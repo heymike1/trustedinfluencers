@@ -1,120 +1,107 @@
-# Creator Database
+# Trusted Influencers
 
 **A public creator database where creators can verify their real performance.**
 
-Anyone can add a creator. Only the real creator can claim the profile — by signing in to the social
-account it belongs to. Once claimed, the platform imports metrics through the platform's official API
-and shows them as **verified metrics**, with the median front and centre so a single viral post doesn't
-distort what a brand can expect.
+Anyone can add a creator. Only the real creator can claim the profile, by signing in with the social
+account it belongs to. Once claimed, the platform pulls the numbers straight from YouTube, Instagram or
+X and shows them as verified: median views, how much of a video gets watched, who the audience is,
+engagement, posting cadence. Brands get numbers nobody typed in.
 
-Stack: Laravel 12 · PHP 8.3 · Livewire 3 · Alpine · Tailwind 4 · MySQL · queues · scheduler.
+Laravel 12 · PHP 8.3 · Livewire 3 · Tailwind 4 · MySQL · queues · scheduler.
 
-## Running locally
+## Local setup
 
 ```bash
 composer install
-npm install && npm run build          # Node 20+ (Vite 7)
+npm install && npm run build            # Node 20+
 cp .env.example .env && php artisan key:generate
 # point DB_* at a MySQL database, then:
 php artisan migrate --seed
-php artisan queue:work               # sync jobs run here
+php artisan queue:work                  # imports run here
 ```
 
-The site is served by Herd at `http://creator-database.test` (`herd link`), or use `php artisan serve`.
+Serve it with Herd (`herd link`, then https://trustedinfluencers.test) or `php artisan serve`.
 
-Seeded logins (password `password`):
+Out of the box `SOCIAL_CONNECTOR_DRIVER=fake`: every OAuth screen is replaced by a local
+"sign in as…" page, so the whole product (claiming, mismatches, imports, Google login) works without
+any API keys or app approval.
+
+### Demo logins (password `password`)
 
 | Who | Email |
 | --- | --- |
 | Admin | `admin@example.com` |
-| Creators | `john-smith@example.com`, `lena-fischer@example.com`, `marcus-reid@example.com`, … (slug@example.com) |
-| Brand user (no profile) | `brand@example.com` |
+| Creators | `john-smith@example.com`, `lena-fischer@example.com`, `marcus-reid@example.com`, … (`<slug>@example.com`) |
+| Brand user, no profile | `brand@example.com` |
 
-The seed creates ~30 creators across YouTube, Instagram and X: claimed and unclaimed, big-but-weak,
+The seed has ~30 creators across the three platforms: claimed and unclaimed, big-but-weak,
 small-but-excellent, multi-platform, plus one "metrics outdated", one "needs reconnection" and one
-"sync failed" example. Claimed creators are imported through the real job chain using the fake connector.
+"sync failed". Claimed ones are imported through the real job chain with the fake connector, so their
+data is shaped exactly like a live import.
 
-### No API credentials needed
+## How it works
 
-`SOCIAL_CONNECTOR_DRIVER=fake` (the default) swaps in `App\Social\Fake\FakeConnector`, which implements
-the exact same interface as the live connectors. Its "consent screen" (`/oauth/{platform}/authorize`)
-lets you type the handle that "signs in", so you can exercise both a successful ownership check and a
-mismatch. Data is generated deterministically per handle; curated demo accounts live in
-`App\Social\Fake\FakeAccounts`.
+1. **Anyone adds a creator**: name, platform, handle. Handles and URLs are normalised
+   (`@john` = `youtube.com/@John/videos`) so the same account can't be listed twice. The profile is
+   public straight away and shows public info only.
+2. **The creator claims it**: they log in (Google, or email + password), open their profile, press
+   *Claim*, and sign in with the social account itself.
+3. **It has to be the right account**: the provider's canonical account id (YouTube channel id,
+   Instagram professional account id, X user id) must match the profile. Email is never used as proof.
+4. **The numbers come from the platform**: content, per-item analytics, retention curves, daily views,
+   audience breakdowns. Imported by queued jobs, refreshed daily, never editable.
 
-To go live, set `SOCIAL_CONNECTOR_DRIVER=live` and the credentials in `.env`:
+One login owns one creator profile. A profile can have one connected account per platform.
 
-| Platform | What you need | Notes |
+## Going live
+
+Set `SOCIAL_CONNECTOR_DRIVER=live` and fill in the credentials in `.env` (`.env.example` lists every
+variable with where to get it and which redirect URI to register).
+
+| Platform | You need | Good to know |
 | --- | --- | --- |
-| YouTube | Google OAuth client, YouTube Data API v3 + YouTube Analytics API enabled; optional API key | Scopes `youtube.readonly`, `yt-analytics.readonly`. The Analytics API does **not** expose impressions / thumbnail CTR, so they are never shown. Shorts are classified by duration/orientation. |
-| Instagram | Meta app using *Instagram API with Instagram Login* | Scopes `instagram_business_basic`, `instagram_business_manage_insights`. Professional accounts only. Long-lived 60-day tokens, refreshed by the scheduler. `impressions`/`plays` are deprecated; `views` is used. No public username lookup exists, so unclaimed Instagram profiles show submitted data only. |
-| X | Developer app, OAuth 2.0 confidential client (PKCE); optional app bearer token for public lookups | Scopes `tweet.read users.read offline.access`. Private metrics (engagements, profile/URL clicks) are only available for posts from the last 30 days. |
+| Google login | OAuth client in Google Cloud | Identity only. Reuses the YouTube client if left empty. |
+| YouTube | Same project, YouTube Data API v3 + YouTube Analytics API enabled | Scopes `youtube.readonly` + `yt-analytics.readonly`; Google requires OAuth verification before the public can use them. Impressions/thumbnail CTR are not in the API, so never shown. |
+| Instagram | Meta app using *Instagram API with Instagram Login* | Professional accounts only. `instagram_business_basic` + `instagram_business_manage_insights`, App Review required. No public username lookup, so unclaimed Instagram profiles show submitted info only. |
+| X | Developer app, OAuth 2.0 confidential client | Reading posts needs a paid tier. Private metrics (engagements, profile/link clicks) only exist for posts from the last 30 days. No audience demographics. |
 
-Redirect URI for each provider: `{APP_URL}/oauth/{youtube|instagram|x}/callback`.
+Production checklist:
 
-**Site login** is "Continue with Google" (identity only: `openid email profile`, redirect URI
-`{APP_URL}/login/google/callback`) with email + password as a fallback. Google login does not grant
-YouTube access; connecting YouTube is still a separate step on the profile. One login owns one creator
-profile; a profile can have one connected account per platform. Email users can reset their password
-from the sign-in page (Laravel's password broker, links valid for 60 minutes).
+- `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://…`, `SESSION_SECURE_COOKIE=true`
+- A real mailer (`MAIL_MAILER=smtp` or postmark/resend): contact requests and password resets go out by email
+- `php artisan queue:work` under Supervisor (or Horizon with Redis)
+- Cron: `* * * * * php artisan schedule:run` (daily re-sync of connected accounts, pruning failed jobs)
+- `php artisan optimize` after deploy, `npm run build` for assets
 
-## How it fits together
+## Code map
 
 ```
 app/Social/
-  Contracts/SocialPlatformConnector   one interface: OAuth, identity, public profile, content, metrics
-  Connectors/{YouTube,Instagram,X}Connector   live implementations (HTTP only, no Eloquent)
-  Fake/FakeConnector + FakeDataGenerator      local stand-in, never used when driver = live
-  ConnectorManager                            resolves a connector per platform from config
-  OAuth/OAuthSession                          state + PKCE + intent stored in the session
-  OAuth/TokenManager                          encrypt/refresh tokens, mark "needs reconnection"
-  Support/HandleNormalizer                    "@john" == "youtube.com/@john" == "https://…/@John/videos"
+  Contracts/SocialPlatformConnector    one interface: OAuth, identity, public profile, content, metrics
+  Connectors/{YouTube,Instagram,X}     live implementations, HTTP only
+  Fake/                                offline stand-in, deterministic data, curated demo accounts
+  Login/                               Google sign-in (live + fake)
+  OAuth/OAuthSession, TokenManager     state + PKCE in the session; encrypted tokens, refresh, reconnection
+  Support/HandleNormalizer             canonical handles per platform
 
-app/Actions/
-  Creators/CreateCreator                      add a public profile (dedupe by provider id, then handle)
-  Claims/StartClaim → CompleteClaim           claim flow; VerifyAccountOwnership is the trust rule
-  Sync/ConnectAccount, StartAccountSync       store tokens, queue the chain
-  Sync/DisconnectAccount                      deletion policy for verified data
-  Admin/MergeCreators                         duplicate handling
-
-app/Jobs/  SyncCreatorSocialProfile → SyncCreatorContent → SyncCreatorMetrics → CalculateCreatorPerformance
-app/Services/Metrics/PerformanceCalculator    median/average per content type × window
+app/Actions/                           one class per user action (create, claim, connect, sync, merge, contact)
+app/Jobs/                              SyncCreatorSocialProfile → SyncCreatorContent → SyncCreatorMetrics
+                                       → CalculateCreatorPerformance (chained per account)
+app/Services/Metrics/                  Statistics, PerformanceCalculator (median/average per content type
+                                       and window, retention and velocity curves, cadence), CreatorRankings
+app/View/                              ProfileInsights and AudienceSummary: derived numbers for the views
+app/Livewire/                          marketplace, profile, add creator, account area, admin, auth
 ```
 
-**Trust rule** (`VerifyAccountOwnership`): the account that authenticated through the provider's OAuth
-must be the account attached to the profile. Comparison is on the provider's canonical account ID
-whenever we have one (stored, or resolved through a public API); only when the platform offers no
-public lookup do we compare the provider-returned handle. Email is never used.
+**Public vs verified data.** `creator_social_accounts` holds public fields anyone may have submitted.
+Verified data (`social_contents.metrics` + `insights`, `creator_metric_snapshots`,
+`creator_audience_insights`, `creator_performance_metrics`) only comes from an authenticated sync and is
+deleted when the creator disconnects. The UI labels the two everywhere and never implies the platform's
+own verification badge.
 
-**Public vs verified data**: `creator_social_accounts` holds public fields (handle, follower count,
-avatar) that anyone may have submitted. Verified data — `social_contents.metrics`,
-`creator_metric_snapshots`, `creator_performance_metrics` — only ever comes from an authenticated sync
-and is deleted when the creator disconnects. The UI labels the two explicitly and never implies a
-platform's own verification badge.
-
-**Audience and watch insights**: the sync also stores per-item time series (`social_contents.insights`:
-a 21-point retention curve and 30 days of daily views, YouTube only) and an account-level audience
-breakdown (`creator_audience_insights`: age, gender, country, city, device, follower vs non-follower
-reach, 28/30-day totals). `PerformanceCalculator` averages these into a retention curve, a view-velocity
-curve, first-week medians, reactions per 1,000 views and posting cadence, stored in
-`creator_performance_metrics.extra`. `RankMetric` + `CreatorRankings` turn the summary columns on
-`creators` into the home page ranking and the profile rank cards. X exposes no audience data, so its
-profile shows per-post metrics only.
-
-**Metric history**: every sync appends snapshots (account-level and per item) instead of overwriting.
-`creator_performance_metrics` holds precomputed rows per account × content type × window
-(last 10/20/30 items, last 30/90 days); a handful of columns are denormalised onto `creators` for fast
-marketplace filtering and sorting.
-
-## Scheduler
-
-```bash
-php artisan schedule:work
-```
-
-`social:sync-due` re-syncs connected accounts every `SOCIAL_SYNC_REFRESH_HOURS` (default 24) and
-refreshes expiring tokens along the way. Creators can also trigger a manual sync, rate limited by
-`SOCIAL_SYNC_MANUAL_COOLDOWN` minutes.
+**History.** Every sync appends snapshots instead of overwriting. `creator_performance_metrics` holds
+precomputed rows per account × content type × window (last 10/20/30 items, last 30/90 days). A few
+columns are denormalised onto `creators` for fast sorting and the rankings.
 
 ## Tests
 
@@ -122,10 +109,8 @@ refreshes expiring tokens along the way. Creators can also trigger a manual sync
 php artisan test
 ```
 
-Covers handle normalisation, duplicate prevention, the claim flow (match, mismatch, forged state,
-denied consent, already claimed), the sync chain and failure states, median/average calculations,
-retention/velocity/cadence maths, rankings, marketplace filters and per-platform columns, creator
-editing permissions, contact requests, profile states, Google login and password reset. The live
-connectors are tested against recorded response shapes with `Http::fake()`; nothing ever hits a real
-API.
-# trustedinfluencers
+125 tests: handle normalisation, duplicate prevention, the claim flow (match, mismatch, forged state,
+denied consent, already claimed), the sync chain and failure states, the maths (median, curves,
+cadence, rankings), marketplace filters and per-platform columns, editing permissions, contact
+requests, profile states, Google login, password reset. The live connectors run against recorded
+response shapes with `Http::fake()`. Nothing ever calls a real API.

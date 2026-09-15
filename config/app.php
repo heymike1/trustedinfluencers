@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Trusted Influencers'),
 
     'tagline' => 'A public creator database where creators can verify their real performance.',
 
