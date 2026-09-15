@@ -44,8 +44,8 @@ class SeoTest extends TestCase
 
     public function test_legal_pages_are_served_and_linked(): void
     {
-        $this->get('/privacy')->assertOk()->assertSee('YouTube API Services')->assertSee('Run More Brands');
-        $this->get('/terms')->assertOk()->assertSee('Dutch law');
+        $this->get('/privacy')->assertOk()->assertSee('YouTube API Services')->assertSee('Limited Use')->assertSee('Run More Brands')->assertSee('Autoriteit Persoonsgegevens');
+        $this->get('/terms')->assertOk()->assertSee('Dutch law')->assertSee('EUR 100');
         $this->get('/')->assertSee(route('privacy'))->assertSee(route('terms'));
     }
 

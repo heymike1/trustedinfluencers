@@ -27,6 +27,7 @@ return [
     'legal' => [
         'entity' => 'Run More Brands',
         'contact' => env('APP_CONTACT_EMAIL', 'info@runmorebrands.com'),
+        'version' => '1.0',
         'updated' => '16 September 2026',
     ],
 

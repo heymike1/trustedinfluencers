@@ -1,85 +1,141 @@
-<x-layouts.app title="Privacy policy" description="What Trusted Influencers stores about creators and visitors, why, for how long, and how to get it deleted." :canonical="route('privacy')">
+<x-layouts.app title="Privacy policy" description="What Trusted Influencers stores about creators and visitors, on which legal basis, for how long, and how to get it deleted." :canonical="route('privacy')">
     <article class="mx-auto max-w-2xl">
         <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Privacy policy</h1>
-        <p class="mt-1 text-sm text-ink-500">Last updated {{ config('app.legal.updated') }}. {{ config('app.name') }} is run by {{ config('app.legal.entity') }} in the Netherlands.</p>
+        <p class="mt-1 text-sm text-ink-500">Version {{ config('app.legal.version') }}, effective {{ config('app.legal.updated') }}.</p>
 
-        <div class="prose-sm mt-8 space-y-8 text-ink-700 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-ink-950 [&_h2]:mb-2 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1">
+        <div class="mt-8 space-y-8 text-ink-700 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-ink-950 [&_h2]:mb-2 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-ink-950 [&_h3]:mt-4 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1 [&_table]:mt-3 [&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_th]:font-semibold [&_th]:text-ink-950 [&_th]:py-1.5 [&_th]:pr-3 [&_th]:border-b [&_th]:border-ink-200 [&_td]:py-1.5 [&_td]:pr-3 [&_td]:align-top [&_td]:border-b [&_td]:border-ink-100">
             <section>
-                <h2>The short version</h2>
-                <p>Creator profiles on this site are public. What we store about you depends on what you do: visit, sign in, or connect a social account. Connecting is what gives us access to your analytics, and disconnecting deletes everything we pulled in. We never see your passwords, and we never sell data.</p>
+                <h2>1. Who is responsible</h2>
+                <p>{{ config('app.name') }} ({{ config('app.url') }}, "the Service") is operated by <strong>{{ config('app.legal.entity') }}</strong>, established in the Netherlands ("we", "us"). We are the controller for the personal data described in this policy. Contact: <a href="mailto:{{ config('app.legal.contact') }}" class="underline underline-offset-2">{{ config('app.legal.contact') }}</a>.</p>
+                <p>This policy applies to everyone who visits the Service, holds an account, is listed as a creator, or sends a contact request. It is written to meet the General Data Protection Regulation (GDPR / AVG) and the Dutch Telecommunications Act. Where this policy and a platform's own terms differ, the platform's terms govern the data that platform holds; this policy governs what we hold.</p>
             </section>
 
             <section>
-                <h2>If you only visit</h2>
-                <p>We keep server logs (IP address, browser, pages requested) for security and debugging, for up to 30 days. We use <a href="https://datafa.st" class="underline underline-offset-2">Datafast</a> for visitor statistics. Datafast sets a cookie to tell returning visitors from new ones and records pages visited, referrer, country, device and browser. We use it to see which pages are used, not to identify you.</p>
-                <p>A session cookie keeps you signed in and protects forms against forgery. Nothing else is set.</p>
+                <h2>2. Scope and definitions</h2>
+                <p>"Personal data" means any information relating to an identified or identifiable natural person. "Processing" means any operation performed on personal data, such as collecting, storing, publishing or deleting it. "Platform" means YouTube (Google LLC), Instagram (Meta Platforms Ireland Ltd.) and X (X Corp.). "Creator profile" means a public page on the Service describing one creator. "Connected account" means a platform account whose holder has authorised the Service to retrieve its data.</p>
+                <p>This policy covers all personal data we process in connection with the Service. It does not cover the platforms' own processing, nor websites we link to.</p>
             </section>
 
             <section>
-                <h2>If someone adds you as a creator</h2>
-                <p>Anyone can list a creator with a name, a platform and a handle. That creates a public profile with information that is already public on the platform, or that the person who added it typed in. Where the platform offers a public lookup (YouTube, X), we also fetch the public display name, avatar and audience count. Such profiles are marked "Public info only".</p>
-                <p>If a profile about you exists and you don't want it, claim it and hide it from your dashboard, or email us and we'll remove it.</p>
+                <h2>3. What we process, why, and on which legal basis</h2>
+
+                <h3>3.1 Visitors</h3>
+                <table>
+                    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+                    <tr><td>IP address, browser and device details, pages requested, timestamps (server logs)</td><td>Security, abuse prevention, debugging</td><td>Legitimate interest (Art. 6(1)(f) GDPR): keeping the Service running and secure</td></tr>
+                    <tr><td>Session cookie</td><td>Keeping you signed in; protecting forms against forgery</td><td>Strictly necessary; no consent required (Art. 11.7a(3) Telecommunications Act)</td></tr>
+                    <tr><td>Datafast analytics cookie and the events it records (pages visited, referrer, country, device, browser, approximate time on page)</td><td>Aggregated visitor statistics</td><td>Legitimate interest in understanding use of the Service; see section 8 on cookies and your ability to refuse</td></tr>
+                </table>
+
+                <h3>3.2 Account holders</h3>
+                <table>
+                    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+                    <tr><td>Name, email address; with Google sign-in also your Google account ID and profile picture; with email sign-in a hashed password</td><td>Creating and securing your account, signing you in, sending password reset links and contact requests addressed to you</td><td>Performance of a contract (Art. 6(1)(b)): providing the account you asked for</td></tr>
+                    <tr><td>Profile details you enter (display name, bio, category, location, website, contact email, whether you accept contact requests)</td><td>Displaying your public profile as you set it</td><td>Performance of a contract</td></tr>
+                </table>
+                <p>Google sign-in gives us only your basic profile (name, email, picture). It does not give us access to your YouTube channel; that is a separate, explicit step described in 3.4.</p>
+
+                <h3>3.3 Listed creators (profiles added by others)</h3>
+                <p>Anyone may add a creator by name, platform and handle. This creates a public profile containing information that is already public on the platform, or that the person adding the profile entered. Where the platform offers a public lookup (YouTube, X), we retrieve the public display name, avatar and audience count. Such profiles are clearly marked "Public info only" and contain no non-public data.</p>
+                <p><strong>Legal basis:</strong> legitimate interest (Art. 6(1)(f)): operating a public directory of professional creators, limited to information those creators have already made public in that professional capacity. We have balanced this against your interests: we only show professional, already-public information; we never show contact details submitted by third parties; and you can object at any time (section 9), after which we remove the profile. Because the data comes from public sources and not from you, this policy serves as the information required by Art. 14 GDPR.</p>
+
+                <h3>3.4 Connected creators (you claimed a profile)</h3>
+                <p>To claim a profile you sign in with the social account itself through the platform's official authorisation flow (OAuth). You choose what to grant on the platform's consent screen; we request read-only access. The platform then provides, and we store:</p>
+                <table>
+                    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+                    <tr><td>Your account ID and handle on that platform</td><td>Verifying that the account you signed in with is the one on the profile</td><td>Performance of a contract (the claim you requested)</td></tr>
+                    <tr><td>Access token and, where the platform issues one, refresh token; granted scopes; token expiry</td><td>Retrieving your data now and on the daily refresh</td><td>Performance of a contract</td></tr>
+                    <tr><td>Your recent content (titles, links, thumbnails, publish dates) and its analytics: views, watch time, retention, reach, likes, comments, shares, saves, profile and link clicks, daily view counts</td><td>Showing verified performance on your public profile and computing the derived figures (medians, averages, rates, curves)</td><td>Performance of a contract</td></tr>
+                    <tr><td>Audience breakdowns where the platform provides them: age ranges, gender, country, city, device type, follower vs. non-follower reach (aggregated percentages only, never individual viewers)</td><td>Showing who your audience is on your public profile</td><td>Performance of a contract</td></tr>
+                    <tr><td>Historic snapshots of the above at each refresh</td><td>Showing how your numbers develop over time</td><td>Performance of a contract</td></tr>
+                </table>
+                <p>Tokens are stored encrypted at rest and are never exposed to your browser or to anyone else. We refresh your data about once a day and whenever you press "Sync now". You cannot edit the retrieved numbers, and neither can we; that is what makes them "verified".</p>
+                <p><strong>Publication.</strong> By connecting an account you instruct us to publish the retrieved figures on your public profile, where they may be viewed by anyone and indexed by search engines. You can stop this at any time by disconnecting (section 7).</p>
+
+                <h3>3.5 People who send a contact request</h3>
+                <table>
+                    <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
+                    <tr><td>Name, email address, company (optional), subject, message, IP address, time</td><td>Delivering your message to the creator so they can reply to you; rate limiting and abuse prevention</td><td>Performance of a contract (delivering the message you asked us to deliver); legitimate interest for abuse prevention</td></tr>
+                </table>
+                <p>The creator receives your name, email address, company, subject and message. For unclaimed profiles we hold the message until the creator claims the profile; we never forward it to an email address entered by a third party unless that address has been confirmed by the creator.</p>
             </section>
 
             <section>
-                <h2>If you sign in</h2>
-                <p>With Google we receive your Google account id, name, email address and profile picture. With email we store your email and a hashed password. We use these to run your account and to send you contact requests and password reset links. We don't send newsletters.</p>
+                <h2>4. Google and YouTube</h2>
+                <p>The Service uses YouTube API Services. By connecting a YouTube channel you also agree to the <a href="https://www.youtube.com/t/terms" class="underline underline-offset-2">YouTube Terms of Service</a>, and the <a href="https://policies.google.com/privacy" class="underline underline-offset-2">Google Privacy Policy</a> applies to Google's handling of your data.</p>
+                <p>Our use of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" class="underline underline-offset-2">Google API Services User Data Policy</a>, including the Limited Use requirements. Specifically, we only use Google user data to provide and improve the features described in this policy; we do not transfer it to third parties except as needed to provide those features, to comply with the law, or as part of a merger or acquisition with prior notice to you; we do not use it for advertising; and no human reads it except with your consent, for security purposes, to comply with the law, or in aggregated, anonymised form.</p>
+                <p>We store YouTube data as described in section 3.4, refresh it at least daily so that it never reflects more than roughly 24 hours of staleness, and delete it when you disconnect, when you delete your account, or on request. You can revoke our access at any time at <a href="https://myaccount.google.com/permissions" class="underline underline-offset-2">myaccount.google.com/permissions</a>.</p>
             </section>
 
             <section>
-                <h2>If you connect YouTube, Instagram or X</h2>
-                <p>This is the part that matters. When you claim a profile you sign in with the social account itself. The platform then gives us:</p>
+                <h2>5. Instagram and X</h2>
+                <p>Instagram data is retrieved through the Instagram API with Instagram Login (Meta Platforms Ireland Ltd.); X data through the X API (X Corp.). Their privacy policies apply to their handling of your data. You can revoke our access on Instagram under Settings → Website permissions → Apps and websites, and on X under Settings → Security and account access → Apps and sessions. If you revoke access, our next refresh fails and the profile shows "Needs reconnection" until you disconnect or reconnect; retrieved data is retained until you disconnect or ask us to delete it. To have Instagram-derived data deleted, disconnect the account or email us (section 7).</p>
+            </section>
+
+            <section>
+                <h2>6. Who receives data</h2>
                 <ul>
-                    <li>your account id and handle, used to check that it's really your account</li>
-                    <li>an access token (and a refresh token where the platform supports it), stored encrypted, so we can fetch your data again later</li>
-                    <li>your recent content and its analytics: views, watch time, retention, reach, likes, comments, shares, saves, clicks</li>
-                    <li>audience breakdowns where the platform offers them: age, gender, country, city, device, follower vs. non-follower reach</li>
+                    <li><strong>The public.</strong> Creator profiles, including verified figures and audience breakdowns, are public and may be indexed by search engines. Email addresses, tokens, contact requests and account details are never public.</li>
+                    <li><strong>Processors.</strong> Our hosting provider (servers, database, backups) and our email delivery provider, both under data processing agreements; Datafast for analytics (section 8). Processors act on our instructions only.</li>
+                    <li><strong>Data sources.</strong> Google, Meta and X provide data to us; we do not send them data other than the API requests needed to retrieve yours.</li>
+                    <li><strong>Authorities.</strong> When required by law or a binding order.</li>
+                    <li><strong>Successors.</strong> If the Service is transferred to another operator, data goes with it under the same commitments, with notice to account holders.</li>
                 </ul>
-                <p>We refresh this about once a day and keep a history of each refresh so the profile can show how numbers change over time. Everything is shown publicly on your profile as "verified", because it came from your own account through the platform's official API. You can't edit these numbers, and neither can we.</p>
-                <p>We only ask for read access. We never post, message, or change anything on your accounts.</p>
+                <p>We do not sell, rent or trade personal data, and we do not share it with brands or other users beyond what the public profile shows and what a contact request necessarily contains.</p>
+                <p><strong>Transfers outside the EEA.</strong> Some processors and all three platforms process data in the United States. We rely on the EU-US Data Privacy Framework where the recipient is certified and otherwise on the European Commission's Standard Contractual Clauses.</p>
             </section>
 
             <section>
-                <h2>Disconnecting and deleting</h2>
-                <p>On your <em>Connected accounts</em> page you can disconnect any platform at any time. That immediately destroys the stored tokens and deletes all content, analytics and audience data we pulled in for that account, history included. Your public profile (name, handle, last known audience count) stays listed, exactly as if a visitor had added it.</p>
-                <p>To delete your whole account and everything attached to it, email {{ config('app.legal.contact') }} from the address you signed up with. We'll confirm within a few days.</p>
-                <p>You can also revoke our access on the platform's side: Google at <a href="https://myaccount.google.com/permissions" class="underline underline-offset-2">myaccount.google.com/permissions</a>, Instagram under Settings → Apps and websites, X under Settings → Security and account access → Apps and sessions. If you do, the next refresh fails and your profile shows "Needs reconnection" until you delete or reconnect.</p>
+                <h2>7. Disconnecting and deletion</h2>
+                <p><strong>Disconnect a platform</strong> from <em>Connected accounts</em> on your dashboard. This immediately and irreversibly destroys the stored tokens and deletes all content, analytics, audience data and historic snapshots retrieved for that account. Your public profile (name, handle, last known audience count) remains listed, exactly as if a visitor had added it; hide it from your dashboard if you don't want that.</p>
+                <p><strong>Delete your account</strong> by emailing <a href="mailto:{{ config('app.legal.contact') }}" class="underline underline-offset-2">{{ config('app.legal.contact') }}</a> from the address on the account. We disconnect all platforms as above, delete the account and your profile, and confirm to you, within 30 days and normally much sooner. Backups are overwritten within a further 30 days.</p>
+                <p><strong>Remove a profile someone else added</strong> about you: claim it and hide it, or email us with the profile link; we remove it within 30 days and normally much sooner.</p>
             </section>
 
             <section>
-                <h2>YouTube</h2>
-                <p>This site uses YouTube API Services. By connecting a YouTube channel you also agree to the <a href="https://www.youtube.com/t/terms" class="underline underline-offset-2">YouTube Terms of Service</a>, and Google's <a href="https://policies.google.com/privacy" class="underline underline-offset-2">Privacy Policy</a> applies to the data we receive from Google. We store YouTube data as described above, refresh it daily, and delete it when you disconnect. YouTube data is never shared with third parties or used for advertising.</p>
+                <h2>8. Cookies</h2>
+                <table>
+                    <tr><th>Cookie</th><th>Set by</th><th>Purpose</th><th>Lifetime</th></tr>
+                    <tr><td>Session and CSRF cookies</td><td>Us</td><td>Strictly necessary: sign-in state, form protection</td><td>Session, or 2 hours of inactivity</td></tr>
+                    <tr><td>Datafast identifier</td><td>Datafast (datafa.st)</td><td>Analytics: distinguishing new from returning visitors for aggregated statistics. Not used for advertising or cross-site tracking.</td><td>Set by Datafast; see their <a href="https://datafa.st/privacy" class="underline underline-offset-2">privacy policy</a></td></tr>
+                </table>
+                <p>You can refuse or delete cookies in your browser at any time; the Service keeps working, though you will be signed out. Blocking requests to datafa.st stops the analytics cookie entirely.</p>
             </section>
 
             <section>
-                <h2>Contact requests</h2>
-                <p>When a visitor sends a contact request through a profile, we store their name, email, company, subject and message, and forward it to the creator by email. The creator gets the sender's email address to reply. For unclaimed profiles we keep the request until the creator claims the profile; we don't forward it to any email address a third party typed in.</p>
+                <h2>9. Your rights</h2>
+                <p>Under the GDPR you have the right to access the personal data we hold about you, to have it corrected or erased, to restrict or object to its processing, to receive the data you provided in a portable format, and, where processing is based on legitimate interest, to object on grounds relating to your particular situation. If you object to a profile listed under section 3.3 we will remove it unless we can demonstrate compelling legitimate grounds, which for a directory listing we do not expect to do.</p>
+                <p>Exercise any right by emailing <a href="mailto:{{ config('app.legal.contact') }}" class="underline underline-offset-2">{{ config('app.legal.contact') }}</a>. We may ask you to confirm your identity, for instance by writing from the address on your account. We respond within one month, extendable by two months for complex requests, in which case we tell you. You may also lodge a complaint with the Dutch Data Protection Authority (Autoriteit Persoonsgegevens, <a href="https://autoriteitpersoonsgegevens.nl" class="underline underline-offset-2">autoriteitpersoonsgegevens.nl</a>).</p>
+                <p>We do not make automated decisions with legal or similarly significant effects, and we do not profile individuals. Rankings on the Service order public profiles by published figures; they are not decisions about you.</p>
             </section>
 
             <section>
-                <h2>Who else sees what</h2>
-                <p>Profiles, including verified numbers, are public and can appear in search engines. Your email address, tokens and contact requests are never public. We use a hosting provider for servers and email delivery, and Datafast for statistics; they process data on our behalf and under our instructions. We don't sell or rent data, and we don't share it with brands or anyone else beyond what the public profile shows.</p>
+                <h2>10. Retention</h2>
+                <table>
+                    <tr><th>Data</th><th>Kept for</th></tr>
+                    <tr><td>Server logs</td><td>30 days</td></tr>
+                    <tr><td>Account data</td><td>Until you delete the account</td></tr>
+                    <tr><td>Connected-account data (tokens, content, analytics, audience, snapshots)</td><td>While connected; deleted on disconnect</td></tr>
+                    <tr><td>Listed-creator public profiles</td><td>Until removed by the creator, on objection, or by us</td></tr>
+                    <tr><td>Contact requests</td><td>While the creator's profile exists, at most 24 months</td></tr>
+                    <tr><td>Failed background jobs (may contain an account ID)</td><td>7 days</td></tr>
+                    <tr><td>Backups</td><td>30 days rolling</td></tr>
+                </table>
             </section>
 
             <section>
-                <h2>How long we keep things</h2>
-                <ul>
-                    <li>Server logs: up to 30 days</li>
-                    <li>Connected-account data: while connected, deleted on disconnect</li>
-                    <li>Account data: while your account exists</li>
-                    <li>Contact requests: while the creator's profile exists</li>
-                    <li>Failed background jobs: 7 days</li>
-                </ul>
+                <h2>11. Security</h2>
+                <p>All traffic is encrypted (HTTPS). Platform tokens are encrypted at rest with a key that is not stored in the database. Passwords are hashed. Access to production systems is limited to the people who need it. No system is perfectly secure; if we discover a breach that is likely to affect your rights we will inform you and the Autoriteit Persoonsgegevens as the law requires.</p>
             </section>
 
             <section>
-                <h2>Your rights</h2>
-                <p>Under the GDPR (AVG) you can ask what we hold about you, have it corrected or deleted, or object to how we use it. Email {{ config('app.legal.contact') }}. You can also complain to the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).</p>
+                <h2>12. Children</h2>
+                <p>The Service is not intended for anyone under 16. We do not knowingly create accounts for them; if you believe we hold data about a child, email us and we will delete it.</p>
             </section>
 
             <section>
-                <h2>Changes</h2>
-                <p>If this policy changes in a way that matters, we'll update the date at the top and, for connected creators, mention it on the dashboard.</p>
+                <h2>13. Changes</h2>
+                <p>We may update this policy. The version and effective date at the top change when we do. For material changes affecting connected creators we give notice on the dashboard or by email before they take effect. Continued use after the effective date means the updated policy applies.</p>
             </section>
         </div>
     </article>
