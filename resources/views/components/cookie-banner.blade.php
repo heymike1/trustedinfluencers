@@ -10,10 +10,12 @@
 </div>
 <script>
 (function () {
-    var key = 'cookie-consent', banner = document.getElementById('cookie-banner'), choice = null;
+    var key = 'cookie-consent', banner = document.getElementById('cookie-banner'), loaded = false, choice = null;
     try { choice = localStorage.getItem(key); } catch (e) {}
 
     function load() {
+        if (loaded) return;
+        loaded = true;
         var s = document.createElement('script');
         s.defer = true;
         s.src = 'https://datafa.st/js/script.js';
@@ -22,20 +24,20 @@
         document.head.appendChild(s);
     }
 
+    banner.addEventListener('click', function (e) {
+        var action = e.target.closest('[data-cookie]');
+        if (!action) return;
+        var accepted = action.dataset.cookie === 'accept';
+        try { localStorage.setItem(key, accepted ? 'accepted' : 'declined'); } catch (e) {}
+        banner.hidden = true;
+        if (accepted) load();
+    });
+
     document.querySelectorAll('[data-cookie-settings]').forEach(function (el) {
         el.addEventListener('click', function () { banner.hidden = false; });
     });
 
-    if (choice === 'accepted') { load(); return; }
-    if (choice === 'declined') { return; }
-
-    banner.hidden = false;
-    banner.addEventListener('click', function (e) {
-        var action = e.target.dataset.cookie;
-        if (!action) return;
-        try { localStorage.setItem(key, action === 'accept' ? 'accepted' : 'declined'); } catch (e) {}
-        banner.hidden = true;
-        if (action === 'accept') load();
-    });
+    if (choice === 'accepted') load();
+    else if (choice !== 'declined') banner.hidden = false;
 })();
 </script>
