@@ -18,7 +18,7 @@ return [
     'tagline' => 'A public creator database where creators can verify their real performance.',
 
     // Default Open Graph / Twitter image (1200×630). Path under public/ or a full URL.
-    'og_image' => env('APP_OG_IMAGE', '/images/og-default.png'),
+    'og_image' => env('APP_OG_IMAGE', '/og.png'),
 
     // Optional "@handle" for twitter:site.
     'twitter_handle' => env('APP_TWITTER_HANDLE'),
