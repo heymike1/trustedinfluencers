@@ -49,6 +49,15 @@ class SeoTest extends TestCase
         $this->get('/')->assertSee(route('privacy'))->assertSee(route('terms'));
     }
 
+    public function test_analytics_only_loads_after_cookie_consent(): void
+    {
+        $response = $this->get('/')->assertOk();
+
+        $response->assertSee('id="cookie-banner"', false);
+        $response->assertSee('https://datafa.st/js/script.js', false); // present in the loader…
+        $response->assertDontSee('<script defer data-website-id', false); // …but not as a plain tag
+    }
+
     public function test_private_pages_are_not_indexed(): void
     {
         $user = User::factory()->create();

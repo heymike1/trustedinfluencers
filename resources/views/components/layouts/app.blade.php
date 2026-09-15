@@ -60,9 +60,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @if(config('services.datafast.website_id'))
-        <script defer data-website-id="{{ config('services.datafast.website_id') }}" data-domain="{{ config('services.datafast.domain') }}" src="https://datafa.st/js/script.js"></script>
-    @endif
 </head>
 <body class="min-h-full flex flex-col">
     <header class="border-b border-ink-200 bg-white">
@@ -159,5 +156,9 @@
             </div>
         </div>
     </footer>
+
+    @if(config('services.datafast.website_id'))
+        <x-cookie-banner />
+    @endif
 </body>
 </html>

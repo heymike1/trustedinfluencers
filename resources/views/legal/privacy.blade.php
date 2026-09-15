@@ -24,7 +24,7 @@
                     <tr><th>Data</th><th>Purpose</th><th>Legal basis</th></tr>
                     <tr><td>IP address, browser and device details, pages requested, timestamps (server logs)</td><td>Security, abuse prevention, debugging</td><td>Legitimate interest (Art. 6(1)(f) GDPR): keeping the Service running and secure</td></tr>
                     <tr><td>Session cookie</td><td>Keeping you signed in; protecting forms against forgery</td><td>Strictly necessary; no consent required (Art. 11.7a(3) Telecommunications Act)</td></tr>
-                    <tr><td>Datafast analytics cookie and the events it records (pages visited, referrer, country, device, browser, approximate time on page)</td><td>Aggregated visitor statistics</td><td>Legitimate interest in understanding use of the Service; see section 8 on cookies and your ability to refuse</td></tr>
+                    <tr><td>Datafast analytics cookie and the events it records (pages visited, referrer, country, device, browser, approximate time on page)</td><td>Aggregated visitor statistics</td><td>Your consent (Art. 6(1)(a) GDPR; Art. 11.7a Telecommunications Act), given through the cookie banner and withdrawable at any time; see section 8</td></tr>
                 </table>
 
                 <h3>3.2 Account holders</h3>
@@ -92,14 +92,15 @@
                 <p><strong>Remove a profile someone else added</strong> about you: claim it and hide it, or email us with the profile link; we remove it within 30 days and normally much sooner.</p>
             </section>
 
-            <section>
+            <section id="cookies">
                 <h2>8. Cookies</h2>
                 <table>
                     <tr><th>Cookie</th><th>Set by</th><th>Purpose</th><th>Lifetime</th></tr>
                     <tr><td>Session and CSRF cookies</td><td>Us</td><td>Strictly necessary: sign-in state, form protection</td><td>Session, or 2 hours of inactivity</td></tr>
-                    <tr><td>Datafast identifier</td><td>Datafast (datafa.st)</td><td>Analytics: distinguishing new from returning visitors for aggregated statistics. Not used for advertising or cross-site tracking.</td><td>Set by Datafast; see their <a href="https://datafa.st/privacy" class="underline underline-offset-2">privacy policy</a></td></tr>
+                    <tr><td>Datafast identifier</td><td>Datafast (datafa.st)</td><td>Analytics: distinguishing new from returning visitors for aggregated statistics. Not used for advertising or cross-site tracking. Only set after you choose "Allow" in the cookie banner.</td><td>Set by Datafast; see their <a href="https://datafa.st/privacy" class="underline underline-offset-2">privacy policy</a></td></tr>
+                    <tr><td>cookie-consent (browser storage)</td><td>Us</td><td>Remembering your cookie choice so we don't ask again</td><td>Until you clear site data</td></tr>
                 </table>
-                <p>You can refuse or delete cookies in your browser at any time; the Service keeps working, though you will be signed out. Blocking requests to datafa.st stops the analytics cookie entirely.</p>
+                <p>The analytics cookie is set only after you allow it in the banner. Choosing "No thanks" keeps the Service fully usable. To change your mind later, clear this site's data in your browser and the banner appears again. You can also delete cookies in your browser at any time; you will be signed out if you delete the session cookie.</p>
             </section>
 
             <section>
