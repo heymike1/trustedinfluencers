@@ -27,8 +27,8 @@ return [
     */
 
     'google_login' => [
-        'client_id' => env('GOOGLE_CLIENT_ID', env('YOUTUBE_CLIENT_ID')),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET', env('YOUTUBE_CLIENT_SECRET')),
+        'client_id' => env('GOOGLE_CLIENT_ID') ?: env('YOUTUBE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET') ?: env('YOUTUBE_CLIENT_SECRET'),
     ],
 
     'platforms' => [
