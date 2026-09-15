@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: #18181b; background: #f6f5f2; -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01", "tnum"; }
+    a { color: #18181b; text-decoration: none; } a:hover { color: #0b0b0c; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    table { border-collapse: collapse; }
+    .card { border: 1px solid #e6e3dd; border-radius: 6px; background: #ffffff; box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04); }
+    .th { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e4e4e7; color: #71717a; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500; white-space: nowrap; }
+    .td { padding: 10px 8px; border-bottom: 1px solid #f4f4f5; vertical-align: middle; font-size: 14px; }
+    .r { text-align: right; }
+    .who { display: flex; align-items: center; gap: 10px; }
+    .av { width: 28px; height: 28px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex: none; }
+    .name { font-weight: 600; color: #0b0b0c; line-height: 18px; white-space: nowrap; }
+    .sub { font-size: 12px; color: #71717a; line-height: 16px; }
+    .ok { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 6px; border-radius: 4px; border: 1px solid #d1fae5; background: #ecfdf5; color: #047857; font-size: 11px; font-weight: 500; white-space: nowrap; }
+    .pub { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; border: 1px solid #e4e4e7; background: #fafafa; color: #3f3f46; font-size: 11px; font-weight: 500; white-space: nowrap; }
+    .warn { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 4px; border: 1px solid #fef3c7; background: #fffbeb; color: #b45309; font-size: 11px; font-weight: 500; white-space: nowrap; }
+    .muted { color: #a1a1aa; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border-radius: 6px; border: 1px solid #e6e3dd; background: #ffffff; color: #3f3f46; font-size: 13px; font-weight: 500; white-space: nowrap; }
+    .chip-sm { height: 26px; padding: 0 8px; font-size: 12px; border-radius: 4px; }
+    .chip-on { background: #18181b; border-color: #18181b; color: #ffffff; }
+    .btn { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+    .btn-p { background: #18181b; border: 1px solid #18181b; color: #ffffff; }
+    .btn-s { background: #ffffff; border: 1px solid #e6e3dd; color: #18181b; }
+    .h2 { font-size: 16px; font-weight: 600; color: #0b0b0c; }
+    .hint { font-size: 12px; color: #71717a; }
+    .stat-l { font-size: 12px; color: #71717a; white-space: nowrap; }
+    .stat-v { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; color: #0b0b0c; margin-top: 2px; }
+    .stat-h { font-size: 11px; color: #a1a1aa; margin-top: 2px; line-height: 1.35; }
+    .bar { height: 8px; border-radius: 2px; background: #047857; }
+    .track { height: 8px; border-radius: 2px; background: #f1efe9; flex: 1; overflow: hidden; }
+    .row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .row .lbl { width: 112px; color: #3f3f46; flex: none; }
+    .row .val { width: 40px; text-align: right; font-weight: 500; color: #0b0b0c; flex: none; }
+    .band { background: #eeece6; }
+    .dark { background: #18181b; color: #fafaf9; }
+  </style>
+</helmet>
+<div style="width: 1440px; min-height: 1980px; background: #f6f5f2; display: flex; flex-direction: column;">
+  <div style="height: 56px; border-bottom: 1px solid #e6e3dd; background: #ffffff; display: flex; align-items: center; justify-content: center;">
+    <div style="width: 1104px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: -0.01em; color: #0b0b0c; font-size: 15px;"><div style="width: 20px; height: 20px; border-radius: 2px; background: #18181b;"></div><span>Creator Database</span></div>
+        <div style="display: flex; align-items: center; gap: 20px; font-size: 14px; color: #3f3f46;"><span>Browse creators</span><span>Top performers</span><span>Categories</span><span>Add a creator</span></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px; font-size: 14px; color: #3f3f46;"><span>Sign in</span><div style="display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 6px; background: #18181b; color: #ffffff; font-size: 12px; font-weight: 500;">Claim your profile</div></div>
+    </div>
+  </div>
+  <div class="band" style="display: flex; justify-content: center; padding: 24px 0 28px; border-bottom: 1px solid #e6e3dd;">
+    <div style="width: 1104px; display: flex; flex-direction: column; gap: 20px;">
+
+      <div style="font-size: 13px; color: #71717a; display: flex; gap: 6px;"><span>Creators</span><span>/</span><span>Finance</span><span>/</span><span style="color: #18181b;">John Smith</span></div>
+
+      <!-- Identity -->
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;">
+        <div style="display: flex; gap: 16px; align-items: flex-start;">
+          <div style="width: 72px; height: 72px; border-radius: 9999px; background: #e6ecf2; color: #2b4157; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600;">JS</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: #0b0b0c;">John Smith</span><span class="ok"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"></path></svg>Verified through YouTube</span></div>
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 14px; color: #71717a;">
+              <span style="display: inline-flex; align-items: center; gap: 6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#71717a"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"></path></svg>@johnsmith</span>
+              <span style="color: #d4d4d8;">·</span><span>Finance</span><span style="color: #d4d4d8;">·</span><span>Manchester, UK</span><span style="color: #d4d4d8;">·</span><span>English</span><span style="color: #d4d4d8;">·</span><span>johnsmith.money</span>
+            </div>
+            <div style="font-size: 14px; color: #3f3f46; max-width: 560px; line-height: 1.5;">Personal finance without the hype. Index funds, tax, and the occasional spreadsheet.</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div class="card" style="padding: 12px 16px; min-width: 116px;"><div class="stat-l">Top performers</div><div class="stat-v tnum">#7</div><div class="stat-h">by median views</div></div>
+          <div class="card" style="padding: 12px 16px; min-width: 116px;"><div class="stat-l">Retention rank</div><div class="stat-v tnum">#3</div><div class="stat-h">in Finance</div></div>
+          <div class="btn btn-p">Contact John</div>
+        </div>
+      </div>
+
+      <!-- Brand stat strip -->
+    </div>
+  </div>
+  <div style="display: flex; justify-content: center; padding: 24px 0 0;">
+    <div style="width: 1104px; display: flex; flex-direction: column; gap: 28px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div class="h2">What a sponsor gets, per video</div>
+          <div style="display: flex; gap: 4px;"><div class="chip chip-sm">Last 10</div><div class="chip chip-sm chip-on">Last 20</div><div class="chip chip-sm">Last 30</div><div class="chip chip-sm">90 days</div><div style="width: 1px; background: #e4e4e7; margin: 0 4px;"></div><div class="chip chip-sm chip-on">Videos</div><div class="chip chip-sm">Shorts</div></div>
+        </div>
+        <div class="card" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));">
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Median views</div><div class="stat-v tnum">68K</div><div class="stat-h">expected reach of a video</div></div>
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Views in first 7 days</div><div class="stat-v tnum">46K</div><div class="stat-h">68% of 30-day views</div></div>
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Still watching at 50%</div><div class="stat-v tnum">48%</div><div class="stat-h">mid-roll placement</div></div>
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Avg. watch duration</div><div class="stat-v tnum">6:20</div><div class="stat-h">of 13:46 avg length</div></div>
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Engagement rate</div><div class="stat-v tnum">4.8%</div><div class="stat-h">likes, comments, shares ÷ views</div></div>
+          <div style="padding: 14px 16px; border-right: 1px solid #f1efe9;"><div class="stat-l">Views ÷ subscribers</div><div class="stat-v tnum">55%</div><div class="stat-h">share of subscribers who watch</div></div>
+          <div style="padding: 14px 16px;"><div class="stat-l">Uploads / month</div><div class="stat-v tnum">4.1</div><div class="stat-h">longest gap 11 days</div></div>
+        </div>
+      </div>
+
+      <!-- Retention + velocity -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="card" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+            <div><div class="h2" style="font-size: 14px;">Audience retention across an average video</div><div class="hint" style="margin-top: 2px;">Share of viewers still watching at each point. Averaged over the last 20 videos, normalised to video length.</div></div>
+            <span class="ok">Verified</span>
+          </div>
+          <svg viewBox="0 0 520 190" width="100%" height="190" style="display: block;">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#e4e4e7"></line>
+            <line x1="40" y1="150" x2="510" y2="150" stroke="#e4e4e7"></line>
+            <line x1="40" y1="85" x2="510" y2="85" stroke="#f4f4f5"></line>
+            <line x1="40" y1="20" x2="510" y2="20" stroke="#f4f4f5"></line>
+            <text x="34" y="24" font-size="10" fill="#a1a1aa" text-anchor="end">100%</text>
+            <text x="34" y="89" font-size="10" fill="#a1a1aa" text-anchor="end">50%</text>
+            <text x="34" y="154" font-size="10" fill="#a1a1aa" text-anchor="end">0%</text>
+            <line x1="275" y1="20" x2="275" y2="150" stroke="#d4d4d8" stroke-dasharray="3 3"></line>
+            <line x1="63.5" y1="20" x2="63.5" y2="150" stroke="#d4d4d8" stroke-dasharray="3 3"></line>
+            <path d="M40 20 L63.5 48.6 L110 66.8 L181 78.5 L275 87.6 L369 98 L440 108.4 L510 121.4" fill="none" stroke="#047857" stroke-width="2" stroke-linejoin="round"></path>
+            <path d="M40 20 L63.5 48.6 L110 66.8 L181 78.5 L275 87.6 L369 98 L440 108.4 L510 121.4 L510 150 L40 150 Z" fill="#047857" fill-opacity="0.10"></path>
+            <circle cx="63.5" cy="48.6" r="3" fill="#047857"></circle>
+            <circle cx="275" cy="87.6" r="3" fill="#047857"></circle>
+            <circle cx="510" cy="121.4" r="3" fill="#047857"></circle>
+            <text x="68" y="44" font-size="11" fill="#18181b" font-weight="600">78% at 0:30</text>
+            <text x="280" y="82" font-size="11" fill="#18181b" font-weight="600">48% at midpoint</text>
+            <text x="506" y="116" font-size="11" fill="#18181b" font-weight="600" text-anchor="end">22% at end</text>
+            <text x="40" y="172" font-size="10" fill="#71717a">0:00</text>
+            <text x="157" y="172" font-size="10" fill="#71717a" text-anchor="middle">3:26</text>
+            <text x="275" y="172" font-size="10" fill="#71717a" text-anchor="middle">6:53</text>
+            <text x="392" y="172" font-size="10" fill="#71717a" text-anchor="middle">10:19</text>
+            <text x="510" y="172" font-size="10" fill="#71717a" text-anchor="end">13:46 avg length</text>
+          </svg>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; border-top: 1px solid #f1efe9; padding-top: 10px; font-size: 12px;" class="tnum">
+            <div><div class="hint">Pre-roll (0:00–0:30)</div><div style="font-weight: 600;">100% → 78%</div></div>
+            <div><div class="hint">Mid-roll (6:53)</div><div style="font-weight: 600;">48% still watching</div></div>
+            <div><div class="hint">End card</div><div style="font-weight: 600;">22% reach the end</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+            <div><div class="h2" style="font-size: 14px;">How fast a video collects its views</div><div class="hint" style="margin-top: 2px;">Cumulative share of 30-day views, day by day. Tells a brand when a sponsored mention has done most of its work.</div></div>
+            <span class="ok">Verified</span>
+          </div>
+          <svg viewBox="0 0 520 190" width="100%" height="190" style="display: block;">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#e4e4e7"></line>
+            <line x1="40" y1="150" x2="510" y2="150" stroke="#e4e4e7"></line>
+            <line x1="40" y1="85" x2="510" y2="85" stroke="#f4f4f5"></line>
+            <line x1="40" y1="20" x2="510" y2="20" stroke="#f4f4f5"></line>
+            <text x="34" y="24" font-size="10" fill="#a1a1aa" text-anchor="end">100%</text>
+            <text x="34" y="89" font-size="10" fill="#a1a1aa" text-anchor="end">50%</text>
+            <text x="34" y="154" font-size="10" fill="#a1a1aa" text-anchor="end">0%</text>
+            <path d="M40 150 L55.7 105.8 L71.3 90.2 L87 81.1 L149.7 61.6 L259.3 43.4 L510 20" fill="none" stroke="#047857" stroke-width="2" stroke-linejoin="round"></path>
+            <path d="M40 150 L55.7 105.8 L71.3 90.2 L87 81.1 L149.7 61.6 L259.3 43.4 L510 20 L510 150 Z" fill="#047857" fill-opacity="0.10"></path>
+            <circle cx="55.7" cy="105.8" r="3" fill="#047857"></circle>
+            <circle cx="149.7" cy="61.6" r="3" fill="#047857"></circle>
+            <text x="62" y="103" font-size="11" fill="#18181b" font-weight="600">34% in 24h</text>
+            <text x="156" y="58" font-size="11" fill="#18181b" font-weight="600">68% in 7 days</text>
+            <text x="40" y="172" font-size="10" fill="#71717a">day 0</text>
+            <text x="149.7" y="172" font-size="10" fill="#71717a" text-anchor="middle">day 7</text>
+            <text x="259.3" y="172" font-size="10" fill="#71717a" text-anchor="middle">day 14</text>
+            <text x="510" y="172" font-size="10" fill="#71717a" text-anchor="end">day 30</text>
+          </svg>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; border-top: 1px solid #f1efe9; padding-top: 10px; font-size: 12px;" class="tnum">
+            <div><div class="hint">Median 24h views</div><div style="font-weight: 600;">23K</div></div>
+            <div><div class="hint">Median 7-day views</div><div style="font-weight: 600;">46K</div></div>
+            <div><div class="hint">Still growing after 30 days</div><div style="font-weight: 600;">+9% / month</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audience + engagement + consistency -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <div class="card" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><div class="h2" style="font-size: 14px;">Who watches</div><span class="ok">Verified</span></div>
+          <div class="hint" style="margin-top: -6px;">Viewer demographics from YouTube Analytics, last 90 days.</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;" class="tnum">
+            <div class="row"><span class="lbl">18–24</span><div class="track"><div class="bar" style="width: 14%;"></div></div><span class="val">14%</span></div>
+            <div class="row"><span class="lbl">25–34</span><div class="track"><div class="bar" style="width: 41%;"></div></div><span class="val">41%</span></div>
+            <div class="row"><span class="lbl">35–44</span><div class="track"><div class="bar" style="width: 27%;"></div></div><span class="val">27%</span></div>
+            <div class="row"><span class="lbl">45–54</span><div class="track"><div class="bar" style="width: 12%;"></div></div><span class="val">12%</span></div>
+            <div class="row"><span class="lbl">55+</span><div class="track"><div class="bar" style="width: 6%;"></div></div><span class="val">6%</span></div>
+          </div>
+          <div style="display: flex; gap: 12px; border-top: 1px solid #f1efe9; padding-top: 10px; font-size: 12px;" class="tnum">
+            <div style="flex: 1;"><div class="hint">Gender</div><div style="font-weight: 600;">71% men · 29% women</div></div>
+            <div style="flex: 1;"><div class="hint">Device</div><div style="font-weight: 600;">58% mobile · 31% desktop · 8% TV</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><div class="h2" style="font-size: 14px;">Where they are</div><span class="ok">Verified</span></div>
+          <div class="hint" style="margin-top: -6px;">Share of views by country, last 90 days.</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;" class="tnum">
+            <div class="row"><span class="lbl">United Kingdom</span><div class="track"><div class="bar" style="width: 38%;"></div></div><span class="val">38%</span></div>
+            <div class="row"><span class="lbl">United States</span><div class="track"><div class="bar" style="width: 24%;"></div></div><span class="val">24%</span></div>
+            <div class="row"><span class="lbl">Canada</span><div class="track"><div class="bar" style="width: 7%;"></div></div><span class="val">7%</span></div>
+            <div class="row"><span class="lbl">Australia</span><div class="track"><div class="bar" style="width: 6%;"></div></div><span class="val">6%</span></div>
+            <div class="row"><span class="lbl">Germany</span><div class="track"><div class="bar" style="width: 4%;"></div></div><span class="val">4%</span></div>
+          </div>
+          <div style="border-top: 1px solid #f1efe9; padding-top: 10px; font-size: 12px;" class="tnum"><div class="hint">English-speaking markets</div><div style="font-weight: 600;">79% of views</div></div>
+        </div>
+
+        <div class="card" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><div class="h2" style="font-size: 14px;">Engagement per 1,000 views</div><span class="ok">Verified</span></div>
+          <div class="hint" style="margin-top: -6px;">Median per video. Comments are the strongest trust signal for product recommendations.</div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;" class="tnum">
+            <div><div class="hint">Likes</div><div style="font-size: 20px; font-weight: 600;">41</div></div>
+            <div><div class="hint">Comments</div><div style="font-size: 20px; font-weight: 600;">4.3</div></div>
+            <div><div class="hint">Shares</div><div style="font-size: 20px; font-weight: 600;">2.4</div></div>
+          </div>
+          <div style="border-top: 1px solid #f1efe9; padding-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+            <div class="hint">Uploads per month, last 12 months</div>
+            <div style="display: flex; align-items: flex-end; gap: 4px; height: 36px;">
+              <div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 60%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 100%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 60%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 100%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 80%; background: #047857; border-radius: 2px 2px 0 0;"></div><div style="flex: 1; height: 100%; background: #047857; border-radius: 2px 2px 0 0;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #71717a;" class="tnum"><span>Oct 2025</span><span>49 videos · never more than 11 days apart</span><span>Sep 2026</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video table + sidebar -->
+      <div style="display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><div class="h2">Last 20 videos</div><div class="hint">Per-video analytics · grey = the outlier the median ignores</div></div>
+          <div class="card" style="overflow: hidden;">
+            <table style="width: 100%;" class="tnum">
+              <thead><tr>
+                <th class="th" style="padding-left: 16px;">Video</th>
+                <th class="th">Published</th>
+                <th class="th r">Views</th>
+                <th class="th r">7-day</th>
+                <th class="th r">Avg. viewed</th>
+                <th class="th r">Watch</th>
+                <th class="th r">Eng.</th>
+                <th class="th" style="padding-right: 16px;">Retention</th>
+              </tr></thead>
+              <tbody>
+                <tr><td class="td" style="padding-left: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #ebe9e3; border-radius: 3px; flex: none;"></div><span style="font-weight: 500;">The real cost of saying no</span></div></td><td class="td" style="color: #71717a; white-space: nowrap;">12 Sep</td><td class="td r" style="font-weight: 600;">38K</td><td class="td r" style="color: #3f3f46;">31K</td><td class="td r" style="color: #3f3f46;">51%</td><td class="td r" style="color: #3f3f46;">6:41</td><td class="td r" style="color: #3f3f46;">5.1%</td><td class="td" style="padding-right: 16px;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 6 L18 9 L36 11 L54 14 L72 17" fill="none" stroke="#047857" stroke-width="1.5"></path></svg></td></tr>
+                <tr><td class="td" style="padding-left: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #ebe9e3; border-radius: 3px; flex: none;"></div><span style="font-weight: 500;">How I plan consistency</span></div></td><td class="td" style="color: #71717a; white-space: nowrap;">11 Sep</td><td class="td r" style="font-weight: 600;">63K</td><td class="td r" style="color: #3f3f46;">44K</td><td class="td r" style="color: #3f3f46;">44%</td><td class="td r" style="color: #3f3f46;">5:58</td><td class="td r" style="color: #3f3f46;">4.4%</td><td class="td" style="padding-right: 16px;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 7 L18 10 L36 12 L54 15 L72 18" fill="none" stroke="#047857" stroke-width="1.5"></path></svg></td></tr>
+                <tr style="background: #ecfdf5;"><td class="td" style="padding-left: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #e4e4e7; border-radius: 3px; flex: none;"></div><span style="font-weight: 500; color: #71717a;">A simple system for budgeting</span></div></td><td class="td" style="color: #71717a; white-space: nowrap;">4 Sep</td><td class="td r" style="font-weight: 600; color: #71717a;">2.4M</td><td class="td r" style="color: #71717a;">1.1M</td><td class="td r" style="color: #71717a;">31%</td><td class="td r" style="color: #71717a;">4:12</td><td class="td r" style="color: #71717a;">3.2%</td><td class="td" style="padding-right: 16px;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 9 L18 13 L36 15 L54 17 L72 19" fill="none" stroke="#a1a1aa" stroke-width="1.5"></path></svg></td></tr>
+                <tr><td class="td" style="padding-left: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #ebe9e3; border-radius: 3px; flex: none;"></div><span style="font-weight: 500;">What I learned from pricing</span></div></td><td class="td" style="color: #71717a; white-space: nowrap;">28 Aug</td><td class="td r" style="font-weight: 600;">71K</td><td class="td r" style="color: #3f3f46;">49K</td><td class="td r" style="color: #3f3f46;">47%</td><td class="td r" style="color: #3f3f46;">6:33</td><td class="td r" style="color: #3f3f46;">4.9%</td><td class="td" style="padding-right: 16px;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 6 L18 8 L36 11 L54 13 L72 16" fill="none" stroke="#047857" stroke-width="1.5"></path></svg></td></tr>
+                <tr><td class="td" style="padding-left: 16px;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #ebe9e3; border-radius: 3px; flex: none;"></div><span style="font-weight: 500;">Why I stopped tracking every pound</span></div></td><td class="td" style="color: #71717a; white-space: nowrap;">21 Aug</td><td class="td r" style="font-weight: 600;">54K</td><td class="td r" style="color: #3f3f46;">37K</td><td class="td r" style="color: #3f3f46;">49%</td><td class="td r" style="color: #3f3f46;">7:02</td><td class="td r" style="color: #3f3f46;">5.6%</td><td class="td" style="padding-right: 16px;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 5 L18 8 L36 10 L54 13 L72 16" fill="none" stroke="#047857" stroke-width="1.5"></path></svg></td></tr>
+                <tr><td class="td" style="padding-left: 16px; border-bottom: 0;"><div style="display: flex; align-items: center; gap: 10px;"><div style="width: 56px; height: 32px; background: #ebe9e3; border-radius: 3px; flex: none;"></div><span style="font-weight: 500;">The honest truth about index funds</span></div></td><td class="td" style="color: #71717a; white-space: nowrap; border-bottom: 0;">14 Aug</td><td class="td r" style="font-weight: 600; border-bottom: 0;">88K</td><td class="td r" style="color: #3f3f46; border-bottom: 0;">58K</td><td class="td r" style="color: #3f3f46; border-bottom: 0;">45%</td><td class="td r" style="color: #3f3f46; border-bottom: 0;">6:10</td><td class="td r" style="color: #3f3f46; border-bottom: 0;">4.7%</td><td class="td" style="padding-right: 16px; border-bottom: 0;"><svg width="72" height="20" viewBox="0 0 72 20"><path d="M0 1 L6 6 L18 9 L36 11 L54 14 L72 17" fill="none" stroke="#047857" stroke-width="1.5"></path></svg></td></tr>
+              </tbody>
+            </table>
+            <div style="padding: 10px 16px; border-top: 1px solid #e6e3dd; background: #faf9f6; font-size: 12px; color: #71717a; display: flex; justify-content: space-between;"><span>Showing 6 of 20 · Shorts are listed separately.</span><span style="color: #18181b; font-weight: 500;">All 20 videos →</span></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #3f3f46; line-height: 1.5;">
+            <div class="h2" style="font-size: 14px;">How these numbers were verified</div>
+            <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px;"><path d="M4 10.5l4 4 8-9"></path></svg><span>John signed in to YouTube channel <span style="font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #18181b;">UC2tEDN0…</span> — the same channel this profile lists.</span></div>
+            <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px;"><path d="M4 10.5l4 4 8-9"></path></svg><span>Every figure on this page came through the YouTube Analytics API. Nothing is self-reported or editable.</span></div>
+            <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px;"><path d="M4 10.5l4 4 8-9"></path></svg><span>Last synced 1 hour ago · re-synced daily.</span></div>
+            <div style="border-top: 1px solid #f1efe9; padding-top: 10px; font-size: 12px; color: #71717a;">Not YouTube’s own verification badge. Impressions and thumbnail click-through are not exposed by the API, so they are not shown.</div>
+          </div>
+          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 13px;" >
+            <div class="h2" style="font-size: 14px;">Channel</div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Subscribers</span><span style="font-weight: 500;">124K</span></div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Gained, last 28 days</span><span style="font-weight: 500; color: #047857;">+3,120</span></div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Views, last 28 days</span><span style="font-weight: 500;">1.4M</span></div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Watch time, last 28 days</span><span style="font-weight: 500;">148K hours</span></div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Returning viewers</span><span style="font-weight: 500;">63%</span></div>
+            <div style="display: flex; justify-content: space-between;" class="tnum"><span style="color: #71717a;">Total views</span><span style="font-weight: 500;">22.3M</span></div>
+          </div>
+          <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+            <div class="h2" style="font-size: 14px;">Contact for brand deals</div>
+            <div style="color: #3f3f46; line-height: 1.5;">John accepts contact requests. Replies go straight to your email.</div>
+            <div class="btn btn-p" style="justify-content: center;">Send a request</div>
+            <div class="hint">Typical reply time not tracked yet.</div>
+          </div>
+        </div>
+      </div>
+      <div style="height: 24px;"></div>
+    </div>
+  </div>
+  <div style="margin-top: auto; border-top: 1px solid #e6e3dd; display: flex; justify-content: center; padding: 24px 0;">
+    <div style="width: 1104px; display: flex; justify-content: space-between; font-size: 12px; color: #71717a;">
+      <span>A public creator database where creators can verify their real performance. “Verified” means the creator connected the account and the numbers were retrieved through the platform’s official API.</span>
+      <div style="display: flex; gap: 16px;"><span>Browse</span><span>Top performers</span><span>Add a creator</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

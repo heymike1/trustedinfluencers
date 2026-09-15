@@ -1,0 +1,76 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "Home",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2260
+    },
+    {
+      "file": "Directory.dc.html",
+      "title": "Directory · YouTube columns",
+      "x": 1560,
+      "y": 0,
+      "w": 1440,
+      "h": 1200
+    },
+    {
+      "file": "Profile.dc.html",
+      "title": "Profile · YouTube creator",
+      "x": 0,
+      "y": 2400,
+      "w": 1440,
+      "h": 1980
+    },
+    {
+      "file": "ProfileInstagram.dc.html",
+      "title": "Profile · Instagram creator",
+      "x": 1560,
+      "y": 2400,
+      "w": 1440,
+      "h": 1980
+    }
+  ],
+  "annotations": [
+    {
+      "id": "brief",
+      "x": 0,
+      "y": -220,
+      "w": 560,
+      "text": "v2 — metrics that matter for brand deals.\nEvery figure shown is obtainable through the official APIs once the creator connects: YouTube Analytics gives per-video retention (audienceWatchRatio), day-by-day views, age/gender/country/device; Instagram gives reach, non-follower share, saves, Reel watch time and follower demographics; X gives impressions, engagement, profile and link clicks (no demographics).\nNot shown anywhere because no API exposes it: YouTube impressions/CTR, X demographics, Instagram retention curves."
+    },
+    {
+      "id": "home-note",
+      "x": 1560,
+      "y": -160,
+      "w": 460,
+      "text": "Directory carries the same metric set as the profile: platform tabs switch the columns, retention sparkline inline, audience column, compare tray for shortlists."
+    },
+    {
+      "id": "profile-note",
+      "x": 0,
+      "y": 2260,
+      "w": 560,
+      "text": "Profile: ‘what a sponsor gets per video’ strip → retention curve (pre-roll / mid-roll / end markers) + view velocity → audience, geography, engagement per 1K + cadence → per-video table with retention sparklines. Window and content-type switches at the top apply to everything below."
+    },
+    {
+      "id": "ig-note",
+      "x": 1560,
+      "y": 2260,
+      "w": 460,
+      "text": "Instagram variant of the same layout: reach split followers vs. new audience, watch time as share of Reel length (no retention curve on IG), saves/shares per 1K reached, profile visits and website taps."
+    },
+    {
+      "id": "tone",
+      "x": 620,
+      "y": -220,
+      "w": 420,
+      "text": "v3 tone: warm off-white page (#f6f5f2) with white cards, warm borders, a dark ink hero band on the home page and a warm identity band on profiles. Verified green (#047857) is now the colour of every chart mark — it means ‘this line came from the API’. No gradients, no new fonts."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

@@ -1,0 +1,70 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Connector driver
+    |--------------------------------------------------------------------------
+    |
+    | "fake" simulates OAuth and API responses locally so the whole product
+    | works without Meta, Google or X app approval. "live" talks to the
+    | official APIs using the credentials below.
+    |
+    */
+
+    'driver' => env('SOCIAL_CONNECTOR_DRIVER', 'fake'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Google sign-in
+    |--------------------------------------------------------------------------
+    |
+    | The site login. Identity only (name, email, avatar): it does not grant
+    | YouTube access, that is still a separate connection on the profile.
+    | Defaults to the YouTube OAuth client, since both live in one Google project.
+    |
+    */
+
+    'google_login' => [
+        'client_id' => env('GOOGLE_CLIENT_ID', env('YOUTUBE_CLIENT_ID')),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET', env('YOUTUBE_CLIENT_SECRET')),
+    ],
+
+    'platforms' => [
+        'youtube' => [
+            'client_id' => env('YOUTUBE_CLIENT_ID'),
+            'client_secret' => env('YOUTUBE_CLIENT_SECRET'),
+            // Optional. Used only to resolve public channel data for unclaimed profiles.
+            'api_key' => env('YOUTUBE_API_KEY'),
+        ],
+        'instagram' => [
+            'client_id' => env('INSTAGRAM_CLIENT_ID'),
+            'client_secret' => env('INSTAGRAM_CLIENT_SECRET'),
+        ],
+        'x' => [
+            'client_id' => env('X_CLIENT_ID'),
+            'client_secret' => env('X_CLIENT_SECRET'),
+            // Optional app-only bearer token for public user lookups.
+            'bearer_token' => env('X_BEARER_TOKEN'),
+        ],
+    ],
+
+    'sync' => [
+        // How many recent items to import per account.
+        'content_limit' => (int) env('SOCIAL_SYNC_CONTENT_LIMIT', 50),
+        // Minimum gap between manual "Sync now" requests by a creator.
+        'manual_cooldown_minutes' => (int) env('SOCIAL_SYNC_MANUAL_COOLDOWN', 60),
+        // Verified metrics older than this are shown as "Metrics outdated".
+        'stale_after_days' => (int) env('SOCIAL_SYNC_STALE_AFTER_DAYS', 7),
+        // The scheduler re-syncs connected accounts this often.
+        'refresh_every_hours' => (int) env('SOCIAL_SYNC_REFRESH_HOURS', 24),
+    ],
+
+    'contact' => [
+        // Forward contact requests for unclaimed profiles to their public email.
+        // Off by default: the address was submitted by a third party and is unverified.
+        'forward_to_public_email' => (bool) env('CONTACT_FORWARD_TO_PUBLIC_EMAIL', false),
+    ],
+
+];
