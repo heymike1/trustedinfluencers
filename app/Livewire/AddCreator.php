@@ -88,6 +88,7 @@ class AddCreator extends Component
             'preview' => $this->normalizedHandle(),
             'existing' => $this->existingCreatorId ? Creator::find($this->existingCreatorId) : null,
         ])->layout('components.layouts.app', [
+            'band' => true,
             'description' => 'List a creator on YouTube, Instagram or X with a name and a handle. The profile goes live straight away; the creator can claim it later.',
             'canonical' => route('creators.create'),
         ])->title('Add a creator');

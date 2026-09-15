@@ -1,8 +1,13 @@
-<div class="mx-auto max-w-xl">
-    <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Add a creator</h1>
-    <p class="mt-1 text-sm text-ink-500">Anyone can add a creator. The profile goes live straight away and only shows public info until the creator claims it.</p>
+<div>
+    <x-page-band>
+        <div class="mx-auto max-w-xl">
+            <span class="eyebrow">Free, takes a minute</span>
+            <h1 class="display mt-4 text-3xl sm:text-[40px] leading-[1.05]">Add a creator</h1>
+            <p class="mt-3 text-[15px] text-ink-700 text-pretty">Anyone can add a creator. The profile goes live straight away and only shows public info until the creator claims it by signing in with the account itself.</p>
+        </div>
+    </x-page-band>
 
-    <form wire:submit="submit" class="card mt-6 p-5 space-y-5">
+    <form wire:submit="submit" class="card mx-auto max-w-xl p-6 space-y-5">
         <div>
             <label class="label" for="name">Creator name</label>
             <input id="name" type="text" wire:model="name" class="input" placeholder="John Smith" autocomplete="off">
@@ -13,9 +18,9 @@
             <p class="label">Platform</p>
             <div class="grid grid-cols-3 gap-2">
                 @foreach($platforms as $p)
-                    <label class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm cursor-pointer {{ $platform === $p->value ? 'border-brand-600 bg-brand-600 text-white' : 'border-ink-200 text-ink-700 hover:bg-ink-50' }}">
+                    <label class="flex items-center justify-center gap-2 rounded-full border px-3 py-2.5 text-sm font-medium cursor-pointer {{ $platform === $p->value ? 'border-brand-700 bg-brand-700 text-white' : 'border-ink-200 bg-white text-ink-700 hover:bg-ink-50' }}">
                         <input type="radio" wire:model.live="platform" value="{{ $p->value }}" class="sr-only">
-                        <x-platform-icon :platform="$p" /> {{ $p->label() }}
+                        <x-platform-icon :platform="$p" class="size-4" :colored="$platform !== $p->value" /> {{ $p->label() }}
                     </label>
                 @endforeach
             </div>
@@ -32,9 +37,9 @@
             @endif
             <x-field-error for="handle" />
             @if($existing)
-                <div class="mt-2 rounded-xl border border-ink-200 bg-ink-50 p-3 text-sm">
+                <div class="mt-2 flex items-center justify-between gap-3 rounded-xl border border-band-edge bg-verified-50 px-4 py-3 text-sm">
                     <p class="text-ink-700">This account is already listed.</p>
-                    <a href="{{ route('creators.show', $existing) }}" class="mt-1 inline-flex items-center gap-2 font-medium text-ink-950 underline underline-offset-2">
+                    <a href="{{ route('creators.show', $existing) }}" class="inline-flex items-center gap-2 font-semibold text-brand-700">
                         <x-avatar :creator="$existing" size="xs" /> {{ $existing->name }} →
                     </a>
                 </div>
