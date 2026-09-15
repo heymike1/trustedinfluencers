@@ -42,12 +42,8 @@
                                     @if($perf->average_view_percentage) · {{ \App\Support\Format::percent($perf->average_view_percentage, 0) }} of each video watched @endif
                                     @if($perf->median_reach) · {{ \App\Support\Format::compact($perf->median_reach) }} median reach @endif
                                     · {{ \App\Support\Format::percent($perf->engagement_rate) }} engagement
-                                @elseif($creator->socialAccounts->contains->isImporting())
-                                    Importing numbers
-                                @elseif($creator->socialAccounts->contains->hasVerifiedMetrics())
-                                    Connected, nothing to measure yet
                                 @else
-                                    Claimed, no account connected
+                                    Claimed
                                 @endif
                                 · {{ \App\Support\Format::compact($account?->follower_count) }} {{ $account?->platform->audienceNoun() }}
                             </span>
