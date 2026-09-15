@@ -25,6 +25,7 @@ class DisconnectAccount
             $account->snapshots()->delete();
             $account->performanceMetrics()->delete();
             $account->contents()->delete();
+            $account->audience()->delete();
 
             $account->forgetTokens();
             $account->forceFill([

@@ -1,6 +1,7 @@
 <div>
     @if(! $creator)
         <x-no-creator />
+        <div class="mx-auto max-w-lg mt-8">@include('livewire.account.partials.delete-account')</div>
     @else
         <x-account-nav :creator="$creator" />
 
@@ -55,6 +56,10 @@
                     </div>
                     <label class="flex items-center gap-2 text-sm text-ink-900"><input type="checkbox" wire:model="contact_enabled" class="accent-brand-600"> Accept contact requests through my profile</label>
                 </div>
+                <div class="border-t border-ink-100 pt-5">
+                    <label class="flex items-center gap-2 text-sm text-ink-900"><input type="checkbox" wire:model="is_listed" class="accent-brand-600"> Show my profile in the directory</label>
+                    <p class="mt-1 text-xs text-ink-400">Turn this off and your profile disappears from the directory, rankings and search engines. Only you can still open it. Your data stays as it is, so you can turn it back on any time.</p>
+                </div>
                 <div class="flex justify-end">
                     <button type="submit" class="btn-primary" wire:loading.attr="disabled">Save changes</button>
                 </div>
@@ -65,5 +70,7 @@
                 <p>Your verified numbers, follower count and content stats come straight from the platform, so there’s nothing to edit here. To refresh or reconnect, go to <a href="{{ route('account.connections') }}" class="underline underline-offset-2 text-ink-900">Connected accounts</a>.</p>
             </aside>
         </div>
+
+        <div class="mt-8 lg:max-w-[calc(100%-332px)]">@include('livewire.account.partials.delete-account')</div>
     @endif
 </div>

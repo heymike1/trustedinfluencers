@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Account;
 
+use App\Actions\Auth\DeleteUserAccount;
 use App\Models\Creator;
 use App\Models\CreatorCategory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -33,6 +36,8 @@ class EditProfile extends Component
 
     public bool $contact_enabled = true;
 
+    public bool $is_listed = true;
+
     public function mount(): void
     {
         $this->creator = auth()->user()->creator;
@@ -47,6 +52,7 @@ class EditProfile extends Component
                 'website' => $this->creator->website ?? '',
                 'contact_email' => $this->creator->contact_email ?? '',
                 'contact_enabled' => $this->creator->contact_enabled,
+                'is_listed' => $this->creator->is_listed,
             ]);
         }
     }
@@ -64,6 +70,7 @@ class EditProfile extends Component
             'website' => ['nullable', 'url', 'max:2048'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'contact_enabled' => ['boolean'],
+            'is_listed' => ['boolean'],
         ]);
 
         $this->creator->fill([
@@ -75,6 +82,7 @@ class EditProfile extends Component
             'website' => $data['website'] ?: null,
             'contact_email' => $data['contact_email'] ?: null,
             'contact_enabled' => $data['contact_enabled'],
+            'is_listed' => $data['is_listed'],
         ]);
 
         if ($this->creator->isDirty('name')) {
@@ -85,6 +93,25 @@ class EditProfile extends Component
 
         session()->flash('success', 'Profile updated.');
         $this->redirectRoute('account');
+    }
+
+    public function deleteAccount(DeleteUserAccount $delete): void
+    {
+        try {
+            $delete->handle(auth()->user());
+        } catch (ValidationException $e) {
+            $this->addError('account', collect($e->errors())->flatten()->first());
+
+            return;
+        }
+
+        // Not Auth::logout(): cycling the remember token would save() the deleted model back into the table.
+        Auth::forgetUser();
+        session()->invalidate();
+        session()->regenerateToken();
+        session()->flash('success', 'Your account and profile have been deleted.');
+
+        $this->redirectRoute('home');
     }
 
     public function render(): View

@@ -58,6 +58,7 @@
                                 </form>
                                 <p class="text-xs text-ink-500">Sign in as {{ $account->handleWithAt() }} to confirm it’s yours and pull in your numbers.</p>
                             @endif
+                            <button type="button" wire:click="remove({{ $account->id }})" wire:confirm="Remove {{ $account->platform->label() }} from your profile? {{ $account->isConnected() ? 'We’ll delete the verified numbers and stats we pulled in, and ' : 'We’ll take ' }}{{ $account->handleWithAt() }} off your public profile." class="btn-secondary btn-sm text-danger-700 sm:ml-auto">Remove</button>
                         </div>
                     </div>
                 @endforeach
@@ -91,6 +92,8 @@
                 <p>We refresh connected accounts every {{ config('social.sync.refresh_every_hours') }} hours on our own. You can run a sync yourself once every {{ $cooldown }} minutes.</p>
                 <p class="font-medium text-ink-900 pt-2">Disconnecting</p>
                 <p>Disconnecting throws away the login straight away and deletes everything we pulled in for that account, history included. Your public profile (name, handle, last known follower count) stays listed.</p>
+                <p class="font-medium text-ink-900 pt-2">Removing</p>
+                <p>Removing does the same and also takes the platform off your public profile. To take your whole profile out of the directory, turn off the listing under <a href="{{ route('account') }}" class="underline underline-offset-2 text-ink-900">Profile</a>.</p>
             </aside>
         </div>
     @endif

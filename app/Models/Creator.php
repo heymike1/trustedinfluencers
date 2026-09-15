@@ -31,6 +31,7 @@ class Creator extends Model
         'contact_enabled',
         'claimed_at',
         'status',
+        'is_listed',
     ];
 
     protected function casts(): array
@@ -39,6 +40,7 @@ class Creator extends Model
             'claimed_at' => 'datetime',
             'metrics_synced_at' => 'datetime',
             'contact_enabled' => 'boolean',
+            'is_listed' => 'boolean',
             'has_verified_metrics' => 'boolean',
             'status' => CreatorStatus::class,
             'engagement_rate' => 'float',
@@ -88,9 +90,15 @@ class Creator extends Model
         return 'slug';
     }
 
+    /** Profiles that show up publicly: not hidden by an admin and not unlisted by the creator. */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', CreatorStatus::Active);
+        return $query->where('status', CreatorStatus::Active)->where('is_listed', true);
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->status === CreatorStatus::Active && $this->is_listed;
     }
 
     public function scopeClaimed(Builder $query): Builder

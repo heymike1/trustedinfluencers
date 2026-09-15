@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Claims\StartClaim;
-use App\Enums\CreatorStatus;
 use App\Models\Creator;
 use App\Models\CreatorSocialAccount;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ class ClaimController extends Controller
 {
     public function show(Request $request, Creator $creator)
     {
-        abort_if($creator->status !== CreatorStatus::Active, 404);
+        abort_unless($creator->isPublic(), 404);
 
         $creator->load('socialAccounts');
 

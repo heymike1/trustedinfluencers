@@ -7,17 +7,19 @@ use App\Enums\Platform;
 use App\Enums\RankMetric;
 use App\Models\Creator;
 use App\Services\Metrics\CreatorRankings;
+use Illuminate\Http\Request;
 
 class CreatorController extends Controller
 {
-    public function show(Creator $creator, CreatorRankings $rankings)
+    public function show(Request $request, Creator $creator, CreatorRankings $rankings)
     {
         // Merged duplicates keep their URL but redirect to the canonical profile.
         if ($creator->status === CreatorStatus::Merged && $creator->mergedInto) {
             return redirect()->route('creators.show', $creator->mergedInto, 301);
         }
 
-        abort_if($creator->status !== CreatorStatus::Active, 404);
+        // An unlisted profile is still reachable for its owner, so they can see what they hid.
+        abort_unless($creator->isPublic() || ($creator->status === CreatorStatus::Active && $creator->isOwnedBy($request->user())), 404);
 
         $creator->load(['category', 'socialAccounts']);
 

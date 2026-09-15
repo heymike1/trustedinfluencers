@@ -148,6 +148,66 @@ class CreatorAccountTest extends TestCase
         $this->assertNull($this->creator->median_views);
     }
 
+    public function test_removing_the_last_platform_deletes_it_and_unlists_the_profile(): void
+    {
+        SocialContent::factory()->for($this->account, 'socialAccount')->withMetrics(['views' => 10])->count(2)->create();
+
+        Livewire::actingAs($this->owner)->test(Connections::class)
+            ->call('remove', $this->account->id)
+            ->assertSee('hidden from the directory');
+
+        $this->creator->refresh();
+        $this->assertDatabaseMissing('creator_social_accounts', ['id' => $this->account->id]);
+        $this->assertSame(0, SocialContent::count());
+        $this->assertFalse($this->creator->is_listed);
+        $this->assertFalse($this->creator->has_verified_metrics);
+        $this->assertSame(0, $this->creator->follower_count);
+
+        // Removing one of several platforms keeps the listing.
+        $this->creator->update(['is_listed' => true]);
+        $x = CreatorSocialAccount::factory()->for($this->creator)->platform(Platform::X, 'johnsmith')->create();
+        CreatorSocialAccount::factory()->for($this->creator)->platform(Platform::Instagram, 'johnsmith')->create();
+
+        Livewire::actingAs($this->owner)->test(Connections::class)->call('remove', $x->id)->assertDontSee('hidden from the directory');
+        $this->assertTrue($this->creator->fresh()->is_listed);
+    }
+
+    public function test_an_unlisted_profile_is_only_visible_to_its_owner(): void
+    {
+        Livewire::actingAs($this->owner)->test(EditProfile::class)->set('is_listed', false)->call('save')->assertHasNoErrors();
+
+        $this->assertFalse($this->creator->fresh()->is_listed);
+
+        auth()->logout();
+        $this->get(route('creators.show', $this->creator))->assertNotFound();
+        $this->get(route('creators.index'))->assertDontSee('John Smith');
+        $this->actingAs($this->owner)->get(route('creators.show', $this->creator))->assertOk()->assertSee('Only you can see this page')->assertSee('noindex, nofollow', false);
+    }
+
+    public function test_deleting_the_account_removes_the_user_and_the_whole_profile(): void
+    {
+        SocialContent::factory()->for($this->account, 'socialAccount')->withMetrics(['views' => 10])->count(2)->create();
+
+        Livewire::actingAs($this->owner)->test(EditProfile::class)
+            ->call('deleteAccount')
+            ->assertHasNoErrors()
+            ->assertRedirect(route('home'));
+
+        $this->assertGuest();
+        $this->assertDatabaseMissing('users', ['id' => $this->owner->id]);
+        $this->assertDatabaseMissing('creators', ['id' => $this->creator->id]);
+        $this->assertDatabaseMissing('creator_social_accounts', ['id' => $this->account->id]);
+        $this->assertSame(0, SocialContent::count());
+    }
+
+    public function test_admins_cannot_delete_themselves_from_the_dashboard(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        Livewire::actingAs($admin)->test(EditProfile::class)->call('deleteAccount')->assertHasErrors('account');
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
+    }
+
     public function test_the_owner_can_add_and_then_connect_another_platform(): void
     {
         Livewire::actingAs($this->owner)->test(Connections::class)

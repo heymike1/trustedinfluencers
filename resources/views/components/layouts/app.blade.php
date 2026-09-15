@@ -148,7 +148,7 @@
             </div>
             <div class="mt-8 flex flex-wrap items-center justify-between gap-2 border-t border-ink-100 pt-4 text-xs text-ink-400">
                 <p class="flex gap-4">
-                    <span>© {{ date('Y') }} {{ config('app.legal.entity') }}</span>
+                    <span>© {{ date('Y') }} {{ config('app.name') }}</span>
                     <a href="{{ route('privacy') }}" class="hover:text-ink-900">Privacy</a>
                     <a href="{{ route('terms') }}" class="hover:text-ink-900">Terms</a>
                     @if(config('services.datafast.website_id'))<button type="button" data-cookie-settings class="hover:text-ink-900">Cookie settings</button>@endif

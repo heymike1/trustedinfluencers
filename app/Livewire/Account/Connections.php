@@ -4,6 +4,7 @@ namespace App\Livewire\Account;
 
 use App\Actions\Creators\AddSocialAccountToCreator;
 use App\Actions\Creators\DuplicateCreatorException;
+use App\Actions\Creators\RemoveSocialAccount;
 use App\Actions\Sync\DisconnectAccount;
 use App\Actions\Sync\RequestManualSync;
 use App\Enums\Platform;
@@ -50,6 +51,14 @@ class Connections extends Component
         $disconnect->handle($account);
 
         $this->notify('success', $account->platform->label().' disconnected. The verified numbers and stats for this account are gone.');
+    }
+
+    public function remove(int $accountId, RemoveSocialAccount $remove): void
+    {
+        $account = $this->ownedAccount($accountId);
+        $unlisted = $remove->handle($account);
+
+        $this->notify('success', $account->platform->label().' removed from your profile.'.($unlisted ? ' Your profile is now hidden from the directory because it has no platforms left. Add one and turn the listing back on under Profile whenever you like.' : ''));
     }
 
     public function addAccount(AddSocialAccountToCreator $add): void

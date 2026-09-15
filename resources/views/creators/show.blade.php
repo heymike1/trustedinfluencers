@@ -8,10 +8,13 @@
     $importing = $creator->socialAccounts->contains(fn ($a) => $a->isImporting());
     $connected = $creator->socialAccounts->filter->hasVerifiedMetrics();
 @endphp
-<x-layouts.app :title="$title" :description="$description" :canonical="route('creators.show', $creator)" :json-ld="\App\Support\Seo::creator($creator)">
+<x-layouts.app :title="$title" :description="$description" :canonical="route('creators.show', $creator)" :json-ld="\App\Support\Seo::creator($creator)" :noindex="! $creator->is_listed">
     <x-slot:hero>
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-8">
+                @unless($creator->is_listed)
+                    <p class="mb-4 rounded-md border border-warn-100 bg-amber-50 px-3.5 py-2.5 text-sm text-warn-700">Only you can see this page. Your profile is hidden from the directory; turn the listing back on under <a href="{{ route('account') }}" class="underline underline-offset-2">Profile</a>.</p>
+                @endunless
                 <p class="text-xs text-ink-500 flex gap-1.5">
                     <a href="{{ route('creators.index') }}" class="hover:text-ink-950">Creators</a>
                     @if($creator->category)<span>/</span><a href="{{ route('creators.index', ['category' => $creator->category->slug]) }}" class="hover:text-ink-950">{{ $creator->category->name }}</a>@endif

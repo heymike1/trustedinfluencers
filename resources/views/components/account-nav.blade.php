@@ -3,7 +3,7 @@
     <div class="flex items-center gap-3">
         <x-avatar :creator="$creator" size="md" />
         <div>
-            <p class="font-semibold text-ink-950">{{ $creator->name }}</p>
+            <p class="font-semibold text-ink-950 flex items-center gap-2">{{ $creator->name }} @unless($creator->is_listed)<x-badge variant="warn">Hidden from directory</x-badge>@endunless</p>
             <a href="{{ route('creators.show', $creator) }}" class="text-xs text-ink-500 hover:text-ink-950">View public profile →</a>
         </div>
     </div>
