@@ -20,7 +20,7 @@ class Seo
                     '@id' => url('/').'#organization',
                     'name' => config('app.name'),
                     'url' => url('/'),
-                    'logo' => url(config('app.og_image')),
+                    'logo' => url('/logo.png'),
                 ],
                 [
                     '@type' => 'WebSite',

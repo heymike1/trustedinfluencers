@@ -14,6 +14,7 @@
     $image = $image ?? config('app.og_image');
     $imageUrl = $image ? (str_starts_with($image, 'http') ? $image : url($image)) : null;
     // Signed-in areas, auth screens and OAuth hops never belong in a search index.
+    $hasLogo = file_exists(public_path('logo.png'));
     $noindex ??= request()->routeIs('account*', 'admin.*', 'login*', 'register', 'password.*', 'oauth.*', 'creators.claim*');
 @endphp
 <!DOCTYPE html>
@@ -70,7 +71,7 @@
         <div class="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center justify-between gap-6">
             <div class="flex items-center gap-6">
                 <a href="{{ route('home') }}" class="font-semibold tracking-tight text-ink-950 flex items-center gap-2 whitespace-nowrap">
-                    <span class="inline-block size-5 rounded bg-brand-600"></span>
+                    @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded bg-brand-600"></span>@endif
                     {{ config('app.name') }}
                 </a>
                 <nav class="hidden sm:flex items-center gap-5 text-sm text-ink-700">
@@ -110,7 +111,7 @@
             <div class="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
                 <div class="max-w-xs">
                     <a href="{{ route('home') }}" class="font-semibold tracking-tight text-ink-950 flex items-center gap-2">
-                        <span class="inline-block size-5 rounded bg-brand-600"></span>
+                        @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded bg-brand-600"></span>@endif
                         {{ config('app.name') }}
                     </a>
                     <p class="mt-3 text-sm text-ink-600">{{ config('app.tagline') }}</p>

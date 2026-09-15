@@ -1,6 +1,7 @@
 Drop these files in place; the markup already points at them.
 
 - `/images/og-default.png`   1200×630, the default share image (Open Graph / Twitter)
+- `/logo.png`                 the logo, shown in the header and footer (rendered at 24px high, so a square or near-square mark works best)
 - `/favicon.ico`             32×32 (a placeholder ships with Laravel; replace it)
 - `/icon.svg`                vector favicon
 - `/apple-touch-icon.png`    180×180
