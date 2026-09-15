@@ -54,7 +54,14 @@ return [
     'send_default_pii' => env('SENTRY_SEND_DEFAULT_PII', false),
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_exceptions
-    // 'ignore_exceptions' => [],
+    // Expected outcomes, not bugs: a creator revoked access, or signed in with the wrong account.
+    'ignore_exceptions' => [
+        App\Social\Exceptions\ReconnectionRequiredException::class,
+        App\Actions\Claims\OwnershipMismatchException::class,
+        Illuminate\Auth\AuthenticationException::class,
+        Illuminate\Validation\ValidationException::class,
+        Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+    ],
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_transactions
     'ignore_transactions' => [
