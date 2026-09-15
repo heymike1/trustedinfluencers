@@ -6,7 +6,6 @@ use App\Social\ConnectorManager;
 use App\Social\Login\FakeGoogleLoginProvider;
 use App\Social\Login\GoogleLoginProvider;
 use App\Social\Login\LiveGoogleLoginProvider;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,10 +14,5 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ConnectorManager::class);
         $this->app->bind(GoogleLoginProvider::class, fn () => config('social.driver', 'fake') === 'fake' ? new FakeGoogleLoginProvider : new LiveGoogleLoginProvider);
-    }
-
-    public function boot(): void
-    {
-        Vite::prefetch(concurrency: 3);
     }
 }
