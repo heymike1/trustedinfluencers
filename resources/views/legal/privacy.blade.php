@@ -100,7 +100,7 @@
                     <tr><td>Datafast identifier</td><td>Datafast (datafa.st)</td><td>Analytics: distinguishing new from returning visitors for aggregated statistics. Not used for advertising or cross-site tracking. Only set after you choose "Allow" in the cookie banner.</td><td>Set by Datafast; see their <a href="https://datafa.st/privacy" class="underline underline-offset-2">privacy policy</a></td></tr>
                     <tr><td>cookie-consent (browser storage)</td><td>Us</td><td>Remembering your cookie choice so we don't ask again</td><td>Until you clear site data</td></tr>
                 </table>
-                <p>The analytics cookie is set only after you allow it in the banner. Choosing "No thanks" keeps the Service fully usable. To change your mind later, clear this site's data in your browser and the banner appears again. You can also delete cookies in your browser at any time; you will be signed out if you delete the session cookie.</p>
+                <p>The analytics cookie is set only after you allow it in the banner. Choosing "No thanks" keeps the Service fully usable. To change your mind later, use "Cookie settings" in the footer; the banner appears again and your new choice replaces the old one. Withdrawing consent stops the analytics cookie from then on; statistics already collected are aggregated and cannot be traced back to you. You can also delete cookies in your browser at any time; you will be signed out if you delete the session cookie.</p>
             </section>
 
             <section>
