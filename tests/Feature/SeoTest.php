@@ -78,6 +78,7 @@ class SeoTest extends TestCase
             ->assertSee(route('creators.show', $active), false)
             ->assertSee(route('creators.index', ['category' => 'tech']), false)
             ->assertSee(route('creators.index', ['platform' => 'x']), false)
+            ->assertSee(route('about'), false)
             ->assertDontSee('hidden-one');
     }
 

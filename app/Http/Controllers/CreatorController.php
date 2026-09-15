@@ -42,7 +42,7 @@ class CreatorController extends Controller
         $ranks = [];
 
         if ($overall = $rankings->position($creator, RankMetric::MedianViews)) {
-            $ranks[] = ['title' => 'Top performers', 'rank' => $overall['rank'], 'hint' => "of {$overall['total']} verified creators by median views"];
+            $ranks[] = ['title' => 'Leaderboard', 'rank' => $overall['rank'], 'hint' => "on the leaderboard of {$overall['total']} verified creators by median views"];
         }
 
         $quality = $creator->primary_platform === Platform::YouTube ? RankMetric::Watched : RankMetric::Engagement;

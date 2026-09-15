@@ -28,7 +28,7 @@
     @if($canonical && ! $noindex)
         <link rel="canonical" href="{{ $canonical }}">
     @endif
-    <meta name="theme-color" content="#059669">
+    <meta name="theme-color" content="#0f3d2e">
     <meta name="application-name" content="{{ $siteName }}">
 
     <meta property="og:site_name" content="{{ $siteName }}">
@@ -58,21 +58,22 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-full flex flex-col">
-    <header class="border-b border-ink-200 bg-white">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center justify-between gap-6">
-            <div class="flex items-center gap-6">
-                <a href="{{ route('home') }}" class="font-semibold tracking-tight text-ink-950 flex items-center gap-2 whitespace-nowrap">
-                    @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded bg-brand-600"></span>@endif
+    {{-- With a hero band the header sits inside it; otherwise it is a plain white bar. --}}
+    <header class="{{ isset($hero) ? 'bg-band' : 'border-b border-ink-200 bg-white' }}">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
+            <div class="flex items-center gap-8">
+                <a href="{{ route('home') }}" class="display text-[17px] tracking-[-0.02em] flex items-center gap-2.5 whitespace-nowrap">
+                    @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-flex size-6 items-center justify-center rounded-[7px] bg-brand-700"><svg class="size-3.5 text-white" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>@endif
                     {{ config('app.name') }}
                 </a>
-                <nav class="hidden sm:flex items-center gap-5 text-sm text-ink-700">
-                    <a href="{{ route('creators.index') }}" class="hover:text-ink-950 {{ request()->routeIs('creators.index') ? 'text-ink-950 font-medium' : '' }}">Browse creators</a>
-                    <a href="{{ route('home') }}#top-performers" class="hover:text-ink-950">Top performers</a>
-                    <a href="{{ route('creators.create') }}" class="hover:text-ink-950 {{ request()->routeIs('creators.create') ? 'text-ink-950 font-medium' : '' }}">Add a creator</a>
+                <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-ink-700">
+                    <a href="{{ route('creators.index') }}" class="hover:text-ink-950 {{ request()->routeIs('creators.index') ? 'text-ink-950' : '' }}">Browse creators</a>
+                    <a href="{{ route('home') }}#leaderboard" class="hover:text-ink-950">Leaderboard</a>
+                    <a href="{{ route('about') }}" class="hover:text-ink-950 {{ request()->routeIs('about') ? 'text-ink-950' : '' }}">About</a>
                 </nav>
             </div>
             <nav class="flex items-center gap-4 text-sm text-ink-700 whitespace-nowrap">
@@ -87,7 +88,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="hover:text-ink-950">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn-primary btn-sm">Claim your profile</a>
+                    <a href="{{ route('register') }}" class="btn-primary btn-sm !px-4 !py-2">Claim your profile</a>
                 @endauth
             </nav>
         </div>
@@ -106,7 +107,7 @@
             <div class="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
                 <div class="max-w-xs">
                     <a href="{{ route('home') }}" class="font-semibold tracking-tight text-ink-950 flex items-center gap-2">
-                        @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded bg-brand-600"></span>@endif
+                        @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded-md bg-brand-700"></span>@endif
                         {{ config('app.name') }}
                     </a>
                     <p class="mt-3 text-sm text-ink-600">{{ config('app.tagline') }}</p>
@@ -117,7 +118,8 @@
                     <ul class="mt-3 space-y-2 text-sm text-ink-700">
                         <li><a href="{{ route('creators.index') }}" class="hover:text-ink-950">All creators</a></li>
                         <li><a href="{{ route('creators.index', ['verified' => 1]) }}" class="hover:text-ink-950">Verified only</a></li>
-                        <li><a href="{{ route('home') }}#top-performers" class="hover:text-ink-950">Top performers</a></li>
+                        <li><a href="{{ route('home') }}#leaderboard" class="hover:text-ink-950">Leaderboard</a></li>
+                        <li><a href="{{ route('about') }}" class="hover:text-ink-950">About</a></li>
                         @foreach(\App\Enums\Platform::cases() as $platform)
                             <li><a href="{{ route('creators.index', ['platform' => $platform->value]) }}" class="inline-flex items-center gap-1.5 hover:text-ink-950"><x-platform-icon :platform="$platform" class="size-3.5" :colored="true" /> {{ $platform->label() }} creators</a></li>
                         @endforeach

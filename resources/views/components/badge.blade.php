@@ -6,4 +6,4 @@
     'dark' => 'border-ink-900 bg-ink-900 text-white',
     default => 'border-ink-200 bg-ink-50 text-ink-700',
 })
-<span {{ $attributes->class(["inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-medium leading-4 whitespace-nowrap $classes"]) }}>{{ $slot }}</span>
+<span {{ $attributes->class(["inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold leading-4 whitespace-nowrap $classes"]) }}>{{ $slot }}</span>

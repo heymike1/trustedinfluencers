@@ -94,7 +94,7 @@ class InsightsAndRankingsTest extends TestCase
 
         $this->get(route('creators.show', $creator))
             ->assertOk()
-            ->assertSee('Top performers')
+            ->assertSee('on the leaderboard')
             ->assertSee('#1')
             ->assertSee('most watched');
     }

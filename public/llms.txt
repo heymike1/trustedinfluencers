@@ -12,7 +12,8 @@
 
 ## Pages
 
-- [Home](/): top performing creators, ranked by median views, how much gets watched, engagement or posting cadence.
+- [Home](/): the leaderboard of verified creators, ranked by median views, how much gets watched, engagement or posting cadence.
+- [About](/about): how verification works, what a verified profile shows, and what the platforms don't share.
 - [Browse creators](/creators): every listed creator, filterable by platform, category, audience size and verified numbers.
 - [Creator profiles](/creators/{slug}): per creator, per platform: median and average views, watch curve, first-week views, audience breakdown, reactions per 1,000 views, recent content.
 - [Add a creator](/creators/add): list a creator by name, platform and handle.

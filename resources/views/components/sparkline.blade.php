@@ -1,4 +1,4 @@
-@props(['points', 'width' => 72, 'height' => 20, 'color' => '#059669'])
+@props(['points', 'width' => 72, 'height' => 20, 'color' => '#1f9d66'])
 @php
     $n = count($points);
     $max = max(1, max($points)); $min = min($points);
