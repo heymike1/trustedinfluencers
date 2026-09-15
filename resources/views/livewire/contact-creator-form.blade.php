@@ -15,7 +15,7 @@
         </div>
     @else
         @if(! $creator->isClaimed())
-            <p class="mb-4 rounded-md border border-ink-200 bg-ink-50 px-3 py-2 text-xs text-ink-600">Nobody has claimed this profile yet. We’ll keep your message and show it to the creator if they do.</p>
+            <p class="mb-4 rounded-xl border border-ink-200 bg-ink-50 px-3 py-2 text-xs text-ink-600">Nobody has claimed this profile yet. We’ll keep your message and show it to the creator if they do.</p>
         @endif
         <form wire:submit="submit" class="grid gap-4 sm:grid-cols-2">
             <div>

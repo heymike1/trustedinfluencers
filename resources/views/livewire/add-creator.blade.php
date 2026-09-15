@@ -13,7 +13,7 @@
             <p class="label">Platform</p>
             <div class="grid grid-cols-3 gap-2">
                 @foreach($platforms as $p)
-                    <label class="flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer {{ $platform === $p->value ? 'border-brand-600 bg-brand-600 text-white' : 'border-ink-200 text-ink-700 hover:bg-ink-50' }}">
+                    <label class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm cursor-pointer {{ $platform === $p->value ? 'border-brand-600 bg-brand-600 text-white' : 'border-ink-200 text-ink-700 hover:bg-ink-50' }}">
                         <input type="radio" wire:model.live="platform" value="{{ $p->value }}" class="sr-only">
                         <x-platform-icon :platform="$p" /> {{ $p->label() }}
                     </label>
@@ -32,7 +32,7 @@
             @endif
             <x-field-error for="handle" />
             @if($existing)
-                <div class="mt-2 rounded-md border border-ink-200 bg-ink-50 p-3 text-sm">
+                <div class="mt-2 rounded-xl border border-ink-200 bg-ink-50 p-3 text-sm">
                     <p class="text-ink-700">This account is already listed.</p>
                     <a href="{{ route('creators.show', $existing) }}" class="mt-1 inline-flex items-center gap-2 font-medium text-ink-950 underline underline-offset-2">
                         <x-avatar :creator="$existing" size="xs" /> {{ $existing->name }} →

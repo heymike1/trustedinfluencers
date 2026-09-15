@@ -4,11 +4,11 @@
 @endphp
 <div @if($importing) wire:poll.8s @endif>
     @if($accounts->count() > 1)
-        <div class="flex gap-0 border-b border-ink-200 mb-6 text-sm">
+        <div class="flex flex-wrap gap-1.5 mb-6">
             @foreach($accounts as $a)
-                <button type="button" wire:click="$set('platform', '{{ $a->platform->value }}')" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 {{ $a->is($account) ? 'font-semibold text-ink-950 border-b-2 border-brand-600 -mb-px' : 'font-medium text-ink-500 hover:text-ink-900' }}">
-                    <x-platform-icon :platform="$a->platform" class="size-3.5" :colored="true" /> {{ $a->platform->label() }}
-                    @if($a->hasVerifiedMetrics())<span class="size-1.5 rounded-full bg-brand-600"></span>@endif
+                <button type="button" wire:click="$set('platform', '{{ $a->platform->value }}')" class="chip !py-2 {{ $a->is($account) ? 'chip-on' : '' }}">
+                    <x-platform-icon :platform="$a->platform" class="size-3.5" :colored="! $a->is($account)" /> {{ $a->platform->label() }}
+                    @if($a->hasVerifiedMetrics())<span class="size-1.5 rounded-full {{ $a->is($account) ? 'bg-white/80' : 'bg-brand-600' }}"></span>@endif
                 </button>
             @endforeach
         </div>
@@ -19,7 +19,7 @@
     @elseif($verified && $insights)
         {{-- Stat strip --}}
         <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
-            <h2 class="text-base font-semibold text-ink-950">What a sponsor gets, per {{ $activeType->singular() }}</h2>
+            <h2 class="display text-xl tracking-[-0.02em]">What a sponsor gets, per {{ $activeType->singular() }}</h2>
             <div class="flex flex-wrap gap-1">
                 @foreach($windows as $w)
                     <button type="button" wire:click="$set('window', '{{ $w->value }}')" class="chip {{ $activeWindow === $w ? 'chip-on' : '' }}">{{ $w->label() }}</button>
@@ -76,7 +76,7 @@
     {{-- Contact --}}
     <section id="contact" class="mt-10 grid gap-6 lg:grid-cols-[1fr_320px] scroll-mt-6">
         <div>
-            <h2 class="text-base font-semibold text-ink-950 mb-3">Contact {{ $creator->name }}</h2>
+            <h2 class="display text-xl tracking-[-0.02em] mb-3">Contact {{ $creator->name }}</h2>
             <livewire:contact-creator-form :creator="$creator" />
         </div>
         <aside class="text-sm text-ink-500 space-y-3 lg:pt-9">

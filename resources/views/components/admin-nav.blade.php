@@ -2,7 +2,7 @@
     <h1 class="text-xl font-semibold tracking-tight text-ink-950">Admin</h1>
     <nav class="flex flex-wrap gap-1 text-sm">
         @foreach([['admin.dashboard', 'Overview'], ['admin.creators', 'Creators'], ['admin.users', 'Users'], ['admin.claims', 'Claims'], ['admin.duplicates', 'Duplicates'], ['admin.connections', 'Connections']] as [$route, $label])
-            <a href="{{ route($route) }}" class="rounded-md px-3 py-1.5 {{ request()->routeIs($route) || ($route === 'admin.creators' && request()->routeIs('admin.creators.*')) ? 'bg-brand-600 text-white' : 'text-ink-700 hover:bg-ink-100' }}">{{ $label }}</a>
+            <a href="{{ route($route) }}" class="rounded-full px-3.5 py-1.5 {{ request()->routeIs($route) || ($route === 'admin.creators' && request()->routeIs('admin.creators.*')) ? 'bg-brand-700 text-white' : 'text-ink-700 hover:bg-ink-100' }}">{{ $label }}</a>
         @endforeach
     </nav>
 </div>

@@ -11,9 +11,9 @@
 <x-layouts.app :title="$title" :description="$description" :canonical="route('creators.show', $creator)" :json-ld="\App\Support\Seo::creator($creator)" :noindex="! $creator->is_listed">
     <x-slot:hero>
         <div class="band">
-            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-8">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-10">
                 @unless($creator->is_listed)
-                    <p class="mb-4 rounded-md border border-warn-100 bg-amber-50 px-3.5 py-2.5 text-sm text-warn-700">Only you can see this page. Your profile is hidden from the directory; turn the listing back on under <a href="{{ route('account') }}" class="underline underline-offset-2">Profile</a>.</p>
+                    <p class="mb-4 rounded-xl border border-warn-100 bg-amber-50 px-3.5 py-2.5 text-sm text-warn-700">Only you can see this page. Your profile is hidden from the directory; turn the listing back on under <a href="{{ route('account') }}" class="underline underline-offset-2">Profile</a>.</p>
                 @endunless
                 <p class="text-xs text-ink-500 flex gap-1.5">
                     <a href="{{ route('creators.index') }}" class="hover:text-ink-950">Creators</a>
@@ -24,7 +24,7 @@
                         <x-avatar :creator="$creator" size="xl" />
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
-                                <h1 class="text-2xl font-semibold tracking-tight text-ink-950">{{ $creator->name }}</h1>
+                                <h1 class="display text-[28px] sm:text-[32px] tracking-[-0.025em]">{{ $creator->name }}</h1>
                                 @if($state === \App\Enums\ProfileState::VerifiedMetrics)
                                     <x-badge variant="verified" class="gap-1.5">
                                         <svg class="size-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>
@@ -47,16 +47,16 @@
                             </div>
                             @if($creator->bio)<p class="mt-3 max-w-xl text-sm text-ink-700">{{ $creator->bio }}</p>@endif
                             @if($ranks)
-                                <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-500 tnum">
+                                <div class="mt-3 flex flex-wrap gap-1.5 text-xs tnum">
                                     @foreach($ranks as $rank)
-                                        <span><span class="font-semibold text-ink-900">#{{ $rank['rank'] }}</span> {{ $rank['hint'] }}</span>
+                                        <span class="inline-flex items-center gap-1.5 rounded-full border border-band-edge bg-white px-2.5 py-1 text-ink-500"><span class="font-bold text-brand-700">#{{ $rank['rank'] }}</span> {{ $rank['hint'] }}</span>
                                     @endforeach
-                                </p>
+                                </div>
                             @endif
                         </div>
                     </div>
 
-                    <div class="card w-full md:w-72 shrink-0 p-4 text-sm">
+                    <div class="card w-full md:w-72 shrink-0 p-5 text-sm">
                         @if($isOwner)
                             <p class="font-medium text-ink-950">This is your profile</p>
                             <p class="mt-1 text-ink-500">Edit details or manage connected accounts from your dashboard.</p>

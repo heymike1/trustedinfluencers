@@ -20,12 +20,12 @@
     <text x="{{ $left - 6 }}" y="{{ $top + 4 }}" font-size="10" fill="#a1a1aa" text-anchor="end">100%</text>
     <text x="{{ $left - 6 }}" y="{{ ($top + $bottom) / 2 + 4 }}" font-size="10" fill="#a1a1aa" text-anchor="end">50%</text>
     <text x="{{ $left - 6 }}" y="{{ $bottom + 4 }}" font-size="10" fill="#a1a1aa" text-anchor="end">0%</text>
-    <path d="{{ $area }}" fill="#059669" fill-opacity="0.10"></path>
-    <path d="{{ $path }}" fill="none" stroke="#059669" stroke-width="2" stroke-linejoin="round"></path>
+    <path d="{{ $area }}" fill="#1f9d66" fill-opacity="0.10"></path>
+    <path d="{{ $path }}" fill="none" stroke="#1f9d66" stroke-width="2" stroke-linejoin="round"></path>
     @foreach($markers as [$index, $text])
         @php($anchor = $index > $n * 0.7 ? 'end' : ($index < $n * 0.15 ? 'start' : 'middle'))
         <line x1="{{ round($x($index), 1) }}" y1="{{ $top }}" x2="{{ round($x($index), 1) }}" y2="{{ $bottom }}" stroke="#c4e0d0" stroke-dasharray="3 3"></line>
-        <circle cx="{{ round($x($index), 1) }}" cy="{{ round($y($points[$index]), 1) }}" r="3" fill="#059669"></circle>
+        <circle cx="{{ round($x($index), 1) }}" cy="{{ round($y($points[$index]), 1) }}" r="3" fill="#1f9d66"></circle>
         <text x="{{ round($x($index) + ($anchor === 'end' ? -6 : ($anchor === 'start' ? 6 : 0)), 1) }}" y="{{ round($y($points[$index]) - 8, 1) }}" font-size="11" font-weight="600" fill="#18181b" text-anchor="{{ $anchor }}">{{ $text }}</text>
     @endforeach
     @foreach($labels as [$pos, $text])

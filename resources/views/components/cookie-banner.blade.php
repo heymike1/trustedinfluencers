@@ -1,5 +1,5 @@
 {{-- Loads the analytics script only after the visitor accepts. Choice is remembered in localStorage. --}}
-<div id="cookie-banner" hidden class="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-lg rounded-md border border-ink-200 bg-white p-4 shadow-lg sm:inset-x-auto sm:right-6">
+<div id="cookie-banner" hidden class="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-lg rounded-xl border border-ink-200 bg-white p-4 shadow-lg sm:inset-x-auto sm:right-6">
     <p class="text-sm font-semibold text-ink-950">Cookies on this site</p>
     <p class="mt-1 text-sm text-ink-700">Some cookies are needed to keep you signed in and to protect forms; those are always on. With your permission we also set one analytics cookie so we can see which pages are used and how many people visit. It doesn't follow you to other sites and it isn't used for advertising. You can change your mind any time from the cookie policy.</p>
     <p class="mt-1 text-xs text-ink-500"><a href="{{ route('privacy') }}#cookies" class="underline underline-offset-2 text-ink-700">Read the cookie policy</a></p>
