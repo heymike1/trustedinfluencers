@@ -17,53 +17,53 @@
         </div>
     </x-slot:hero>
 
-    <div class="-mt-36 sm:-mt-40">
-        <livewire:top-performers />
-    </div>
-
-    {{-- Three moments in time. Not filters: a glance at what moved today, this week and ever. --}}
-    <div class="mt-4 grid gap-3.5 md:grid-cols-3">
-        <div class="card px-5 py-4 flex flex-col gap-2">
-            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">Today</span>
+    {{-- Three moments in time, overlapping the band. Not filters: a glance at what moved today, this week and ever. --}}
+    <div class="-mt-36 sm:-mt-40 card overflow-hidden grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-100">
+        <div class="px-6 py-5 flex flex-col gap-3">
+            <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> Today</p>
             @if($pulse['refreshedToday'] || $pulse['claimedToday'])
-                <p class="display text-2xl tracking-[-0.02em] tnum">{{ number_format($pulse['refreshedToday']) }} <span class="text-base font-semibold text-ink-700">{{ \Illuminate\Support\Str::plural('profile', $pulse['refreshedToday']) }} refreshed</span></p>
-                <p class="text-[13px] text-ink-500 tnum">{{ $pulse['claimedToday'] ? number_format($pulse['claimedToday']).' '.\Illuminate\Support\Str::plural('creator', $pulse['claimedToday']).' claimed a profile today.' : 'Nobody new yet today.' }} Numbers come in fresh from the platforms every {{ config('social.sync.refresh_every_hours') }} hours.</p>
+                <p class="display text-[28px] leading-none tracking-[-0.02em] tnum">{{ number_format($pulse['refreshedToday']) }}<span class="ml-2 text-sm font-semibold tracking-normal text-ink-700">{{ \Illuminate\Support\Str::plural('profile', $pulse['refreshedToday']) }} refreshed</span></p>
+                <p class="text-[13px] text-ink-500 tnum">{{ $pulse['claimedToday'] ? number_format($pulse['claimedToday']).' '.\Illuminate\Support\Str::plural('creator', $pulse['claimedToday']).' claimed a profile today.' : 'Nobody new yet today.' }} Numbers come in fresh every {{ config('social.sync.refresh_every_hours') }} hours.</p>
             @else
-                <p class="display text-2xl tracking-[-0.02em]">Quiet so far</p>
-                <p class="text-[13px] text-ink-500">Numbers come in fresh from the platforms every {{ config('social.sync.refresh_every_hours') }} hours. <a href="{{ route('creators.index') }}" class="font-semibold text-brand-700">Find your profile</a> to be today’s first.</p>
+                <p class="display text-[28px] leading-none tracking-[-0.02em]">Quiet so far</p>
+                <p class="text-[13px] text-ink-500">Numbers come in fresh every {{ config('social.sync.refresh_every_hours') }} hours. <a href="{{ route('creators.index') }}" class="font-semibold text-brand-700">Find your profile</a> to be today’s first.</p>
             @endif
         </div>
-        <div class="card px-5 py-4 flex flex-col gap-2">
-            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">This week <span class="normal-case tracking-normal text-ink-400">· strongest newcomer</span></span>
+        <div class="px-6 py-5 flex flex-col gap-3">
+            <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> This week <span class="normal-case tracking-normal font-medium text-ink-400">· strongest newcomer</span></p>
             @if($new = $pulse['newThisWeek'])
                 @php($account = $new->primaryAccount())
-                <a href="{{ route('creators.show', $new) }}" class="flex items-center gap-3">
-                    <x-avatar :creator="$new" size="sm" />
+                <a href="{{ route('creators.show', $new) }}" class="flex items-center gap-3 group">
+                    <x-avatar :creator="$new" size="md" />
                     <span class="min-w-0">
-                        <span class="block font-semibold text-ink-950 truncate">{{ $new->name }}</span>
-                        <span class="block text-[13px] text-ink-500 tnum">Joined with {{ \App\Support\Format::compact($new->median_views) }} median views @if($account)· <x-platform-icon :platform="$account->platform" class="inline size-3" :colored="true" /> {{ $account->handleWithAt() }}@endif</span>
+                        <span class="block display text-lg leading-tight tracking-[-0.02em] truncate group-hover:text-brand-700">{{ $new->name }}</span>
+                        <span class="block text-[13px] text-ink-500 tnum">{{ \App\Support\Format::compact($new->median_views) }} median views @if($account)· <x-platform-icon :platform="$account->platform" class="inline size-3" :colored="true" /> {{ $account->handleWithAt() }}@endif</span>
                     </span>
                 </a>
             @else
-                <p class="display text-2xl tracking-[-0.02em]">Nobody new yet</p>
+                <p class="display text-[28px] leading-none tracking-[-0.02em]">Nobody new yet</p>
                 <p class="text-[13px] text-ink-500">The strongest profile to join this week shows up here. <a href="{{ route('creators.create') }}" class="font-semibold text-brand-700">Add a creator</a> you work with.</p>
             @endif
         </div>
-        <div class="card px-5 py-4 flex flex-col gap-2">
-            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">All-time <span class="normal-case tracking-normal text-ink-400">· most watched</span></span>
+        <div class="px-6 py-5 flex flex-col gap-3">
+            <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> All-time <span class="normal-case tracking-normal font-medium text-ink-400">· most watched</span></p>
             @if($best = $pulse['mostWatched'])
-                <a href="{{ route('creators.show', $best) }}" class="flex items-center gap-3">
-                    <x-avatar :creator="$best" size="sm" />
+                <a href="{{ route('creators.show', $best) }}" class="flex items-center gap-3 group">
+                    <x-avatar :creator="$best" size="md" />
                     <span class="min-w-0">
-                        <span class="block font-semibold text-ink-950 truncate">{{ $best->name }}</span>
-                        <span class="block text-[13px] text-ink-500 tnum">{{ \App\Support\Format::percent($best->average_view_percentage, 0) }} of each video watched, on average</span>
+                        <span class="block display text-lg leading-tight tracking-[-0.02em] truncate group-hover:text-brand-700">{{ $best->name }}</span>
+                        <span class="block text-[13px] text-ink-500 tnum"><span class="font-semibold text-brand-700">{{ \App\Support\Format::percent($best->average_view_percentage, 0) }}</span> of each video watched, on average</span>
                     </span>
                 </a>
             @else
-                <p class="display text-2xl tracking-[-0.02em]">No record yet</p>
+                <p class="display text-[28px] leading-none tracking-[-0.02em]">No record yet</p>
                 <p class="text-[13px] text-ink-500">The creator whose videos get watched the longest takes this spot.</p>
             @endif
         </div>
+    </div>
+
+    <div class="mt-4">
+        <livewire:top-performers />
     </div>
 
     <p class="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">

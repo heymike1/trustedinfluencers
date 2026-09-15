@@ -24,7 +24,7 @@ class TopPerformers extends Component
     #[Url(as: 'in', except: '')]
     public string $category = '';
 
-    public int $limit = 8;
+    public int $limit = 20;
 
     public function updatedPlatform(): void
     {
