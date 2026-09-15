@@ -15,9 +15,6 @@ return [
 
     'default' => env('QUEUE_CONNECTION', 'database'),
 
-    // Start a worker from the scheduler every minute (for hosts without Supervisor).
-    'worker_via_scheduler' => (bool) env('QUEUE_WORKER_VIA_SCHEDULER', false),
-
     /*
     |--------------------------------------------------------------------------
     | Queue Connections

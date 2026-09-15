@@ -69,9 +69,10 @@ Production checklist:
 
 - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://…`, `SESSION_SECURE_COOKIE=true`
 - A real mailer (`MAIL_MAILER=smtp` or postmark/resend): contact requests and password resets go out by email
-- `php artisan queue:work` under Supervisor (or Horizon with Redis). No Supervisor? Set
-  `QUEUE_WORKER_VIA_SCHEDULER=true` and the scheduler starts a short-lived worker every minute.
-- Cron: `* * * * * php artisan schedule:run` (daily re-sync of connected accounts, pruning failed jobs)
+- Cron, every minute: `cd /path/to/app && php artisan schedule:run`. That single line runs the
+  hourly re-sync, the cleanup and the queue worker (a short-lived `queue:work` each minute that
+  handles imports and emails). If you'd rather run a permanent worker under Supervisor, drop the
+  `queue:work` line from `routes/console.php`.
 - `php artisan optimize` after deploy, `npm run build` for assets
 
 ## Code map

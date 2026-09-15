@@ -8,22 +8,16 @@ use Tests\TestCase;
 
 class ScheduleTest extends TestCase
 {
-    public function test_the_scheduled_worker_is_only_registered_when_enabled(): void
+    public function test_cron_runs_the_sync_the_cleanup_and_the_queue_worker(): void
     {
-        $this->assertStringNotContainsString('queue:work', $this->scheduledCommands(false));
-
-        $with = $this->scheduledCommands(true);
-        $this->assertStringContainsString('queue:work --stop-when-empty', $with);
-        $this->assertStringContainsString('social:sync-due', $with);
-    }
-
-    private function scheduledCommands(bool $workerViaScheduler): string
-    {
-        config(['queue.worker_via_scheduler' => $workerViaScheduler]);
         $this->app->forgetInstance(Schedule::class);
         Facade::clearResolvedInstance(Schedule::class);
         require base_path('routes/console.php');
 
-        return collect(app(Schedule::class)->events())->map(fn ($event) => $event->command)->join("\n");
+        $commands = collect(app(Schedule::class)->events())->map(fn ($event) => $event->command)->join("\n");
+
+        $this->assertStringContainsString('social:sync-due', $commands);
+        $this->assertStringContainsString('queue:prune-failed', $commands);
+        $this->assertStringContainsString('queue:work --stop-when-empty', $commands);
     }
 }
