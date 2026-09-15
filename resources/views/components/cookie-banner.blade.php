@@ -1,6 +1,6 @@
-{{-- Loads the Datafast analytics script only after the visitor accepts. Choice is remembered in localStorage. --}}
+{{-- Loads the analytics script only after the visitor accepts. Choice is remembered in localStorage. --}}
 <div id="cookie-banner" hidden class="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-lg rounded-md border border-ink-200 bg-white p-4 shadow-lg sm:inset-x-auto sm:right-6">
-    <p class="text-sm text-ink-700">We use one analytics cookie (Datafast) to count visits. No ads, no tracking across sites. <a href="{{ route('privacy') }}#cookies" class="underline underline-offset-2 text-ink-900">Details</a></p>
+    <p class="text-sm text-ink-700">We use cookies to see how the site is used. No ads, no tracking across sites. <a href="{{ route('privacy') }}#cookies" class="underline underline-offset-2 text-ink-900">Cookie policy</a></p>
     <div class="mt-3 flex gap-2">
         <button type="button" data-cookie="accept" class="btn-primary btn-sm">Allow</button>
         <button type="button" data-cookie="decline" class="btn-secondary btn-sm">No thanks</button>
