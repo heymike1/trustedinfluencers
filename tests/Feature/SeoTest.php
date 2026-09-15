@@ -42,6 +42,13 @@ class SeoTest extends TestCase
             ->assertSee('<link rel="canonical" href="'.route('creators.index', ['platform' => 'youtube']).'">', false);
     }
 
+    public function test_legal_pages_are_served_and_linked(): void
+    {
+        $this->get('/privacy')->assertOk()->assertSee('YouTube API Services')->assertSee('Run More Brands');
+        $this->get('/terms')->assertOk()->assertSee('Dutch law');
+        $this->get('/')->assertSee(route('privacy'))->assertSee(route('terms'));
+    }
+
     public function test_private_pages_are_not_indexed(): void
     {
         $user = User::factory()->create();

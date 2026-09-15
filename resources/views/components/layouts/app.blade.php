@@ -150,7 +150,11 @@
                 </div>
             </div>
             <div class="mt-8 flex flex-wrap items-center justify-between gap-2 border-t border-ink-100 pt-4 text-xs text-ink-400">
-                <p>© {{ date('Y') }} {{ config('app.name') }}</p>
+                <p class="flex gap-4">
+                    <span>© {{ date('Y') }} {{ config('app.legal.entity') }}</span>
+                    <a href="{{ route('privacy') }}" class="hover:text-ink-900">Privacy</a>
+                    <a href="{{ route('terms') }}" class="hover:text-ink-900">Terms</a>
+                </p>
                 <p>Not affiliated with YouTube, Instagram or X. Platform names and icons belong to their owners.</p>
             </div>
         </div>

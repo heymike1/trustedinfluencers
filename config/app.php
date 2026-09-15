@@ -23,6 +23,13 @@ return [
     // Optional "@handle" for twitter:site.
     'twitter_handle' => env('APP_TWITTER_HANDLE'),
 
+    // Shown on the privacy policy and terms pages.
+    'legal' => [
+        'entity' => 'Run More Brands',
+        'contact' => env('APP_CONTACT_EMAIL', env('MAIL_FROM_ADDRESS')),
+        'updated' => '16 September 2026',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
