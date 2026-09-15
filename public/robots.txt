@@ -1,2 +1,13 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /account
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /oauth/
+Disallow: /creators/*/claim
+Disallow: /livewire/
+
+Sitemap: https://trustedinfluencers.test/sitemap.xml

@@ -8,12 +8,10 @@ use App\Models\CreatorCategory;
 use App\Models\CreatorSocialAccount;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('components.layouts.app')]
 class Marketplace extends Component
 {
     use WithPagination;
@@ -143,6 +141,10 @@ class Marketplace extends Component
             'activePlatform' => Platform::tryFrom($this->platform),
             'total' => Creator::active()->count(),
             'verifiedTotal' => Creator::active()->where('has_verified_metrics', true)->count(),
+        ])->layout('components.layouts.app', [
+            'description' => 'Browse creators on YouTube, Instagram and X. Filter by platform, category, audience size and verified numbers like median views and engagement.',
+            // Filters and pages are all the same list to a search engine.
+            'canonical' => route('creators.index', array_filter(['platform' => $this->platform, 'category' => $this->category])),
         ])->title('Browse creators');
     }
 }

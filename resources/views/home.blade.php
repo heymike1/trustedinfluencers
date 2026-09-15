@@ -1,4 +1,4 @@
-<x-layouts.app description="A public creator database where creators can verify their real performance. Browse creators on Instagram, YouTube and X. Claimed profiles show numbers that come straight from the creator’s own account." :canonical="route('home')">
+<x-layouts.app :canonical="route('home')" :json-ld="\App\Support\Seo::website()">
     <x-slot:hero>
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-14">

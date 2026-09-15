@@ -8,7 +8,7 @@
     $importing = $creator->socialAccounts->contains(fn ($a) => $a->isImporting());
     $connected = $creator->socialAccounts->filter->hasVerifiedMetrics();
 @endphp
-<x-layouts.app :title="$title" :description="$description" :canonical="route('creators.show', $creator)">
+<x-layouts.app :title="$title" :description="$description" :canonical="route('creators.show', $creator)" :json-ld="\App\Support\Seo::creator($creator)">
     <x-slot:hero>
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-8">

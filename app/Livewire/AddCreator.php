@@ -10,10 +10,8 @@ use App\Models\CreatorCategory;
 use App\Social\Support\HandleNormalizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.app')]
 class AddCreator extends Component
 {
     public string $name = '';
@@ -89,6 +87,9 @@ class AddCreator extends Component
             'platforms' => Platform::cases(),
             'preview' => $this->normalizedHandle(),
             'existing' => $this->existingCreatorId ? Creator::find($this->existingCreatorId) : null,
+        ])->layout('components.layouts.app', [
+            'description' => 'List a creator on YouTube, Instagram or X with a name and a handle. The profile goes live straight away; the creator can claim it later.',
+            'canonical' => route('creators.create'),
         ])->title('Add a creator');
     }
 }

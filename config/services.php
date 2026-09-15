@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // Datafast analytics, loaded on every page. Set DATAFAST_WEBSITE_ID= (empty) to switch it off.
+    'datafast' => [
+        'website_id' => env('DATAFAST_WEBSITE_ID', 'dfid_mWBEhF5ENbpUJJFPlCs7l'),
+        'domain' => env('DATAFAST_DOMAIN', 'trustedinfluencers.co'),
+    ],
+
 ];

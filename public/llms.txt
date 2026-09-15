@@ -1,0 +1,30 @@
+# Trusted Influencers
+
+> A public creator database where creators can verify their real performance. Anyone can add a creator; only the real creator can claim the profile, by signing in with the social account itself. Claimed profiles show numbers pulled straight from YouTube, Instagram or X: median views, how much of a video gets watched, audience age and country, engagement, posting cadence.
+
+## What "verified" means here
+
+- The creator signed in with their own YouTube, Instagram or X account through the platform's official sign-in.
+- The account they signed in with must be the one on the profile, or the claim fails.
+- Every verified number comes from the platform's API after that sign-in. Nothing is self-reported or editable.
+- This is not the platform's own verification badge (blue tick, X Premium).
+- Numbers the platforms don't share are never shown: impressions on YouTube, audience details on X, second-by-second watch data on Instagram.
+
+## Pages
+
+- [Home](/): top performing creators, ranked by median views, how much gets watched, engagement or posting cadence.
+- [Browse creators](/creators): every listed creator, filterable by platform, category, audience size and verified numbers.
+- [Creator profiles](/creators/{slug}): per creator, per platform: median and average views, watch curve, first-week views, audience breakdown, reactions per 1,000 views, recent content.
+- [Add a creator](/creators/add): list a creator by name, platform and handle.
+
+## Vocabulary
+
+- Median views: what a typical video gets. Half did better, half did worse; one viral hit doesn't drag it up.
+- Average views: every video counted, viral hits included.
+- Watched: how much of a video people watch on average (YouTube only).
+- Views vs. audience: median views as a share of subscribers or followers.
+- Public info: what anyone can see on the platform, or what the person who added the profile typed in.
+
+## Not on this site
+
+No pricing, campaigns, messaging, reviews or brand accounts. Contact requests go to the creator by email.

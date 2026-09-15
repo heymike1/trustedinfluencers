@@ -2,32 +2,68 @@
     'title' => null,
     'description' => null,
     'canonical' => null,
-    'noindex' => false,
+    'noindex' => null,
+    'image' => null,
+    'jsonLd' => null,
     'wide' => false,
 ])
+@php
+    $siteName = config('app.name');
+    $fullTitle = $title ? $title.' · '.$siteName : $siteName.' · '.config('app.tagline');
+    $description ??= config('app.tagline').' Browse creators on YouTube, Instagram and X. Claimed profiles show numbers that come straight from the creator’s own account.';
+    $image = $image ?? config('app.og_image');
+    $imageUrl = $image ? (str_starts_with($image, 'http') ? $image : url($image)) : null;
+    // Signed-in areas, auth screens and OAuth hops never belong in a search index.
+    $noindex ??= request()->routeIs('account*', 'admin.*', 'login*', 'register', 'password.*', 'oauth.*', 'creators.claim*');
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ? $title.' · '.config('app.name') : config('app.name').' · '.config('app.tagline') }}</title>
-    @if($description)
-        <meta name="description" content="{{ $description }}">
-    @endif
-    @if($canonical)
+    <title>{{ $fullTitle }}</title>
+    <meta name="description" content="{{ $description }}">
+    <meta name="robots" content="{{ $noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large' }}">
+    @if($canonical && ! $noindex)
         <link rel="canonical" href="{{ $canonical }}">
     @endif
-    @if($noindex)
-        <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#059669">
+    <meta name="application-name" content="{{ $siteName }}">
+
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:type" content="{{ $jsonLd['@type'] ?? '' === 'ProfilePage' ? 'profile' : 'website' }}">
+    <meta property="og:title" content="{{ $title ?? $siteName }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
+    <meta property="og:locale" content="en_US">
+    @if($imageUrl)
+        <meta property="og:image" content="{{ $imageUrl }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
     @endif
-    <meta property="og:title" content="{{ $title ?? config('app.name').' · '.config('app.tagline') }}">
-    @if($description)
-        <meta property="og:description" content="{{ $description }}">
+    <meta name="twitter:card" content="{{ $imageUrl ? 'summary_large_image' : 'summary' }}">
+    <meta name="twitter:title" content="{{ $title ?? $siteName }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    @if($imageUrl)<meta name="twitter:image" content="{{ $imageUrl }}">@endif
+    @if(config('app.twitter_handle'))<meta name="twitter:site" content="{{ config('app.twitter_handle') }}">@endif
+
+    {{-- Drop the real files into public/ when you have them; these paths are what browsers look for. --}}
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    @if($jsonLd)
+        <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if(config('services.datafast.website_id'))
+        <script defer data-website-id="{{ config('services.datafast.website_id') }}" data-domain="{{ config('services.datafast.domain') }}" src="https://datafa.st/js/script.js"></script>
+    @endif
 </head>
 <body class="min-h-full flex flex-col">
     <header class="border-b border-ink-200 bg-white">
