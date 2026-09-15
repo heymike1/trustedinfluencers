@@ -48,10 +48,8 @@
     @if($imageUrl)<meta name="twitter:image" content="{{ $imageUrl }}">@endif
     @if(config('app.twitter_handle'))<meta name="twitter:site" content="{{ config('app.twitter_handle') }}">@endif
 
-    {{-- Drop the real files into public/ when you have them; these paths are what browsers look for. --}}
-    <link rel="icon" href="/favicon.ico" sizes="32x32">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" href="/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo.png">
     <link rel="manifest" href="/site.webmanifest">
 
     @if($jsonLd)
