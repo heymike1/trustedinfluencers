@@ -6,6 +6,7 @@
     'image' => null,
     'jsonLd' => null,
     'wide' => false,
+    'band' => false,
 ])
 @php
     $siteName = config('app.name');
@@ -61,9 +62,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-full flex flex-col">
-    {{-- With a hero band the header sits inside it; otherwise it is a plain white bar. --}}
-    <header class="{{ isset($hero) ? 'bg-band' : 'border-b border-ink-200 bg-white' }}">
+<body class="min-h-full flex flex-col overflow-x-clip">
+    {{-- With a hero band the header sits inside it; otherwise it is a plain white bar. Livewire pages set `band` and draw their own <x-page-band>. --}}
+    <header class="{{ isset($hero) || $band ? 'bg-band' : 'border-b border-ink-200 bg-white' }}">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
             <div class="flex items-center gap-8">
                 <a href="{{ route('home') }}" class="display text-[17px] tracking-[-0.02em] flex items-center gap-2.5 whitespace-nowrap">

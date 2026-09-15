@@ -142,6 +142,7 @@ class Marketplace extends Component
             'total' => Creator::active()->count(),
             'verifiedTotal' => Creator::active()->where('has_verified_metrics', true)->count(),
         ])->layout('components.layouts.app', [
+            'band' => true,
             'description' => 'Browse creators on YouTube, Instagram and X. Filter by platform, category, audience size and verified numbers like median views and engagement.',
             // Filters and pages are all the same list to a search engine.
             'canonical' => route('creators.index', array_filter(['platform' => $this->platform, 'category' => $this->category])),

@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.app')]
+#[Layout('components.layouts.app', ['band' => true])]
 class Connections extends Component
 {
     use HasNotice;
@@ -104,11 +104,14 @@ class Connections extends Component
         $accounts = $this->creator?->socialAccounts()->with('performanceMetrics')->get() ?? collect();
         $importing = $accounts->contains(fn (CreatorSocialAccount $a) => $a->isImporting());
 
+        $lastSync = $accounts->filter->isConnected()->min('last_synced_at');
+
         return view('livewire.account.connections', [
             'accounts' => $accounts,
             'importing' => $importing,
             'platforms' => collect(Platform::cases())->reject(fn (Platform $p) => $accounts->contains('platform', $p)),
             'cooldown' => config('social.sync.manual_cooldown_minutes'),
+            'nextRefresh' => $lastSync?->addHours(config('social.sync.refresh_every_hours')),
         ])->title('Connected accounts');
     }
 }

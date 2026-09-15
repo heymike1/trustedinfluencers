@@ -3,6 +3,7 @@
 namespace App\Livewire\Account;
 
 use App\Actions\Auth\DeleteUserAccount;
+use App\Enums\Platform;
 use App\Models\Creator;
 use App\Models\CreatorCategory;
 use Illuminate\Contracts\View\View;
@@ -15,7 +16,7 @@ use Livewire\Component;
 /**
  * The creator edits public profile details only. Verified metrics are never editable.
  */
-#[Layout('components.layouts.app')]
+#[Layout('components.layouts.app', ['band' => true])]
 class EditProfile extends Component
 {
     public ?Creator $creator = null;
@@ -114,10 +115,34 @@ class EditProfile extends Component
         $this->redirectRoute('home');
     }
 
+    /**
+     * What still makes the profile better, for the checklist in the sidebar. Each item: label, done, link.
+     *
+     * @return list<array{label: string, done: bool, href: string|null}>
+     */
+    private function checklist(): array
+    {
+        if (! $this->creator) {
+            return [];
+        }
+
+        $accounts = $this->creator->socialAccounts;
+        $missing = collect(Platform::cases())->first(fn (Platform $p) => ! $accounts->contains('platform', $p));
+
+        return [
+            ['label' => 'Connect a platform', 'done' => $accounts->contains->isConnected(), 'href' => route('account.connections')],
+            ['label' => 'Pick a category', 'done' => $this->creator->creator_category_id !== null, 'href' => null],
+            ['label' => 'Write a bio', 'done' => filled($this->creator->bio), 'href' => null],
+            ['label' => 'Turn on contact requests', 'done' => $this->creator->contact_enabled, 'href' => null],
+            ['label' => $missing ? 'Add your '.$missing->label() : 'All platforms added', 'done' => $missing === null, 'href' => route('account.connections')],
+        ];
+    }
+
     public function render(): View
     {
         return view('livewire.account.edit-profile', [
             'categories' => CreatorCategory::orderBy('sort_order')->orderBy('name')->get(),
+            'checklist' => $this->checklist(),
         ])->title('My profile');
     }
 }
