@@ -26,7 +26,7 @@ return [
     // Shown on the privacy policy and terms pages.
     'legal' => [
         'entity' => 'Run More Brands',
-        'contact' => env('APP_CONTACT_EMAIL', env('MAIL_FROM_ADDRESS')),
+        'contact' => env('APP_CONTACT_EMAIL', 'info@runmorebrands.com'),
         'updated' => '16 September 2026',
     ],
 
