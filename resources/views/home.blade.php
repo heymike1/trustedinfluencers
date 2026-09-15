@@ -3,7 +3,7 @@
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-36 sm:pt-14 sm:pb-40 flex flex-col items-center text-center gap-5">
                 <h1 class="display max-w-2xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ config('app.tagline') }}</h1>
-                <p class="max-w-xl text-base text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from YouTube, Instagram or X.</p>
+                <p class="max-w-xl text-base text-ink-700 text-pretty"><span class="font-semibold text-ink-950">{{ config('app.name') }}</span> is a public directory where brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from YouTube, Instagram or X.</p>
                 <div class="flex items-center gap-8 tnum">
                     <span class="flex flex-col items-center"><span class="display text-2xl tracking-[-0.02em]">{{ number_format($counts['creators']) }}</span><span class="text-xs font-medium text-ink-500">creators</span></span>
                     <span class="h-8 w-px bg-band-edge"></span>
