@@ -10,4 +10,4 @@ Disallow: /oauth/
 Disallow: /creators/*/claim
 Disallow: /livewire/
 
-Sitemap: https://trustedinfluencers.test/sitemap.xml
+Sitemap: https://trustedinfluencers.co/sitemap.xml
