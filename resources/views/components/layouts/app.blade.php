@@ -72,7 +72,6 @@
                 </a>
                 <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-ink-700">
                     <a href="{{ route('creators.index') }}" class="hover:text-ink-950 {{ request()->routeIs('creators.index') ? 'text-ink-950' : '' }}">Browse creators</a>
-                    <a href="{{ route('home') }}#leaderboard" class="hover:text-ink-950">Leaderboard</a>
                     <a href="{{ route('about') }}" class="hover:text-ink-950 {{ request()->routeIs('about') ? 'text-ink-950' : '' }}">About</a>
                 </nav>
             </div>

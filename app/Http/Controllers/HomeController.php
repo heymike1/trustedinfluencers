@@ -32,8 +32,31 @@ class HomeController extends Controller
             'counts' => [
                 'creators' => Creator::active()->count(),
                 'verified' => Creator::active()->where('has_verified_metrics', true)->count(),
-                'claimedThisWeek' => CreatorClaim::where('status', 'verified')->where('verified_at', '>=', now()->subWeek())->count(),
             ],
+            'pulse' => $this->pulse(),
         ]);
+    }
+
+    /**
+     * Three moments in time for the strip under the leaderboard: what happened today, the strongest
+     * profile that joined this week, and the all-time record for how much of a video gets watched.
+     */
+    private function pulse(): array
+    {
+        return [
+            'refreshedToday' => Creator::active()->where('has_verified_metrics', true)->whereDate('metrics_synced_at', today())->count(),
+            'claimedToday' => CreatorClaim::where('status', 'verified')->whereDate('verified_at', today())->count(),
+            'newThisWeek' => Creator::active()
+                ->where('has_verified_metrics', true)
+                ->where('claimed_at', '>=', now()->subWeek())
+                ->with('socialAccounts')
+                ->orderByDesc('median_views')
+                ->first(),
+            'mostWatched' => Creator::active()
+                ->whereNotNull('average_view_percentage')
+                ->with('socialAccounts')
+                ->orderByDesc('average_view_percentage')
+                ->first(),
+        ];
     }
 }

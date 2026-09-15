@@ -17,22 +17,57 @@
         <livewire:top-performers />
     </div>
 
-    <p class="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
+    {{-- Three moments in time. Not filters: a glance at what moved today, this week and ever. --}}
+    <div class="mt-4 grid gap-3.5 md:grid-cols-3">
+        <div class="card px-5 py-4 flex flex-col gap-2">
+            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">Today</span>
+            @if($pulse['refreshedToday'] || $pulse['claimedToday'])
+                <p class="display text-2xl tracking-[-0.02em] tnum">{{ number_format($pulse['refreshedToday']) }} <span class="text-base font-semibold text-ink-700">{{ \Illuminate\Support\Str::plural('profile', $pulse['refreshedToday']) }} refreshed</span></p>
+                <p class="text-[13px] text-ink-500 tnum">{{ $pulse['claimedToday'] ? number_format($pulse['claimedToday']).' '.\Illuminate\Support\Str::plural('creator', $pulse['claimedToday']).' claimed a profile today.' : 'Nobody new yet today.' }} Numbers come in fresh from the platforms every {{ config('social.sync.refresh_every_hours') }} hours.</p>
+            @else
+                <p class="display text-2xl tracking-[-0.02em]">Quiet so far</p>
+                <p class="text-[13px] text-ink-500">Numbers come in fresh from the platforms every {{ config('social.sync.refresh_every_hours') }} hours. <a href="{{ route('creators.index') }}" class="font-semibold text-brand-700">Find your profile</a> to be today’s first.</p>
+            @endif
+        </div>
+        <div class="card px-5 py-4 flex flex-col gap-2">
+            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">This week <span class="normal-case tracking-normal text-ink-400">· strongest newcomer</span></span>
+            @if($new = $pulse['newThisWeek'])
+                @php($account = $new->primaryAccount())
+                <a href="{{ route('creators.show', $new) }}" class="flex items-center gap-3">
+                    <x-avatar :creator="$new" size="sm" />
+                    <span class="min-w-0">
+                        <span class="block font-semibold text-ink-950 truncate">{{ $new->name }}</span>
+                        <span class="block text-[13px] text-ink-500 tnum">Joined with {{ \App\Support\Format::compact($new->median_views) }} median views @if($account)· <x-platform-icon :platform="$account->platform" class="inline size-3" :colored="true" /> {{ $account->handleWithAt() }}@endif</span>
+                    </span>
+                </a>
+            @else
+                <p class="display text-2xl tracking-[-0.02em]">Nobody new yet</p>
+                <p class="text-[13px] text-ink-500">The strongest profile to join this week shows up here. <a href="{{ route('creators.create') }}" class="font-semibold text-brand-700">Add a creator</a> you work with.</p>
+            @endif
+        </div>
+        <div class="card px-5 py-4 flex flex-col gap-2">
+            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-500">All-time <span class="normal-case tracking-normal text-ink-400">· most watched</span></span>
+            @if($best = $pulse['mostWatched'])
+                <a href="{{ route('creators.show', $best) }}" class="flex items-center gap-3">
+                    <x-avatar :creator="$best" size="sm" />
+                    <span class="min-w-0">
+                        <span class="block font-semibold text-ink-950 truncate">{{ $best->name }}</span>
+                        <span class="block text-[13px] text-ink-500 tnum">{{ \App\Support\Format::percent($best->average_view_percentage, 0) }} of each video watched, on average</span>
+                    </span>
+                </a>
+            @else
+                <p class="display text-2xl tracking-[-0.02em]">No record yet</p>
+                <p class="text-[13px] text-ink-500">The creator whose videos get watched the longest takes this spot.</p>
+            @endif
+        </div>
+    </div>
+
+    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
         <span class="text-xs">Every number above comes straight from</span>
         @foreach(\App\Enums\Platform::cases() as $platform)
             <span class="inline-flex items-center gap-2 font-semibold text-ink-700"><x-platform-icon :platform="$platform" class="size-[18px]" /> {{ $platform->label() }} {{ $platform === \App\Enums\Platform::Instagram ? 'Insights' : 'Analytics' }}</span>
         @endforeach
     </p>
-
-    <section class="mt-20">
-        <div class="flex flex-col items-center text-center gap-4">
-            <span class="eyebrow">How a profile gets verified</span>
-            <h2 class="display max-w-2xl text-3xl sm:text-[40px] leading-[1.1]">Anyone can list a creator. Only the creator can verify it.</h2>
-        </div>
-        <div class="mt-8">
-            @include('partials.how-it-works')
-        </div>
-    </section>
 
     <section class="mt-20 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <div>
