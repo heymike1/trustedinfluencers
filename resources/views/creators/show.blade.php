@@ -82,7 +82,7 @@
                             @if($creator->contact_enabled)<a href="#contact" class="btn-secondary btn-sm mt-3 w-full">Contact {{ \Illuminate\Support\Str::before($creator->name, ' ') }}</a>@endif
                         @else
                             <div class="flex items-center justify-between gap-2"><p class="font-medium text-ink-950">Claimed</p><x-state-badge :state="$state" /></div>
-                            <p class="mt-1 text-ink-500">The creator owns this profile but hasn’t connected an account yet, so there are no verified numbers.</p>
+                            <p class="mt-1 text-ink-500">The creator owns this profile but has no account connected right now, so there are no verified numbers.</p>
                             @if($creator->contact_enabled)<a href="#contact" class="btn-secondary btn-sm mt-3 w-full">Contact {{ \Illuminate\Support\Str::before($creator->name, ' ') }}</a>@endif
                         @endif
                     </div>

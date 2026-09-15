@@ -29,7 +29,7 @@ class ProfileStateTest extends TestCase
         CreatorSocialAccount::factory()->for($creator)->create();
 
         $this->assertSame(ProfileState::Claimed, $creator->profileState());
-        $this->get(route('creators.show', $creator))->assertSee('hasn’t connected')->assertDontSee('Is this you?');
+        $this->get(route('creators.show', $creator))->assertSee('no account connected')->assertDontSee('Is this you?');
     }
 
     public function test_verified_metrics(): void
