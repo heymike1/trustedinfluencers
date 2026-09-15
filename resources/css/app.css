@@ -15,26 +15,26 @@
     --color-ink-700: #3f3f46;
     --color-ink-500: #71717a;
     --color-ink-400: #a1a1aa;
-    --color-ink-200: #e3e6e3;
-    --color-ink-100: #eef0ee;
-    --color-ink-50: #f7f8f6;
+    --color-ink-200: #e2e6ec;
+    --color-ink-100: #edf0f4;
+    --color-ink-50: #f6f8fa;
 
-    /* Page ground is warm paper; the mint band carries the nav and page headers. White cards on top. */
-    --color-page: #f3f4f2;
-    --color-band: #e4f1e9;
-    --color-band-edge: #cfe3d7;
+    /* Page ground is cool paper; the baby-blue band carries the nav and page headers. White cards on top. */
+    --color-page: #f3f5f8;
+    --color-band: #e4edf9;
+    --color-band-edge: #c9d9f0;
 
-    /* Two greens: deep forest for actions and active filters, emerald for chart marks and live dots. */
-    --color-brand-800: #0b2f23;
-    --color-brand-700: #0f3d2e;
-    --color-brand-600: #1f9d66;
-    --color-brand-200: #bfe0cd;
-    --color-brand-100: #cfe3d7;
-    --color-brand-50: #e6f4ec;
+    /* Two blues from the logo: navy for actions and active filters, bright blue for chart marks and live dots. */
+    --color-brand-800: #08183a;
+    --color-brand-700: #0d2352;
+    --color-brand-600: #1d6ef5;
+    --color-brand-200: #b9d0f5;
+    --color-brand-100: #cfdff8;
+    --color-brand-50: #e8f0fc;
 
-    --color-verified-600: #0f3d2e;
-    --color-verified-100: #cfe3d7;
-    --color-verified-50: #e6f4ec;
+    --color-verified-600: #0d2352;
+    --color-verified-100: #cfdff8;
+    --color-verified-50: #e8f0fc;
 
     --color-warn-700: #b45309;
     --color-warn-100: #fef3c7;

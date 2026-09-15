@@ -34,7 +34,7 @@
                         @foreach($columns as $label => $key)
                             <td class="text-right">{{ is_callable($key) ? $key($content) : Format::compact($m[$key] ?? null) }}</td>
                         @endforeach
-                        @if($sparkline)<td class="pr-4">@if($content->retentionCurve())<x-sparkline :points="$content->retentionCurve()" :color="$viral ? '#a1a1aa' : '#1f9d66'" />@else —@endif</td>@endif
+                        @if($sparkline)<td class="pr-4">@if($content->retentionCurve())<x-sparkline :points="$content->retentionCurve()" :color="$viral ? '#a1a1aa' : '#1d6ef5'" />@else —@endif</td>@endif
                     </tr>
                 @endforeach
             </tbody>

@@ -29,7 +29,7 @@
     @if($canonical && ! $noindex)
         <link rel="canonical" href="{{ $canonical }}">
     @endif
-    <meta name="theme-color" content="#0f3d2e">
+    <meta name="theme-color" content="#0d2352">
     <meta name="application-name" content="{{ $siteName }}">
 
     <meta property="og:site_name" content="{{ $siteName }}">

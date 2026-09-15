@@ -60,12 +60,12 @@
                 <div class="card !rounded-xl px-5 py-4">
                     <div class="flex items-center justify-between text-[13.5px]"><span class="font-semibold text-ink-950">How much of a video gets watched</span><span class="text-xs text-ink-500">Average of last 20</span></div>
                     <svg class="mt-3 w-full" height="120" viewBox="0 0 480 120" preserveAspectRatio="none" aria-hidden="true">
-                        <line x1="0" y1="119.5" x2="480" y2="119.5" stroke="#e3e6e3"/>
-                        <line x1="0" y1="60" x2="480" y2="60" stroke="#eef0ee" stroke-dasharray="3 4"/>
-                        <path d="M0 8 C 40 12, 70 30, 110 40 S 200 58, 260 66 S 380 82, 480 96 L 480 120 L 0 120 Z" fill="#e6f4ec"/>
-                        <path d="M0 8 C 40 12, 70 30, 110 40 S 200 58, 260 66 S 380 82, 480 96" fill="none" stroke="#1f9d66" stroke-width="2.5"/>
-                        <line x1="240" y1="0" x2="240" y2="120" stroke="#0f3d2e" stroke-dasharray="3 3"/>
-                        <circle cx="240" cy="64" r="4" fill="#0f3d2e"/>
+                        <line x1="0" y1="119.5" x2="480" y2="119.5" stroke="#e2e6ec"/>
+                        <line x1="0" y1="60" x2="480" y2="60" stroke="#edf0f4" stroke-dasharray="3 4"/>
+                        <path d="M0 8 C 40 12, 70 30, 110 40 S 200 58, 260 66 S 380 82, 480 96 L 480 120 L 0 120 Z" fill="#e8f0fc"/>
+                        <path d="M0 8 C 40 12, 70 30, 110 40 S 200 58, 260 66 S 380 82, 480 96" fill="none" stroke="#1d6ef5" stroke-width="2.5"/>
+                        <line x1="240" y1="0" x2="240" y2="120" stroke="#0d2352" stroke-dasharray="3 3"/>
+                        <circle cx="240" cy="64" r="4" fill="#0d2352"/>
                     </svg>
                     <div class="mt-2 flex justify-between text-xs text-ink-500"><span>Start</span><span class="font-semibold text-brand-700">48% still watching at halfway</span><span>End</span></div>
                 </div>
