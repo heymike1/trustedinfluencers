@@ -1,6 +1,6 @@
 <x-layouts.app title="Privacy policy" description="What Trusted Influencers stores about creators and visitors, on which legal basis, for how long, and how to get it deleted." :canonical="route('privacy')">
     <article class="mx-auto max-w-2xl">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Privacy policy</h1>
+        <h1 class="display text-2xl tracking-[-0.025em]">Privacy policy</h1>
         <p class="mt-1 text-sm text-ink-500">Version {{ config('app.legal.version') }}, effective {{ config('app.legal.updated') }}.</p>
 
         <div class="mt-8 space-y-8 text-ink-700 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-ink-950 [&_h2]:mb-2 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-ink-950 [&_h3]:mt-4 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1 [&_table]:mt-3 [&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_th]:font-semibold [&_th]:text-ink-950 [&_th]:py-1.5 [&_th]:pr-3 [&_th]:border-b [&_th]:border-ink-200 [&_td]:py-1.5 [&_td]:pr-3 [&_td]:align-top [&_td]:border-b [&_td]:border-ink-100">

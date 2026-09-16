@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-sm">
-    <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Sign in</h1>
+    <h1 class="display text-2xl tracking-[-0.025em]">Sign in</h1>
     <p class="mt-1 text-sm text-ink-500">Sign in to claim your profile or manage your connected accounts.</p>
 
     <div class="card mt-6 p-5">

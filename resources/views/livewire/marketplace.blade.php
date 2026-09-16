@@ -2,7 +2,7 @@
     <x-page-band>
         <div class="flex flex-wrap items-end justify-between gap-6">
             <div>
-                <h1 class="display text-3xl sm:text-[40px] leading-[1.05]">Browse creators</h1>
+                <h1 class="display text-2xl sm:text-[30px] leading-[1.1]">Browse creators</h1>
                 <p class="mt-2 text-[15px] text-ink-700 tnum">{{ number_format($total) }} creators · <span class="font-semibold text-brand-700">{{ number_format($verifiedTotal) }} with verified numbers</span></p>
             </div>
             <div class="flex w-full flex-wrap items-center gap-3 sm:w-auto">

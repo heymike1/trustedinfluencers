@@ -2,7 +2,7 @@
     <x-page-band>
         <div class="mx-auto max-w-xl">
             <span class="eyebrow">Free, takes a minute</span>
-            <h1 class="display mt-4 text-3xl sm:text-[40px] leading-[1.05]">Add a creator</h1>
+            <h1 class="display mt-4 text-2xl sm:text-[30px] leading-[1.1]">Add a creator</h1>
             <p class="mt-3 text-[15px] text-ink-700 text-pretty">Anyone can add a creator. The profile goes live straight away and only shows public info until the creator claims it by signing in with the account itself.</p>
         </div>
     </x-page-band>

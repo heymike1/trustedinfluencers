@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-sm">
-    <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Choose a new password</h1>
+    <h1 class="display text-2xl tracking-[-0.025em]">Choose a new password</h1>
 
     <form wire:submit="save" class="card mt-6 p-5 space-y-4">
         <div>

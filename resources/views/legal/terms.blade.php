@@ -1,6 +1,6 @@
 <x-layouts.app title="Terms of service" description="The terms for using Trusted Influencers: listing creators, claiming profiles, verified figures, acceptable use, liability, Dutch law." :canonical="route('terms')">
     <article class="mx-auto max-w-2xl">
-        <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Terms of service</h1>
+        <h1 class="display text-2xl tracking-[-0.025em]">Terms of service</h1>
         <p class="mt-1 text-sm text-ink-500">Version {{ config('app.legal.version') }}, effective {{ config('app.legal.updated') }}.</p>
 
         <div class="mt-8 space-y-8 text-ink-700 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-ink-950 [&_h2]:mb-2 [&_p]:mt-2 [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mt-1">

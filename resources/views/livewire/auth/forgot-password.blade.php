@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-sm">
-    <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Reset your password</h1>
+    <h1 class="display text-2xl tracking-[-0.025em]">Reset your password</h1>
     <p class="mt-1 text-sm text-ink-500">Tell us your email and we’ll send a link to choose a new one.</p>
 
     <div class="card mt-6 p-5">

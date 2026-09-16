@@ -24,7 +24,7 @@
                         <x-avatar :creator="$creator" size="xl" />
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
-                                <h1 class="display text-[28px] sm:text-[32px] tracking-[-0.025em]">{{ $creator->name }}</h1>
+                                <h1 class="display text-2xl sm:text-[28px] tracking-[-0.025em]">{{ $creator->name }}</h1>
                                 @if($state === \App\Enums\ProfileState::VerifiedMetrics)
                                     <x-badge variant="verified" class="gap-1.5">
                                         <svg class="size-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>

@@ -4,7 +4,7 @@
         <div class="mt-3 flex items-center gap-3">
             <x-avatar :creator="$creator" size="lg" />
             <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-ink-950">Claim {{ $creator->name }}</h1>
+                <h1 class="display text-2xl tracking-[-0.025em]">Claim {{ $creator->name }}</h1>
                 <p class="text-sm text-ink-500">Sign in with the social account this profile belongs to and it’s yours.</p>
             </div>
         </div>
