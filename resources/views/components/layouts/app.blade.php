@@ -68,7 +68,7 @@
         <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
             <div class="flex items-center gap-8">
                 <a href="{{ route('home') }}" class="display text-[17px] tracking-[-0.02em] flex items-center gap-2.5 whitespace-nowrap">
-                    @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-flex size-6 items-center justify-center rounded-[7px] bg-brand-700"><svg class="size-3.5 text-white" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>@endif
+                    @if($hasLogo)<img src="/logo.png" alt="{{ config('app.name') }}" class="size-6 shrink-0">@else<span class="inline-flex size-6 items-center justify-center rounded-[7px] bg-brand-700"><svg class="size-3.5 text-white" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>@endif
                     {{ config('app.name') }}
                 </a>
                 <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-ink-700">
@@ -107,7 +107,7 @@
             <div class="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
                 <div class="max-w-xs">
                     <a href="{{ route('home') }}" class="font-semibold tracking-tight text-ink-950 flex items-center gap-2">
-                        @if($hasLogo)<img src="/logo.png" alt="" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded-md bg-brand-700"></span>@endif
+                        @if($hasLogo)<img src="/logo.png" alt="{{ config('app.name') }}" class="size-6 shrink-0">@else<span class="inline-block size-5 rounded-md bg-brand-700"></span>@endif
                         {{ config('app.name') }}
                     </a>
                     <p class="mt-3 text-sm text-ink-600">{{ config('app.tagline') }}</p>

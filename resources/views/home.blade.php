@@ -2,7 +2,10 @@
     <x-slot:hero>
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-36 sm:pt-14 sm:pb-40 flex flex-col items-center text-center gap-5">
-                <h1 class="display max-w-2xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ config('app.tagline') }}</h1>
+                <h1 class="max-w-2xl">
+                    <span class="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-700">{{ config('app.name') }}</span>
+                    <span class="display mt-3 block text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ config('app.tagline') }}</span>
+                </h1>
                 <p class="max-w-xl text-base text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from YouTube, Instagram or X.</p>
                 <div class="flex items-center gap-8 tnum">
                     <span class="flex flex-col items-center"><span class="display text-2xl tracking-[-0.02em]">{{ number_format($counts['creators']) }}</span><span class="text-xs font-medium text-ink-500">creators</span></span>
@@ -66,7 +69,8 @@
         <livewire:top-performers />
     </div>
 
-    <p class="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
+    <p class="mx-auto mt-6 max-w-2xl text-center text-[13px] text-ink-500 text-pretty">{{ config('app.name') }} never asks for passwords. A creator signs in with Google to connect their YouTube channel (or with Instagram or X), and we read only that channel’s analytics to show verified numbers. Creators can disconnect at any time.</p>
+    <p class="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
         <span class="text-xs">Every number above comes straight from</span>
         @foreach(\App\Enums\Platform::cases() as $platform)
             <span class="inline-flex items-center gap-2 font-semibold text-ink-700"><x-platform-icon :platform="$platform" class="size-[18px]" /> {{ $platform->label() }} {{ $platform === \App\Enums\Platform::Instagram ? 'Insights' : 'Analytics' }}</span>
