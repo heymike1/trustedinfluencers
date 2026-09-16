@@ -68,7 +68,6 @@
         $navLinks = [
             ['href' => route('home'), 'label' => 'Home', 'on' => request()->routeIs('home')],
             ['href' => route('creators.index'), 'label' => 'Browse creators', 'on' => request()->routeIs('creators.index', 'creators.show', 'creators.create')],
-            ['href' => route('home').'#leaderboard', 'label' => 'Leaderboard', 'on' => false],
             ['href' => route('about'), 'label' => 'About', 'on' => request()->routeIs('about')],
         ];
     @endphp
