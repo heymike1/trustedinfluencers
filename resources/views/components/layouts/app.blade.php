@@ -10,7 +10,8 @@
 ])
 @php
     $siteName = config('app.name');
-    $fullTitle = $title ? $title.' · '.$siteName : $siteName.' · '.config('app.tagline');
+    // The home title is the bare app name: Google's OAuth branding check matches it against the consent screen.
+    $fullTitle = $title ? $title.' · '.$siteName : $siteName;
     $description ??= config('app.tagline').' Browse creators on YouTube, Instagram and X. Claimed profiles show numbers that come straight from the creator’s own account.';
     $image = $image ?? config('app.og_image');
     $imageUrl = $image ? (str_starts_with($image, 'http') ? $image : url($image)) : null;
