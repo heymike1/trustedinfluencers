@@ -1,5 +1,11 @@
 <?php
 
+use App\Actions\Claims\OwnershipMismatchException;
+use App\Social\Exceptions\ReconnectionRequiredException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 /**
  * Sentry Laravel SDK configuration file.
  *
@@ -56,11 +62,11 @@ return [
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_exceptions
     // Expected outcomes, not bugs: a creator revoked access, or signed in with the wrong account.
     'ignore_exceptions' => [
-        App\Social\Exceptions\ReconnectionRequiredException::class,
-        App\Actions\Claims\OwnershipMismatchException::class,
-        Illuminate\Auth\AuthenticationException::class,
-        Illuminate\Validation\ValidationException::class,
-        Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+        ReconnectionRequiredException::class,
+        OwnershipMismatchException::class,
+        AuthenticationException::class,
+        ValidationException::class,
+        NotFoundHttpException::class,
     ],
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_transactions

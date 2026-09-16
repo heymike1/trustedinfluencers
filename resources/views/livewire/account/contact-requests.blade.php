@@ -13,7 +13,7 @@
                 </p>
             </div>
         @else
-            <div class="grid gap-5 lg:grid-cols-[400px_1fr] lg:items-start">
+            <div class="grid gap-5 lg:grid-cols-[400px_minmax(0,1fr)] lg:items-start">
                 <div class="card overflow-hidden">
                     <div class="flex items-center justify-between px-4 py-3.5">
                         <p class="text-[15px] font-semibold text-ink-950">Inbox @if($unread)<span class="font-normal text-ink-500">· {{ $unread }} unread</span>@endif</p>

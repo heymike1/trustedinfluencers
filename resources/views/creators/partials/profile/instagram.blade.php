@@ -86,7 +86,7 @@
     </x-section-card>
 </div>
 
-<div class="mt-4 grid gap-4 lg:grid-cols-[1fr_300px] lg:items-start">
+<div class="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
     @include('creators.partials.profile.content-table', [
         'columns' => array_filter([
             'Reach' => 'reach',

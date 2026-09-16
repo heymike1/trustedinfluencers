@@ -5,10 +5,10 @@
                 <h1 class="display text-3xl sm:text-[40px] leading-[1.05]">Browse creators</h1>
                 <p class="mt-2 text-[15px] text-ink-700 tnum">{{ number_format($total) }} creators · <span class="font-semibold text-brand-700">{{ number_format($verifiedTotal) }} with verified numbers</span></p>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="relative">
+            <div class="flex w-full flex-wrap items-center gap-3 sm:w-auto">
+                <div class="relative w-full sm:w-auto">
                     <svg class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 size-4 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-                    <input type="search" wire:model.live.debounce.300ms="search" placeholder="Search by name, handle or category" class="input w-72 sm:w-80 rounded-full border-band-edge py-2.5 pl-11 pr-4">
+                    <input type="search" wire:model.live.debounce.300ms="search" placeholder="Search by name, handle or category" class="input w-full sm:w-80 rounded-full border-band-edge py-2.5 pl-11 pr-4">
                 </div>
                 <a href="{{ route('creators.create') }}" class="btn-secondary border-band-edge">Add a creator</a>
             </div>

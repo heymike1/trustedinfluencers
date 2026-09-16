@@ -74,7 +74,7 @@
     @endif
 
     {{-- Contact --}}
-    <section id="contact" class="mt-10 grid gap-6 lg:grid-cols-[1fr_320px] scroll-mt-6">
+    <section id="contact" class="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] scroll-mt-6">
         <div>
             <h2 class="display text-xl tracking-[-0.02em] mb-3">Contact {{ $creator->name }}</h2>
             <livewire:contact-creator-form :creator="$creator" />

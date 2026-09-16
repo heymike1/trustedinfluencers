@@ -2,8 +2,8 @@
     use App\Support\Format;
     $viralId = $i->viralContentId();
 @endphp
-<div class="flex flex-col gap-2">
-    <div class="flex items-center justify-between">
+<div class="flex flex-col gap-2 min-w-0">
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         <h3 class="text-sm font-semibold text-ink-950">Last {{ $contents->count() }} {{ $contents->count() === 1 ? $type->singular() : $type->label() }}</h3>
         <p class="text-xs text-ink-500">Grey row = the viral one that lifts the average but not the median</p>
     </div>

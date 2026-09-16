@@ -64,36 +64,85 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-full flex flex-col overflow-x-clip">
-    {{-- With a hero band the header sits inside it; otherwise it is a plain white bar. Livewire pages set `band` and draw their own <x-page-band>. --}}
-    <header class="{{ isset($hero) || $band ? 'bg-band' : 'border-b border-ink-200 bg-white' }}">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
-            <div class="flex items-center gap-8">
+    @php
+        $navLinks = [
+            ['href' => route('home'), 'label' => 'Home', 'on' => request()->routeIs('home')],
+            ['href' => route('creators.index'), 'label' => 'Browse creators', 'on' => request()->routeIs('creators.index', 'creators.show', 'creators.create')],
+            ['href' => route('home').'#leaderboard', 'label' => 'Leaderboard', 'on' => false],
+            ['href' => route('about'), 'label' => 'About', 'on' => request()->routeIs('about')],
+        ];
+    @endphp
+    {{-- The nav is a pill floating on the band (or on the page ground when a page has no band). Livewire pages set `band` and draw their own <x-page-band>. --}}
+    <header class="{{ isset($hero) || $band ? 'bg-band' : 'bg-page' }}" id="site-header">
+        <div class="relative mx-auto max-w-6xl px-4 sm:px-6 pt-3 sm:pt-4">
+            <div class="flex h-14 items-center justify-between gap-4 rounded-full border border-band-edge bg-white pl-4 pr-2 shadow-[0_6px_20px_rgba(13,35,82,0.08)] sm:h-[60px] sm:pl-5 sm:pr-2.5">
                 <a href="{{ route('home') }}" class="display text-[17px] tracking-[-0.02em] flex items-center gap-2.5 whitespace-nowrap">
                     @if($hasLogo)<img src="/logo.png" alt="{{ config('app.name') }}" class="size-6 shrink-0">@else<span class="inline-flex size-6 items-center justify-center rounded-[7px] bg-brand-700"><svg class="size-3.5 text-white" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>@endif
                     {{ config('app.name') }}
                 </a>
-                <nav class="hidden sm:flex items-center gap-6 text-sm font-medium text-ink-700">
-                    <a href="{{ route('creators.index') }}" class="hover:text-ink-950 {{ request()->routeIs('creators.index') ? 'text-ink-950' : '' }}">Browse creators</a>
-                    <a href="{{ route('about') }}" class="hover:text-ink-950 {{ request()->routeIs('about') ? 'text-ink-950' : '' }}">About</a>
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
+                    @foreach($navLinks as $link)
+                        <a href="{{ $link['href'] }}" class="rounded-full px-3.5 py-2 {{ $link['on'] ? 'bg-brand-50 font-semibold text-brand-700' : 'text-ink-700 hover:bg-ink-50 hover:text-ink-950' }}">{{ $link['label'] }}</a>
+                    @endforeach
                 </nav>
+                <nav class="hidden md:flex items-center gap-1.5 text-sm font-medium whitespace-nowrap">
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="rounded-full px-3.5 py-2 {{ request()->routeIs('admin.*') ? 'bg-brand-50 font-semibold text-brand-700' : 'text-ink-700 hover:bg-ink-50' }}">Admin</a>
+                        @endif
+                        <a href="{{ route('account') }}" class="rounded-full px-3.5 py-2 {{ request()->routeIs('account*') ? 'bg-brand-50 font-semibold text-brand-700' : 'text-ink-700 hover:bg-ink-50' }}">My profile</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="rounded-full px-3.5 py-2 text-ink-700 hover:bg-ink-50">Log out</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="rounded-full px-3.5 py-2 text-ink-700 hover:bg-ink-50">Sign in</a>
+                        <a href="{{ route('register') }}" class="btn-primary !py-2.5">Claim your profile <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
+                    @endauth
+                </nav>
+                <button type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="Menu" class="md:hidden inline-flex size-10 items-center justify-center rounded-full text-ink-950 hover:bg-ink-50">
+                    <svg data-menu-icon="closed" class="size-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    <svg data-menu-icon="open" hidden class="size-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
             </div>
-            <nav class="flex items-center gap-4 text-sm text-ink-700 whitespace-nowrap">
+
+            {{-- Mobile menu: a card dropping out of the pill. --}}
+            <div id="site-menu" hidden class="md:hidden absolute inset-x-4 top-full z-30 mt-2 rounded-[20px] border border-band-edge bg-white px-4 pb-4 pt-1 shadow-[0_12px_32px_rgba(13,35,82,0.10)]">
+                @foreach($navLinks as $link)
+                    <a href="{{ $link['href'] }}" class="flex h-[52px] items-center justify-between border-b border-ink-100 px-1 text-[17px] font-semibold {{ $link['on'] ? 'text-brand-700' : 'text-ink-950' }}">{{ $link['label'] }} <svg class="size-4 text-ink-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l5 5-5 5"/></svg></a>
+                @endforeach
                 @auth
                     @if(auth()->user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="hover:text-ink-950 {{ request()->routeIs('admin.*') ? 'text-ink-950 font-medium' : '' }}">Admin</a>
+                        <a href="{{ route('admin.dashboard') }}" class="flex h-[52px] items-center justify-between border-b border-ink-100 px-1 text-[17px] font-semibold text-ink-950">Admin <svg class="size-4 text-ink-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l5 5-5 5"/></svg></a>
                     @endif
-                    <a href="{{ route('account') }}" class="hover:text-ink-950 {{ request()->routeIs('account*') ? 'text-ink-950 font-medium' : '' }}">My profile</a>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <a href="{{ route('account') }}" class="flex h-[52px] items-center justify-between px-1 text-[17px] font-semibold text-ink-950">My profile <svg class="size-4 text-ink-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l5 5-5 5"/></svg></a>
+                    <form method="POST" action="{{ route('logout') }}" class="mt-3">
                         @csrf
-                        <button type="submit" class="hover:text-ink-950">Log out</button>
+                        <button type="submit" class="btn-secondary w-full !py-3 !text-[15px]">Log out</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="hover:text-ink-950">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn-primary btn-sm !px-4 !py-2">Claim your profile</a>
+                    <div class="mt-3 flex flex-col gap-2">
+                        <a href="{{ route('register') }}" class="btn-primary !py-3 !text-[15px]">Claim your profile</a>
+                        <a href="{{ route('login') }}" class="btn-secondary !py-3 !text-[15px]">Sign in</a>
+                    </div>
                 @endauth
-            </nav>
+            </div>
         </div>
     </header>
+    <script>
+        (function () {
+            var toggle = document.querySelector('[data-menu-toggle]'), menu = document.getElementById('site-menu');
+            if (!toggle || !menu) return;
+            function set(open) {
+                menu.hidden = !open;
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+                toggle.querySelector('[data-menu-icon="closed"]').hidden = open;
+                toggle.querySelector('[data-menu-icon="open"]').hidden = !open;
+            }
+            toggle.addEventListener('click', function () { set(menu.hidden); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+        })();
+    </script>
 
     <main class="flex-1">
         {{ $hero ?? '' }}

@@ -5,7 +5,7 @@
         <x-account-nav :creator="$creator" />
         <x-notice :notice="$notice" />
 
-        <div class="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
+        <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
             <div class="space-y-3.5">
                 @foreach($accounts as $account)
                     @php

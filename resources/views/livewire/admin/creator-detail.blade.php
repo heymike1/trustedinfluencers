@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div class="space-y-6">
             <section class="card overflow-x-auto">
                 <h3 class="px-4 py-3 border-b border-ink-100 text-sm font-semibold">Social accounts</h3>

@@ -77,7 +77,7 @@
         @endforeach
     </p>
 
-    <section class="mt-20 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
+    <section class="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div>
             <div class="flex items-baseline justify-between mb-3">
                 <h2 class="display text-[22px] tracking-[-0.02em]">Recently claimed</h2>
