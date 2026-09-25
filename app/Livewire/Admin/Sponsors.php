@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Livewire\Concerns\HasNotice;
 use App\Models\SponsorSlot;
+use App\Support\Settings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -24,6 +25,7 @@ class Sponsors extends Component
     public function mount(): void
     {
         $this->resetForm();
+        $this->mountSettings();
     }
 
     private function resetForm(): void
@@ -115,11 +117,42 @@ class Sponsors extends Component
         $this->notify('success', 'Sponsor removed.');
     }
 
+    /** The rail settings, saved as config overrides so the public pages pick them up at once. */
+    public array $settings = [];
+
+    public function mountSettings(): void
+    {
+        $this->settings = [
+            'slots_per_rail' => (int) config('social.sponsors.slots_per_rail'),
+            'price' => (string) config('social.sponsors.price'),
+            'period' => (string) config('social.sponsors.period'),
+            'contact' => (string) config('social.sponsors.contact'),
+        ];
+    }
+
+    public function saveSettings(Settings $settings): void
+    {
+        $data = $this->validate([
+            'settings.slots_per_rail' => ['required', 'integer', 'min:0', 'max:12'],
+            'settings.price' => ['nullable', 'string', 'max:40'],
+            'settings.period' => ['required', 'string', 'max:40'],
+            'settings.contact' => ['required', 'email', 'max:255'],
+        ])['settings'];
+
+        $settings->set('social.sponsors.slots_per_rail', $data['slots_per_rail']);
+        $settings->set('social.sponsors.price', $data['price'] ?: null);
+        $settings->set('social.sponsors.period', $data['period']);
+        $settings->set('social.sponsors.contact', $data['contact']);
+
+        $this->notify('success', 'Rail settings saved. The public pages use them right away.');
+    }
+
     public function render(): View
     {
         return view('livewire.admin.sponsors', [
             'slots' => SponsorSlot::orderBy('side')->orderBy('sort_order')->orderBy('id')->get(),
             'tints' => array_keys(SponsorSlot::TINTS),
+            'perRail' => (int) config('social.sponsors.slots_per_rail'),
         ])->title('Sponsors');
     }
 }

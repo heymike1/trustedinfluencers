@@ -68,4 +68,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/requests', Livewire\Admin\ContactRequests::class)->name('requests');
     Route::get('/categories', Livewire\Admin\Categories::class)->name('categories');
     Route::get('/sponsors', Livewire\Admin\Sponsors::class)->name('sponsors');
+    Route::get('/settings', Livewire\Admin\SettingsScreen::class)->name('settings');
 });

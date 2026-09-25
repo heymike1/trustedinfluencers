@@ -33,11 +33,44 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="py-10 text-center text-sm text-ink-500">No sponsors booked yet. The rails stay hidden until you add one.</td></tr>
+                        <tr><td colspan="7" class="py-10 text-center text-sm text-ink-500">No sponsors booked yet. The rails show the open slot card until you add one.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        <div class="space-y-5">
+        <form wire:submit="saveSettings" class="card p-5 space-y-4">
+            <div>
+                <h2 class="text-[15px] font-semibold text-ink-950">Rail settings</h2>
+                <p class="text-[13px] text-ink-500">What the rails offer when a side is not sold out.</p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                    <label class="label" for="s-slots">Slots per side</label>
+                    <input id="s-slots" type="number" min="0" max="12" wire:model="settings.slots_per_rail" class="input">
+                    <p class="mt-1 text-xs text-ink-400">{{ $perRail * 2 }} in total. 0 hides the rails.</p>
+                    <x-field-error for="settings.slots_per_rail" />
+                </div>
+                <div>
+                    <label class="label" for="s-price">Price</label>
+                    <input id="s-price" type="text" wire:model="settings.price" class="input" placeholder="€250">
+                    <p class="mt-1 text-xs text-ink-400">Empty hides the open slot card.</p>
+                    <x-field-error for="settings.price" />
+                </div>
+                <div>
+                    <label class="label" for="s-period">Period</label>
+                    <input id="s-period" type="text" wire:model="settings.period" class="input" placeholder="30 days">
+                    <x-field-error for="settings.period" />
+                </div>
+                <div>
+                    <label class="label" for="s-contact">Enquiries to</label>
+                    <input id="s-contact" type="email" wire:model="settings.contact" class="input">
+                    <x-field-error for="settings.contact" />
+                </div>
+            </div>
+            <div class="flex justify-end"><button type="submit" class="btn-primary" wire:loading.attr="disabled">Save settings</button></div>
+        </form>
 
         <form wire:submit="save" class="card p-5 space-y-4">
             <div>
@@ -112,5 +145,6 @@
                 @endif
             </div>
         </form>
+        </div>
     </div>
 </div>
