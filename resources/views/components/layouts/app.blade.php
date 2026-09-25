@@ -72,8 +72,8 @@
             ['href' => route('about'), 'label' => 'About', 'on' => request()->routeIs('about')],
         ];
     @endphp
-    {{-- The nav is a pill floating on the band (or on the page ground when a page has no band). Livewire pages set `band` and draw their own <x-page-band>. --}}
-    <header class="{{ isset($hero) || $band ? 'bg-band' : 'bg-page' }}" id="site-header">
+    {{-- The nav is a pill floating on the page ground. Livewire pages set `band` and draw their own <x-page-band>. --}}
+    <header class="bg-page" id="site-header">
         <div class="relative mx-auto max-w-6xl px-4 sm:px-6 pt-3 sm:pt-4">
             <div class="flex h-14 items-center justify-between gap-4 rounded-full border border-band-edge bg-white pl-4 pr-2 shadow-[0_6px_20px_rgba(13,35,82,0.08)] sm:h-[60px] sm:pl-5 sm:pr-2.5">
                 <a href="{{ route('home') }}" class="display text-[17px] tracking-[-0.02em] flex items-center gap-2.5 whitespace-nowrap">

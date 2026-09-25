@@ -19,10 +19,11 @@
     --color-ink-100: #edf0f4;
     --color-ink-50: #f6f8fa;
 
-    /* Page ground is cool paper; the baby-blue band carries the nav and page headers. White cards on top. */
+    /* One surface: page, nav and page headers share the same cool paper, so the sponsor rails
+       run over an uninterrupted ground. A header is marked by a hairline, not by a tint. */
     --color-page: #f3f5f8;
-    --color-band: #e4edf9;
-    --color-band-edge: #c9d9f0;
+    --color-band: #f3f5f8;
+    --color-band-edge: #e2e6ec;
 
     /* Two blues from the logo: navy for actions and active filters, bright blue for chart marks and live dots. */
     --color-brand-800: #08183a;
