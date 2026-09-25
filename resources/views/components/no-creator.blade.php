@@ -4,6 +4,5 @@
     <div class="mt-4 flex justify-center gap-2">
         <a href="{{ route('creators.index') }}" class="btn-primary btn-sm">Browse creators</a>
         <a href="{{ route('creators.create') }}" class="btn-secondary btn-sm">Add a creator</a>
-        <a href="{{ route('account.login') }}" class="btn-secondary btn-sm">Manage my account</a>
     </div>
 </div>

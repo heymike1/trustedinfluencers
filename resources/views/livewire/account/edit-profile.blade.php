@@ -1,7 +1,18 @@
 <div>
     @if(! $creator)
+        <x-page-band>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h1 class="display text-2xl sm:text-[26px] tracking-[-0.025em]">My profile</h1>
+                    <p class="mt-0.5 text-[13.5px] text-ink-500">{{ auth()->user()->email }}</p>
+                </div>
+                <a href="{{ route('account.login') }}" class="btn-secondary border-band-edge">
+                    <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+                    Manage my account
+                </a>
+            </div>
+        </x-page-band>
         <x-no-creator />
-        <div class="mx-auto max-w-lg mt-8">@include('livewire.account.partials.delete-account')</div>
     @else
         <x-account-nav :creator="$creator" />
 
