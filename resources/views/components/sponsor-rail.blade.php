@@ -52,7 +52,7 @@
 
             {{-- Nothing free: the way through to the queue, or the page is a dead end. --}}
             @if($price && ! $anyOpen)
-                <a href="{{ route('sponsor') }}" class="block rounded-xl px-2 py-1.5 text-center text-[11px] font-semibold text-ink-500 transition-colors hover:text-brand-700">Sponsor this site &rarr;</a>
+                <a href="{{ route('sponsor') }}" class="block rounded-xl px-2 py-1.5 text-center text-[11px] font-semibold text-ink-500 transition-colors hover:text-brand-700">I want to advertise &rarr;</a>
             @endif
         </div>
     </aside>

@@ -20,7 +20,7 @@
                     @if($booking->isLive())
                         {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. Expires on {{ $booking->ends_at?->format('j F Y') }}. No auto-renew.
                     @elseif($booking->isQueued())
-                        Everything was taken when you paid, so you take the first spot that comes free. Fill your card in now and it goes up the moment there is room.
+                        Fill your card in now and it goes up by itself the moment your spot comes free.
                     @elseif($booking->needsDetails())
                         {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. It goes up as soon as this is complete, and your {{ $days }} days start then.
                     @else

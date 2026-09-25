@@ -105,7 +105,7 @@ class SponsorPageTest extends TestCase
 
         $this->get('/')->assertOk()
             ->assertDontSee('Open slot')
-            ->assertSee('Sponsor this site');
+            ->assertSee('I want to advertise');
     }
 
     public function test_the_page_says_so_when_nothing_is_for_sale(): void
