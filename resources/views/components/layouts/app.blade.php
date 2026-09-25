@@ -67,7 +67,8 @@
     @php
         $navLinks = [
             ['href' => route('home'), 'label' => 'Home', 'on' => request()->routeIs('home')],
-            ['href' => route('creators.index'), 'label' => 'Browse creators', 'on' => request()->routeIs('creators.index', 'creators.show', 'creators.create')],
+            ['href' => route('creators.index'), 'label' => 'Browse creators', 'on' => request()->routeIs('creators.index', 'creators.show')],
+            ['href' => route('creators.create'), 'label' => 'Add a creator', 'on' => request()->routeIs('creators.create')],
             ['href' => route('about'), 'label' => 'About', 'on' => request()->routeIs('about')],
         ];
     @endphp
