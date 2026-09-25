@@ -67,17 +67,14 @@
                 <div>
                     <label class="label" for="s-price">Price</label>
                     <input id="s-price" type="number" min="0" wire:model="settings.price" class="input" placeholder="250">
-                    <p class="mt-1 text-xs text-ink-400">Whole units. 0 takes the spots off the market.</p>
+                    <p class="mt-1 text-xs text-ink-400">Whole dollars. 0 takes the spots off the market.</p>
                     <x-field-error for="settings.price" />
                 </div>
                 <div>
-                    <label class="label" for="s-currency">Currency</label>
-                    <select id="s-currency" wire:model="settings.currency" class="input">
-                        <option value="eur">EUR €</option>
-                        <option value="usd">USD $</option>
-                        <option value="gbp">GBP £</option>
-                    </select>
-                    <x-field-error for="settings.currency" />
+                    <label class="label" for="s-utm">Link tag</label>
+                    <input id="s-utm" type="text" wire:model="settings.utm_source" class="input" placeholder="trustedinfluencers">
+                    <p class="mt-1 text-xs text-ink-400">Cards link out as <span class="tnum">?utm_source=…&amp;utm_medium=referral</span>, so a sponsor sees us in their own analytics.</p>
+                    <x-field-error for="settings.utm_source" />
                 </div>
                 <div>
                     <label class="label" for="s-advance">Price when full</label>

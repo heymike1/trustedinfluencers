@@ -30,7 +30,6 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="SOCIAL_CONNECTOR_DRIVER" value="fake"/>
-        <env name="SPONSOR_CHECKOUT_DRIVER" value="fake"/>
         <env name="SOCIAL_ENABLED_PLATFORMS" value="youtube,instagram,x"/>
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>

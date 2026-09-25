@@ -150,9 +150,9 @@ class Sponsors extends Component
             'slots_per_rail' => (int) config('social.sponsors.slots_per_rail'),
             'price' => Sponsorship::amount(),
             'advance_price' => Sponsorship::advanceAmount(),
-            'currency' => Sponsorship::currency(),
             'days' => Sponsorship::days(),
             'contact' => (string) config('social.sponsors.contact'),
+            'utm_source' => (string) config('social.sponsors.utm_source'),
         ];
     }
 
@@ -162,17 +162,17 @@ class Sponsors extends Component
             'settings.slots_per_rail' => ['required', 'integer', 'min:0', 'max:12'],
             'settings.price' => ['required', 'integer', 'min:0', 'max:1000000'],
             'settings.advance_price' => ['required', 'integer', 'min:0', 'max:1000000'],
-            'settings.currency' => ['required', Rule::in(['eur', 'usd', 'gbp'])],
             'settings.days' => ['required', 'integer', 'min:1', 'max:365'],
             'settings.contact' => ['required', 'email', 'max:255'],
+            'settings.utm_source' => ['required', 'string', 'max:40', 'regex:/^[a-z0-9_-]+$/'],
         ])['settings'];
 
         $settings->set('social.sponsors.slots_per_rail', $data['slots_per_rail']);
         $settings->set('social.sponsors.price', $data['price']);
         $settings->set('social.sponsors.advance_price', $data['advance_price']);
-        $settings->set('social.sponsors.currency', $data['currency']);
         $settings->set('social.sponsors.days', $data['days']);
         $settings->set('social.sponsors.contact', $data['contact']);
+        $settings->set('social.sponsors.utm_source', $data['utm_source']);
 
         $this->notify('success', 'Rail settings saved. The public pages use them right away.');
     }

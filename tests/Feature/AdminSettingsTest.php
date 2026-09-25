@@ -31,7 +31,6 @@ class AdminSettingsTest extends TestCase
             ->set('settings.price', 400)
             ->set('settings.days', 14)
             ->set('settings.advance_price', 1200)
-            ->set('settings.currency', 'eur')
             ->set('settings.contact', 'ads@example.com')
             ->call('saveSettings')
             ->assertHasNoErrors();
@@ -41,7 +40,7 @@ class AdminSettingsTest extends TestCase
         $this->assertSame(14, config('social.sponsors.days'));
 
         // A fresh request reads them back from the database, not from the config file.
-        $this->get('/')->assertOk()->assertSee('€400 / 14 days');
+        $this->get('/')->assertOk()->assertSee('$400 / 14 days');
     }
 
     public function test_the_platform_switches_survive_the_request(): void
@@ -68,7 +67,7 @@ class AdminSettingsTest extends TestCase
     public function test_resetting_falls_back_to_the_config_files(): void
     {
         $settings = app(Settings::class);
-        $settings->set('social.sponsors.price', '€999');
+        $settings->set('social.sponsors.price', '$999');
 
         Livewire::actingAs($this->admin)->test(SettingsScreen::class)->call('resetToFile');
 

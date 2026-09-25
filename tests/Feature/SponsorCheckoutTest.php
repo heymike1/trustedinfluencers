@@ -95,6 +95,16 @@ class SponsorCheckoutTest extends TestCase
         $this->get('/')->assertOk()->assertSee('Blotato');
     }
 
+    public function test_the_stand_in_checkout_is_closed_once_stripe_is_configured(): void
+    {
+        $booking = $this->buy('left1');
+        config(['services.stripe.secret' => 'sk_live_whatever']);
+
+        $this->get(route('sponsor.checkout.fake', $booking))->assertNotFound();
+        $this->post(route('sponsor.checkout.fake.pay', $booking))->assertNotFound();
+        $this->assertNull($booking->fresh()->paid_at);
+    }
+
     public function test_a_card_page_needs_the_token(): void
     {
         $this->get(route('sponsor.card', 'not-a-real-token'))->assertNotFound();

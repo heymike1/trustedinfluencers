@@ -89,19 +89,17 @@ return [
     */
 
     'sponsors' => [
-        'slots_per_rail' => (int) env('SPONSOR_SLOTS_PER_RAIL', 4),
-        // Whole units, the way a buyer reads them: 250 is €250. 0 takes the spots off the market.
-        'price' => (int) env('SPONSOR_PRICE', 250),
+        // Defaults only. Every value here is changed from the admin panel, not from .env, so
+        // there is one place to look. Prices are whole dollars; 0 takes the spots off the market.
+        'slots_per_rail' => 4,
+        'price' => 250,
         // Paid when every spot is taken: it buys the first one that comes free.
-        'advance_price' => (int) env('SPONSOR_ADVANCE_PRICE', 999),
-        'currency' => strtolower(env('SPONSOR_CURRENCY', 'eur')),
-        // A booking runs this many days from the day the card goes up. One month, counted in days.
-        'days' => (int) env('SPONSOR_DAYS', 30),
-        'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
+        'advance_price' => 999,
+        // A booking runs this many days from the day the card goes up.
+        'days' => 30,
+        'contact' => 'info@runmorebrands.com',
         // What a sponsor sees in their own analytics when someone comes off their card.
-        'utm_source' => env('SPONSOR_UTM_SOURCE', 'trustedinfluencers'),
-        // 'stripe' hands off to Checkout; 'fake' keeps the whole flow local for tests and dev.
-        'checkout' => env('SPONSOR_CHECKOUT_DRIVER', 'stripe'),
+        'utm_source' => 'trustedinfluencers',
     ],
 
     'contact' => [

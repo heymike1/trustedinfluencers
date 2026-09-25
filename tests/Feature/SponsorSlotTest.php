@@ -124,7 +124,7 @@ class SponsorSlotTest extends TestCase
 
         $this->slot(['name' => 'Blotato']);
         $this->slot(['name' => 'Chargeback']);
-        $this->get('/')->assertOk()->assertSee('Open slot')->assertSee('€250 / 30 days');
+        $this->get('/')->assertOk()->assertSee('Open slot')->assertSee('$250 / 30 days');
 
         // Every spot taken: nothing left to sell, so the card is gone.
         $this->slot(['name' => 'Libertus']);

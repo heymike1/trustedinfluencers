@@ -105,24 +105,16 @@ class Sponsorship
         return self::isFull() && self::advanceAmount() > 0 ? self::advanceAmount() : self::amount();
     }
 
+    /** We sell in dollars. Bookings carry it too, so an old one still says what it was charged. */
     public static function currency(): string
     {
-        return strtolower((string) config('social.sponsors.currency')) ?: 'eur';
+        return 'usd';
     }
 
-    /** "€250". Falls back to "250 SEK" for anything without a symbol we know. */
+    /** "$250". */
     public static function money(?int $amount): ?string
     {
-        if (! $amount) {
-            return null;
-        }
-
-        return match (self::currency()) {
-            'eur' => '€'.number_format($amount, 0, ',', '.'),
-            'usd' => '$'.number_format($amount),
-            'gbp' => '£'.number_format($amount),
-            default => number_format($amount).' '.strtoupper(self::currency()),
-        };
+        return $amount ? '$'.number_format($amount) : null;
     }
 
     public static function price(): ?string

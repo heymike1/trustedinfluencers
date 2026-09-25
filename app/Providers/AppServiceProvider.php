@@ -18,7 +18,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Settings::class);
         $this->app->singleton(ConnectorManager::class);
-        $this->app->bind(CheckoutGateway::class, fn () => config('social.sponsors.checkout') === 'fake' ? new FakeCheckout : new StripeCheckout);
+        // Stripe as soon as there is a secret. Without one we fall back to the stand-in checkout,
+        // but only where nobody is really buying: in production that is an error, not a free spot.
+        $this->app->bind(CheckoutGateway::class, fn () => config('services.stripe.secret') || ! app()->environment('local', 'testing')
+            ? new StripeCheckout
+            : new FakeCheckout);
         $this->app->bind(GoogleLoginProvider::class, fn () => config('social.driver', 'fake') === 'fake' ? new FakeGoogleLoginProvider : new LiveGoogleLoginProvider);
     }
 
