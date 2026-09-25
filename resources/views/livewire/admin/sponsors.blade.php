@@ -6,7 +6,7 @@
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div class="card overflow-x-auto">
             <table class="data-table">
-                <thead><tr><th class="pl-4">Sponsor</th><th>Spot</th><th>Window</th><th class="text-right">Clicks</th><th>State</th><th class="pr-4"></th></tr></thead>
+                <thead><tr><th class="pl-4">Sponsor</th><th>Spot</th><th>Window</th><th>State</th><th class="pr-4"></th></tr></thead>
                 <tbody>
                     @forelse($slots as $slot)
                         <tr wire:key="slot-{{ $slot->id }}">
@@ -26,7 +26,6 @@
                             <td class="text-xs text-ink-500 whitespace-nowrap tnum">
                                 {{ $slot->starts_at?->format('j M Y') ?? '—' }} → {{ $slot->ends_at?->format('j M Y') ?? '—' }}
                             </td>
-                            <td class="text-right tnum">{{ number_format($slot->clicks) }}</td>
                             <td><x-badge :variant="$slot->state() === 'Live' ? 'verified' : ($slot->state() === 'Paused' ? 'warn' : 'neutral')">{{ $slot->state() }}</x-badge></td>
                             <td class="pr-4 text-right whitespace-nowrap">
                                 @if($slot->token)
@@ -41,7 +40,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="py-10 text-center text-sm text-ink-500">Nothing booked yet. The rails offer every spot until someone takes one.</td></tr>
+                        <tr><td colspan="5" class="py-10 text-center text-sm text-ink-500">Nothing booked yet. The rails offer every spot until someone takes one.</td></tr>
                     @endforelse
                 </tbody>
             </table>

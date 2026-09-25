@@ -11,14 +11,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SponsorCheckoutController;
-use App\Http\Controllers\SponsorClickController;
 use App\Http\Controllers\SponsorWebhookController;
 use App\Livewire;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
-Route::get('/go/{slot}', SponsorClickController::class)->name('sponsors.click');
 Route::view('/about', 'about')->name('about');
 Route::view('/sponsor', 'sponsor')->name('sponsor');
 

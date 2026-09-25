@@ -17,7 +17,7 @@
             @foreach($spots as $spot)
                 @php($slot = $spot['booking']?->isLive() ? $spot['booking'] : null)
                 @if($slot)
-                    <a href="{{ route('sponsors.click', $slot) }}" target="_blank" rel="nofollow sponsored noopener"
+                    <a href="{{ $slot->linkUrl() }}" target="_blank" rel="nofollow sponsored noopener"
                        class="block rounded-2xl border px-3 py-5 text-center transition-transform hover:-translate-y-0.5 min-[1600px]:px-4 min-[1600px]:py-6 {{ $slot->tintClasses() }}">
                         @if($slot->logo_url)
                             <img src="{{ $slot->logo_url }}" alt="" class="mx-auto size-9 rounded-lg object-cover" loading="lazy" onerror="this.remove()">

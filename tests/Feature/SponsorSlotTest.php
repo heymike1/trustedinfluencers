@@ -61,20 +61,23 @@ class SponsorSlotTest extends TestCase
         $this->get('/')->assertOk()->assertDontSee('aria-label="Sponsored"', false);
     }
 
-    public function test_a_click_is_counted_and_redirected(): void
+    public function test_a_card_links_straight_to_the_sponsor_with_our_tag_on_it(): void
     {
-        $slot = $this->slot();
+        $slot = $this->slot(['url' => 'https://blotato.example']);
 
-        $this->get(route('sponsors.click', $slot))->assertRedirect('https://blotato.example');
-        $this->assertSame(1, $slot->fresh()->clicks);
+        $this->assertSame(
+            'https://blotato.example?utm_source=trustedinfluencers&utm_medium=referral&utm_campaign=sponsor_card',
+            $slot->linkUrl(),
+        );
+
+        $this->get('/')->assertOk()->assertSee('utm_campaign=sponsor_card', false);
     }
 
-    public function test_a_paused_slot_cannot_be_clicked(): void
+    public function test_a_link_that_already_has_a_query_keeps_it(): void
     {
-        $slot = $this->slot(['is_active' => false]);
+        $slot = $this->slot(['url' => 'https://blotato.example/?ref=x']);
 
-        $this->get(route('sponsors.click', $slot))->assertNotFound();
-        $this->assertSame(0, $slot->fresh()->clicks);
+        $this->assertStringStartsWith('https://blotato.example/?ref=x&utm_source=', $slot->linkUrl());
     }
 
     public function test_admins_can_book_pause_and_remove_a_sponsor(): void

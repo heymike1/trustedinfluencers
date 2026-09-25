@@ -98,6 +98,8 @@ return [
         // A booking runs this many days from the day the card goes up. One month, counted in days.
         'days' => (int) env('SPONSOR_DAYS', 30),
         'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
+        // What a sponsor sees in their own analytics when someone comes off their card.
+        'utm_source' => env('SPONSOR_UTM_SOURCE', 'trustedinfluencers'),
         // 'stripe' hands off to Checkout; 'fake' keeps the whole flow local for tests and dev.
         'checkout' => env('SPONSOR_CHECKOUT_DRIVER', 'stripe'),
     ],

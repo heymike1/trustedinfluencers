@@ -144,6 +144,23 @@ class SponsorSlot extends Model
         return mb_strtoupper(mb_substr((string) $this->name, 0, 2));
     }
 
+    /**
+     * Where the card points: the sponsor's own address, tagged so the visit shows up in their
+     * analytics as ours. No redirect of ours in between.
+     */
+    public function linkUrl(): ?string
+    {
+        if (! $this->url) {
+            return null;
+        }
+
+        return $this->url.(str_contains($this->url, '?') ? '&' : '?').http_build_query([
+            'utm_source' => config('social.sponsors.utm_source'),
+            'utm_medium' => 'referral',
+            'utm_campaign' => 'sponsor_card',
+        ]);
+    }
+
     /** "left1": how a spot is named in a link. */
     public function spotKey(): ?string
     {
