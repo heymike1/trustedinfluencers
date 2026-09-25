@@ -78,8 +78,8 @@ class SponsorCard extends Component
             'ahead' => $ahead = $this->booking->isQueued()
                 ? SponsorSlot::queued()->where('paid_at', '<', $this->booking->paid_at)->count()
                 : 0,
-            // The day this particular booking's card can appear, queue and all.
-            'visibleFrom' => $this->booking->isQueued() ? Sponsorship::spotFreesAt($ahead) : null,
+            // The card this booking replaces, and with it the day it can appear.
+            'freedBy' => $this->booking->isQueued() ? Sponsorship::spotFreedBy($ahead) : null,
         ])->title('Your sponsor card');
     }
 }

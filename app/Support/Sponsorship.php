@@ -154,11 +154,11 @@ class Sponsorship
     }
 
     /**
-     * When the spot with this many bookings ahead of it comes free. Null when a live card has no
-     * end date, or when there are fewer running cards than people waiting: then there is no date
-     * to promise.
+     * The running card that a booking with this many ahead of it will replace: the one whose run
+     * ends soonest after everybody in front has been served. Null when a live card has no end
+     * date, or when there are fewer running cards than people waiting.
      */
-    public static function spotFreesAt(int $behind = 0): ?Carbon
+    public static function spotFreedBy(int $behind = 0): ?SponsorSlot
     {
         $live = SponsorSlot::live()->get();
 
@@ -166,7 +166,13 @@ class Sponsorship
             return null;
         }
 
-        return $live->sortBy('ends_at')->values()->get($behind)?->ends_at;
+        return $live->sortBy('ends_at')->values()->get($behind);
+    }
+
+    /** The day that spot comes free. */
+    public static function spotFreesAt(int $behind = 0): ?Carbon
+    {
+        return self::spotFreedBy($behind)?->ends_at;
     }
 
     /** A mailto for the enquiry, pre-filled so we know what it is about. */
