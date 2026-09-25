@@ -6,7 +6,7 @@
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div class="card overflow-x-auto">
             <table class="data-table">
-                <thead><tr><th class="pl-4">Sponsor</th><th>Side</th><th class="text-right">Order</th><th>Window</th><th class="text-right">Clicks</th><th>State</th><th class="pr-4"></th></tr></thead>
+                <thead><tr><th class="pl-4">Sponsor</th><th>Spot</th><th>Window</th><th class="text-right">Clicks</th><th>State</th><th class="pr-4"></th></tr></thead>
                 <tbody>
                     @forelse($slots as $slot)
                         <tr wire:key="slot-{{ $slot->id }}">
@@ -14,26 +14,34 @@
                                 <div class="flex items-center gap-2.5">
                                     <span class="flex size-8 shrink-0 items-center justify-center rounded-lg border text-[11px] font-bold text-ink-700 {{ $slot->tintClasses() }}">{{ $slot->initials() }}</span>
                                     <div class="min-w-0">
-                                        <p class="font-medium text-ink-950">{{ $slot->name }}</p>
-                                        <p class="text-xs text-ink-500 truncate max-w-[260px]">{{ $slot->tagline }}</p>
+                                        <p class="font-medium text-ink-950">{{ $slot->name ?? 'No card yet' }}</p>
+                                        <p class="text-xs text-ink-500 truncate max-w-[260px]">{{ $slot->tagline ?? $slot->buyer_email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-xs text-ink-500 capitalize">{{ $slot->side }}</td>
-                            <td class="text-right tnum">{{ $slot->sort_order }}</td>
+                            <td class="text-xs text-ink-500 whitespace-nowrap">
+                                {{ $slot->position ? ucfirst($slot->side).' '.$slot->position : 'In the queue' }}
+                                @if($slot->amount)<span class="block text-ink-400 tnum">{{ \App\Support\Sponsorship::money($slot->amount) }} paid</span>@endif
+                            </td>
                             <td class="text-xs text-ink-500 whitespace-nowrap tnum">
                                 {{ $slot->starts_at?->format('j M Y') ?? '—' }} → {{ $slot->ends_at?->format('j M Y') ?? '—' }}
                             </td>
                             <td class="text-right tnum">{{ number_format($slot->clicks) }}</td>
                             <td><x-badge :variant="$slot->state() === 'Live' ? 'verified' : ($slot->state() === 'Paused' ? 'warn' : 'neutral')">{{ $slot->state() }}</x-badge></td>
                             <td class="pr-4 text-right whitespace-nowrap">
+                                @if($slot->token)
+                                    <a href="{{ route('sponsor.card', $slot->token) }}" target="_blank" class="btn-secondary btn-sm">Their page</a>
+                                @endif
                                 <button type="button" wire:click="edit({{ $slot->id }})" class="btn-secondary btn-sm">Edit</button>
                                 <button type="button" wire:click="toggle({{ $slot->id }})" class="btn-secondary btn-sm">{{ $slot->is_active ? 'Pause' : 'Resume' }}</button>
+                                @if(in_array($slot->status, [\App\Models\SponsorSlot::PAID, \App\Models\SponsorSlot::LIVE, \App\Models\SponsorSlot::PENDING], true))
+                                    <button type="button" wire:click="cancelBooking({{ $slot->id }})" wire:confirm="Cancel this booking and free the spot?" class="btn-secondary btn-sm">Cancel</button>
+                                @endif
                                 <button type="button" wire:click="destroy({{ $slot->id }})" wire:confirm="Remove {{ $slot->name }} from the rails?" class="btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="py-10 text-center text-sm text-ink-500">No sponsors booked yet. The rails show the open slot card until you add one.</td></tr>
+                        <tr><td colspan="6" class="py-10 text-center text-sm text-ink-500">Nothing booked yet. The rails offer every spot until someone takes one.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -47,7 +55,8 @@
             </div>
             <p class="flex items-center gap-2 rounded-xl border border-ink-200 bg-ink-50 px-3 py-2 text-[13px] text-ink-600">
                 <span class="size-1.5 rounded-full {{ $open === 0 ? 'bg-ink-400' : 'bg-brand-600' }}"></span>
-                {{ $open === 0 ? 'Sold out: the page offers the advance instead.' : $open.' of '.$total.' spots open right now.' }}
+                {{ $open === 0 ? 'Sold out: buyers take the next spot that frees up.' : $open.' of '.$total.' spots open right now.' }}
+                @if($queue->isNotEmpty())<span class="font-semibold text-ink-950">{{ $queue->count() }} paid and waiting.</span>@endif
             </p>
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -58,21 +67,36 @@
                 </div>
                 <div>
                     <label class="label" for="s-price">Price</label>
-                    <input id="s-price" type="text" wire:model="settings.price" class="input" placeholder="€250">
-                    <p class="mt-1 text-xs text-ink-400">Empty hides the open slot card.</p>
+                    <input id="s-price" type="number" min="0" wire:model="settings.price" class="input" placeholder="250">
+                    <p class="mt-1 text-xs text-ink-400">Whole units. 0 takes the spots off the market.</p>
                     <x-field-error for="settings.price" />
+                </div>
+                <div>
+                    <label class="label" for="s-currency">Currency</label>
+                    <select id="s-currency" wire:model="settings.currency" class="input">
+                        <option value="eur">EUR €</option>
+                        <option value="usd">USD $</option>
+                        <option value="gbp">GBP £</option>
+                    </select>
+                    <x-field-error for="settings.currency" />
+                </div>
+                <div>
+                    <label class="label" for="s-advance">Price when full</label>
+                    <input id="s-advance" type="number" min="0" wire:model="settings.advance_price" class="input" placeholder="999">
+                    <p class="mt-1 text-xs text-ink-400">Charged on <a href="{{ route('sponsor') }}" target="_blank" class="font-semibold text-brand-700">/sponsor</a> when every spot is taken and the buyer takes the next one that frees up.</p>
+                    <x-field-error for="settings.advance_price" />
                 </div>
                 <div>
                     <label class="label" for="s-days">Days per booking</label>
                     <input id="s-days" type="number" min="1" max="365" wire:model="settings.days" class="input" placeholder="30">
-                    <p class="mt-1 text-xs text-ink-400">A booking runs this long from the day it goes live.</p>
+                    <p class="mt-1 text-xs text-ink-400">A booking runs this long from the day the card goes up.</p>
                     <x-field-error for="settings.days" />
                 </div>
                 <div>
-                    <label class="label" for="s-advance">Advance</label>
-                    <input id="s-advance" type="text" wire:model="settings.advance_price" class="input" placeholder="€999">
-                    <p class="mt-1 text-xs text-ink-400">Asked on <a href="{{ route('sponsor') }}" target="_blank" class="font-semibold text-brand-700">/sponsor</a> when everything is booked. Empty turns it into a plain waiting list.</p>
-                    <x-field-error for="settings.advance_price" />
+                    <label class="label" for="s-hold">Hold during checkout</label>
+                    <input id="s-hold" type="number" min="5" max="180" wire:model="settings.hold_minutes" class="input" placeholder="20">
+                    <p class="mt-1 text-xs text-ink-400">Minutes a spot stays off the market while someone pays.</p>
+                    <x-field-error for="settings.hold_minutes" />
                 </div>
                 <div>
                     <label class="label" for="s-contact">Enquiries to</label>
@@ -129,9 +153,10 @@
                     </select>
                 </div>
                 <div>
-                    <label class="label" for="sort_order">Order</label>
-                    <input id="sort_order" type="number" min="0" max="999" wire:model="form.sort_order" class="input">
-                    <x-field-error for="form.sort_order" />
+                    <label class="label" for="position">Spot</label>
+                    <input id="position" type="number" min="1" max="{{ $perRail }}" wire:model="form.position" class="input" placeholder="1">
+                    <p class="mt-1 text-xs text-ink-400">1 is the top card. Empty puts it in the queue.</p>
+                    <x-field-error for="form.position" />
                 </div>
             </div>
             <div class="grid gap-4 sm:grid-cols-2">

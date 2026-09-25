@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Livewire\Admin\Sponsors;
 use App\Models\SponsorSlot;
 use App\Models\User;
+use App\Support\Sponsorship;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -13,13 +14,18 @@ class SponsorSlotTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** A card that is up, in the first spot nobody has taken. */
     private function slot(array $attributes = []): SponsorSlot
     {
+        $spot = Sponsorship::parseSpot(Sponsorship::openSpots()->first()) ?? ['left', 1];
+
         return SponsorSlot::create(array_merge([
             'name' => 'Blotato',
             'tagline' => 'Social media API',
             'url' => 'https://blotato.example',
-            'side' => 'left',
+            'side' => $spot[0],
+            'position' => $spot[1],
+            'status' => SponsorSlot::LIVE,
         ], $attributes));
     }
 
@@ -50,7 +56,7 @@ class SponsorSlotTest extends TestCase
 
     public function test_the_rails_are_absent_when_the_price_is_switched_off(): void
     {
-        config(['social.sponsors.price' => null]);
+        config(['social.sponsors.price' => 0]);
 
         $this->get('/')->assertOk()->assertDontSee('aria-label="Sponsored"', false);
     }
@@ -80,6 +86,7 @@ class SponsorSlotTest extends TestCase
             ->set('form.tagline', 'Prevent chargebacks on autopilot')
             ->set('form.url', 'https://chargeback.example')
             ->set('form.side', 'right')
+            ->set('form.position', 1)
             ->call('save')
             ->assertHasNoErrors();
 
@@ -110,21 +117,21 @@ class SponsorSlotTest extends TestCase
 
     public function test_an_open_slot_is_offered_until_the_rail_is_full(): void
     {
-        config(['social.sponsors.slots_per_rail' => 2, 'social.sponsors.price' => '€250']);
+        config(['social.sponsors.slots_per_rail' => 2, 'social.sponsors.price' => 250]);
 
-        $this->slot(['name' => 'Blotato', 'side' => 'left']);
-        $this->slot(['name' => 'Chargeback', 'side' => 'right']);
+        $this->slot(['name' => 'Blotato']);
+        $this->slot(['name' => 'Chargeback']);
         $this->get('/')->assertOk()->assertSee('Open slot')->assertSee('€250 / 30 days');
 
-        // Both rails full: nothing left to sell, so the card is gone.
-        $this->slot(['name' => 'Libertus', 'side' => 'left']);
-        $this->slot(['name' => 'Postiz', 'side' => 'right']);
+        // Every spot taken: nothing left to sell, so the card is gone.
+        $this->slot(['name' => 'Libertus']);
+        $this->slot(['name' => 'Postiz']);
         $this->get('/')->assertOk()->assertDontSee('Open slot');
     }
 
     public function test_the_open_slot_card_is_off_without_a_price(): void
     {
-        config(['social.sponsors.price' => null]);
+        config(['social.sponsors.price' => 0]);
         $this->slot();
 
         $this->get('/')->assertOk()->assertSee('Blotato')->assertDontSee('Open slot');

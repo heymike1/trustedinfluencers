@@ -6,51 +6,98 @@
     $forSale = Sponsorship::isForSale();
     $full = $forSale && Sponsorship::isFull();
     $price = Sponsorship::price();
-    $advance = Sponsorship::advancePrice();
     $days = Sponsorship::days();
     $nextFree = Sponsorship::nextFreeAt();
-    $mailto = Sponsorship::mailto($full ? 'The next spot on' : 'Booking a spot on');
+    $queue = Sponsorship::queueLength();
+
+    // Which spot they clicked, and whether it is still there.
+    $asked = request('spot');
+    $spot = Sponsorship::parseSpot($asked);
+    $spotTaken = $spot && ! Sponsorship::isSpotOpen($asked);
+    $spot = $spotTaken ? null : $spot;
+    $due = Sponsorship::money($spot ? Sponsorship::amount() : Sponsorship::amountDueNow());
+    $ordinal = fn (int $n) => $n.([1 => 'st', 2 => 'nd', 3 => 'rd'][$n] ?? 'th');
 @endphp
 <x-layouts.app title="Sponsor" description="One card in the rails beside every page of {{ config('app.name') }}, for {{ $days }} days. {{ $total }} spots in total, booked one month at a time." :canonical="route('sponsor')">
     <x-slot:hero>
         <div class="band">
-            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-12 sm:pt-16 sm:pb-16 flex flex-col gap-6">
-                <span class="eyebrow self-start">Sponsor {{ config('app.name') }}</span>
-                <h1 class="display max-w-3xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ $total }} spots, beside the creators brands are already looking at.</h1>
-                <p class="max-w-2xl text-base text-ink-700 sm:text-lg text-pretty">The cards in the rails on either side of this page are the only advertising on the site. One card is yours for {{ $days }} days and it runs everywhere a visitor on a wide screen goes: the home page, the directory, the leaderboard and every creator profile.</p>
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-12 sm:pt-16 sm:pb-16">
+                <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
+                    <div class="flex flex-col gap-5">
+                        <span class="eyebrow self-start">Sponsor {{ config('app.name') }}</span>
+                        <h1 class="display max-w-2xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">
+                            @if($spot)
+                                The {{ $ordinal($spot[1]) }} card in the {{ $spot[0] }} rail is free.
+                            @else
+                                {{ $total }} spots, beside the creators brands are already looking at.
+                            @endif
+                        </h1>
+                        <p class="max-w-2xl text-base text-ink-700 sm:text-lg text-pretty">The cards in the rails on either side of this page are the only advertising on the site. One card is yours for {{ $days }} days and it runs everywhere a visitor on a wide screen goes: the home page, the directory, the leaderboard and every creator profile.</p>
 
-                <div class="flex flex-wrap items-center gap-3">
-                    @if(! $forSale)
-                        <a href="mailto:{{ Sponsorship::contact() }}" class="btn-secondary !px-5 !py-2.5 !text-[15px] border-band-edge">Ask when spots come back</a>
-                    @elseif($full)
-                        <a href="{{ $mailto }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Take the next spot @if($advance)<span class="tnum">· {{ $advance }}</span>@endif</a>
-                    @else
-                        <a href="{{ $mailto }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Book a spot <span class="tnum">· {{ $price }} / {{ $days }} days</span></a>
-                    @endif
-                    <a href="#how" class="btn-secondary !px-5 !py-2.5 !text-[15px] border-band-edge">How it works</a>
-                </div>
-
-                @if(! $forSale)
-                    <p class="max-w-2xl text-[13px] text-ink-500">We have taken the spots off the market for now. Mail <a href="mailto:{{ Sponsorship::contact() }}" class="font-semibold text-brand-700">{{ Sponsorship::contact() }}</a> and we will let you know when they are back.</p>
-                @else
-                    <p class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[13px] text-ink-500">
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-band-edge bg-white px-2.5 py-1 font-semibold {{ $full ? 'text-ink-700' : 'text-brand-700' }}">
-                            <span class="size-1.5 rounded-full {{ $full ? 'bg-ink-400' : 'bg-brand-600' }}"></span>
-                            {{ $full ? 'All '.$total.' spots are taken' : $open.' of '.$total.' spots open' }}
-                        </span>
-                        @if($full)
-                            <span>
-                                You can still buy one: you take the first spot that comes free.
-                                @if($nextFree)
-                                    That is <span class="font-semibold text-ink-950">{{ $nextFree->format('j F Y') }}</span>.
+                        @if($forSale)
+                            <p class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[13px] text-ink-500">
+                                <span class="inline-flex items-center gap-1.5 rounded-full border border-band-edge bg-white px-2.5 py-1 font-semibold {{ $full ? 'text-ink-700' : 'text-brand-700' }}">
+                                    <span class="size-1.5 rounded-full {{ $full ? 'bg-ink-400' : 'bg-brand-600' }}"></span>
+                                    {{ $full ? 'All '.$total.' spots are taken' : $open.' of '.$total.' spots open' }}
+                                </span>
+                                @if($full)
+                                    <span>
+                                        You can still buy one: you take the first spot that comes free.
+                                        @if($nextFree)
+                                            That is <span class="font-semibold text-ink-950">{{ $nextFree->format('j F Y') }}</span>.
+                                        @endif
+                                        Pay first, go first. Your {{ $days }} days start the day your card goes up.
+                                    </span>
+                                @else
+                                    <span>Booked per month, {{ $days }} days from the day your card goes live. No auto-renew.</span>
                                 @endif
-                                Pay first, go first. Your {{ $days }} days start the day your card goes up.
-                            </span>
-                        @else
-                            <span>Booked per month, {{ $days }} days from the day your card goes live. No auto-renew.</span>
+                            </p>
                         @endif
-                    </p>
-                @endif
+                    </div>
+
+                    {{-- The whole checkout: which spot, what it costs, where to send the link. --}}
+                    <div class="card p-5 sm:p-6">
+                        @if(! $forSale)
+                            <p class="font-semibold text-ink-950">Not for sale right now</p>
+                            <p class="mt-1.5 text-[13.5px] leading-relaxed text-ink-600">We have taken the spots off the market. Mail <a href="mailto:{{ Sponsorship::contact() }}" class="font-semibold text-brand-700">{{ Sponsorship::contact() }}</a> and we will let you know when they are back.</p>
+                        @else
+                            @if($spotTaken)
+                                <p class="mb-4 rounded-xl border border-ink-200 bg-ink-50 px-3 py-2 text-[13px] text-ink-600">That one just went. {{ $open > 0 ? 'You take the next free spot instead.' : 'You take the first spot that comes free.' }}</p>
+                            @endif
+                            @if(session('error'))
+                                <p class="mb-4 rounded-xl border border-danger-100 bg-white px-3 py-2 text-[13px] text-danger-700">{{ session('error') }}</p>
+                            @endif
+
+                            <p class="text-xs font-medium uppercase tracking-wide text-ink-500">{{ $full ? 'The next spot that comes free' : 'Your spot' }}</p>
+                            <p class="mt-1 font-semibold text-ink-950">
+                                @if($spot)
+                                    {{ ucfirst($spot[0]) }} rail, {{ $ordinal($spot[1]) }} card
+                                @elseif($full)
+                                    {{ $queue > 0 ? 'Behind '.$queue.' other '.($queue === 1 ? 'buyer' : 'buyers') : 'First in line' }}
+                                @else
+                                    Whichever of the {{ $open }} free spots you like
+                                @endif
+                            </p>
+                            <p class="mt-4 flex items-baseline gap-2">
+                                <span class="display text-3xl tnum">{{ $due }}</span>
+                                <span class="text-[13px] text-ink-500">for {{ $days }} days</span>
+                            </p>
+
+                            <form method="POST" action="{{ route('sponsor.checkout') }}" class="mt-4 space-y-3">
+                                @csrf
+                                <input type="hidden" name="spot" value="{{ $spot ? $spot[0].$spot[1] : '' }}">
+                                <div>
+                                    <label class="label" for="email">Your email</label>
+                                    <input id="email" name="email" type="email" required class="input" placeholder="you@company.com" value="{{ old('email') }}">
+                                    <p class="mt-1.5 text-xs text-ink-400">Where the receipt and the link to your card go.</p>
+                                    @error('email')<p class="mt-1 text-xs text-danger-700">{{ $message }}</p>@enderror
+                                </div>
+                                <button type="submit" class="btn-primary w-full">{{ $full ? 'Take the next spot' : 'Continue to payment' }}</button>
+                            </form>
+                            <p class="mt-3 text-[11.5px] leading-snug text-ink-500">We hold the spot for {{ Sponsorship::holdMinutes() }} minutes while you pay. You fill in the card itself afterwards, and it only goes up once you do.</p>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </x-slot:hero>
@@ -60,9 +107,9 @@
         <h2 class="display text-2xl sm:text-[28px]">How it works</h2>
         <div class="mt-5 grid gap-4 sm:grid-cols-3">
             @foreach([
-                ['Add your product or website', 'Click any open slot on the site and you land here. You need a name, one line about what you make, and a link. A logo if you have one; if you don’t, we use your initials. That is the whole card, so there is nothing to design.'],
-                ['Pick your spot and pay for the month', 'Say which side you want, left or right. Whatever this page calls open is genuinely open, and if everything is taken you simply take the first spot that frees up. '.($price ?: 'The price').' covers '.$days.' days, one invoice, and the card goes up as soon as it is paid.'],
-                ['It runs '.$days.' days, then it is free again', 'The clock starts the day your card appears, not the day you paid. Nothing renews behind your back: when the '.$days.' days are up the card comes down and the spot goes back on the page for the next one.'],
+                ['Pick an open spot', 'Click any open slot on the site and you land here with that one selected. If everything is taken you are not stuck: you buy anyway and you take the first spot that comes free, in the order people paid.'],
+                ['Pay for the month', ($price ?: 'The price').' covers '.$days.' days. One payment, no percentages, and nothing renews behind your back. We hold your spot while you are in the checkout so nobody can pay for it twice.'],
+                ['Add your product or website', 'Straight after paying you get your own page. Fill in a name, your website and one line about what you make; we read the logo off your site for you. The card goes up as soon as it is complete, and that is when the '.$days.' days start.'],
             ] as $i => [$title, $body])
                 <div class="card p-5">
                     <span class="flex size-7 items-center justify-center rounded-full bg-brand-100 text-[13px] font-bold text-brand-700 tnum">{{ $i + 1 }}</span>

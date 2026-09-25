@@ -35,6 +35,12 @@ return [
         ],
     ],
 
+    // Stripe Checkout for the sponsor spots. Without these keys the checkout cannot start.
+    'stripe' => [
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
     // Datafast analytics, loaded on every page. Set DATAFAST_WEBSITE_ID= (empty) to switch it off.
     'datafast' => [
         'website_id' => env('DATAFAST_WEBSITE_ID', 'dfid_mWBEhF5ENbpUJJFPlCs7l'),

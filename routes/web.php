@@ -6,10 +6,13 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\CreatorController;
 use App\Http\Controllers\FakeOAuthController;
+use App\Http\Controllers\FakeSponsorCheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SponsorCheckoutController;
 use App\Http\Controllers\SponsorClickController;
+use App\Http\Controllers\SponsorWebhookController;
 use App\Livewire;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +21,15 @@ Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/go/{slot}', SponsorClickController::class)->name('sponsors.click');
 Route::view('/about', 'about')->name('about');
 Route::view('/sponsor', 'sponsor')->name('sponsor');
+
+// Buying a spot: hold it, pay for it, then fill in the card. The webhook is what marks it paid.
+Route::post('/sponsor/checkout', [SponsorCheckoutController::class, 'start'])->middleware('throttle:10,1')->name('sponsor.checkout');
+Route::get('/sponsor/checkout/{booking}/return', [SponsorCheckoutController::class, 'return'])->name('sponsor.return');
+Route::get('/sponsor/checkout/{booking}/pending', [SponsorCheckoutController::class, 'pending'])->name('sponsor.pending');
+Route::get('/sponsor/checkout/{booking}/fake', [FakeSponsorCheckoutController::class, 'show'])->name('sponsor.checkout.fake');
+Route::post('/sponsor/checkout/{booking}/fake', [FakeSponsorCheckoutController::class, 'pay'])->name('sponsor.checkout.fake.pay');
+Route::get('/sponsor/card/{token}', Livewire\SponsorCard::class)->name('sponsor.card');
+Route::post('/webhooks/stripe', SponsorWebhookController::class)->name('webhooks.stripe');
 Route::view('/privacy', 'legal.privacy')->name('privacy');
 Route::view('/terms', 'legal.terms')->name('terms');
 

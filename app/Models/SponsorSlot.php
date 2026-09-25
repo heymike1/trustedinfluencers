@@ -5,14 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
- * A paid card in one of the two rails beside the page. Admin-managed; a slot shows only while
- * it is active and inside its booking window.
+ * One booking of one numbered spot in one of the two rails beside the page.
+ *
+ * pending  a checkout is open; the spot is held until reserved_until
+ * paid     the money is in. With a position it is waiting for the buyer's card details, without
+ *          one it is in the queue for the first spot that comes free
+ * live     the card is up and the clock is running
+ * ended    the run is over and the spot is back on the market
+ * cancelled a hold that expired, or a booking we refunded
  */
 class SponsorSlot extends Model
 {
     use HasFactory;
+
+    public const PENDING = 'pending';
+
+    public const PAID = 'paid';
+
+    public const LIVE = 'live';
+
+    public const ENDED = 'ended';
+
+    public const CANCELLED = 'cancelled';
 
     /** Card tints, keyed by the value stored on the slot. */
     public const TINTS = [
@@ -25,7 +42,9 @@ class SponsorSlot extends Model
     ];
 
     protected $fillable = [
-        'name', 'tagline', 'url', 'logo_url', 'tint', 'side', 'sort_order', 'is_active', 'starts_at', 'ends_at',
+        'name', 'tagline', 'url', 'logo_url', 'tint', 'side', 'position', 'sort_order',
+        'is_active', 'starts_at', 'ends_at', 'status', 'reserved_until', 'paid_at', 'queued_at',
+        'buyer_email', 'checkout_session_id', 'payment_reference', 'amount', 'currency',
     ];
 
     protected function casts(): array
@@ -34,33 +53,92 @@ class SponsorSlot extends Model
             'is_active' => 'boolean',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
+            'reserved_until' => 'datetime',
+            'paid_at' => 'datetime',
+            'queued_at' => 'datetime',
+            'reminded_at' => 'datetime',
+            'ending_notice_at' => 'datetime',
         ];
     }
 
-    /** Slots that may be shown right now. */
+    /** Cards that may be shown right now. */
     public function scopeLive(Builder $query): Builder
     {
-        return $query->where('is_active', true)
+        return $query->where('status', self::LIVE)
+            ->where('is_active', true)
+            ->whereNotNull('name')
             ->where(fn (Builder $q) => $q->whereNull('starts_at')->orWhere('starts_at', '<=', now()))
             ->where(fn (Builder $q) => $q->whereNull('ends_at')->orWhere('ends_at', '>', now()));
     }
 
+    /**
+     * Bookings that keep a spot off the market: a card that is up, money that is in, and a
+     * checkout that has not run out of time yet.
+     */
+    public function scopeHoldingASpot(Builder $query): Builder
+    {
+        return $query->whereNotNull('position')
+            ->where(fn (Builder $q) => $q
+                ->whereIn('status', [self::LIVE, self::PAID])
+                ->orWhere(fn (Builder $q) => $q->where('status', self::PENDING)->where('reserved_until', '>', now())));
+    }
+
+    /** Paid, but with no spot to go to yet. First paid, first served. */
+    public function scopeQueued(Builder $query): Builder
+    {
+        return $query->where('status', self::PAID)->whereNull('position')->orderBy('paid_at');
+    }
+
+    /** Paid and holding a spot, but the buyer has not filled in their card yet. */
+    public function scopeAwaitingDetails(Builder $query): Builder
+    {
+        return $query->where('status', self::PAID)->whereNotNull('position');
+    }
+
     public function isLive(): bool
     {
-        return $this->is_active
+        return $this->status === self::LIVE
+            && $this->is_active
+            && $this->name !== null
             && ($this->starts_at === null || $this->starts_at->isPast())
             && ($this->ends_at === null || $this->ends_at->isFuture());
     }
 
-    /** Why a slot is not showing, for the admin table. */
+    public function isQueued(): bool
+    {
+        return $this->status === self::PAID && $this->position === null;
+    }
+
+    public function needsDetails(): bool
+    {
+        return $this->status === self::PAID && $this->position !== null;
+    }
+
+    /** Everything the card needs before it can go up. */
+    public function hasCard(): bool
+    {
+        return filled($this->name) && filled($this->url) && filled($this->tagline);
+    }
+
+    /** Why a booking is not showing, for the admin table. */
     public function state(): string
     {
         return match (true) {
+            $this->status === self::PENDING => 'Checkout',
+            $this->isQueued() => 'In the queue',
+            $this->needsDetails() => 'Awaiting details',
+            $this->status === self::CANCELLED => 'Cancelled',
+            $this->status === self::ENDED => 'Ended',
             ! $this->is_active => 'Paused',
             $this->starts_at !== null && $this->starts_at->isFuture() => 'Scheduled',
             $this->ends_at !== null && $this->ends_at->isPast() => 'Ended',
             default => 'Live',
         };
+    }
+
+    public function daysLeft(): ?int
+    {
+        return $this->ends_at ? max(0, (int) now()->diffInDays($this->ends_at, false)) : null;
     }
 
     public function tintClasses(): string
@@ -70,6 +148,22 @@ class SponsorSlot extends Model
 
     public function initials(): string
     {
-        return mb_strtoupper(mb_substr($this->name, 0, 2));
+        return mb_strtoupper(mb_substr((string) $this->name, 0, 2));
+    }
+
+    /** "left1": how a spot is named in a link. */
+    public function spotKey(): ?string
+    {
+        return $this->position ? $this->side.$this->position : null;
+    }
+
+    public function freshToken(): string
+    {
+        return $this->token ??= Str::random(48);
+    }
+
+    public function cardUrl(): string
+    {
+        return route('sponsor.card', $this->freshToken());
     }
 }

@@ -144,10 +144,11 @@
         })();
     </script>
 
-    @php($sponsorSlots = \App\Models\SponsorSlot::live()->orderBy('sort_order')->orderBy('id')->get()->groupBy('side'))
+    {{-- Every spot in rail order, whether it holds a card or is still for sale. --}}
+    @php($sponsorSpots = \App\Support\Sponsorship::spots()->groupBy('side'))
     <main class="relative flex-1">
-        <x-sponsor-rail :slots="$sponsorSlots->get('left', collect())" side="left" />
-        <x-sponsor-rail :slots="$sponsorSlots->get('right', collect())" side="right" />
+        <x-sponsor-rail :spots="$sponsorSpots->get('left', collect())" side="left" />
+        <x-sponsor-rail :spots="$sponsorSpots->get('right', collect())" side="right" />
         {{ $hero ?? '' }}
         <div class="mx-auto {{ $wide ? 'max-w-7xl' : 'max-w-6xl' }} px-4 sm:px-6 py-8">
             <x-flash />

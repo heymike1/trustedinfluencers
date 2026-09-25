@@ -19,9 +19,11 @@ class Settings
     /** Keys an admin is allowed to set, with the type they are stored as. */
     public const EDITABLE = [
         'social.sponsors.slots_per_rail' => 'int',
-        'social.sponsors.price' => 'string',
+        'social.sponsors.price' => 'int',
+        'social.sponsors.advance_price' => 'int',
+        'social.sponsors.currency' => 'string',
         'social.sponsors.days' => 'int',
-        'social.sponsors.advance_price' => 'string',
+        'social.sponsors.hold_minutes' => 'int',
         'social.sponsors.contact' => 'string',
         'social.enabled_platforms' => 'array',
         'social.sync.refresh_every_hours' => 'int',

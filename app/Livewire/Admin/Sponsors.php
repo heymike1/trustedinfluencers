@@ -39,6 +39,7 @@ class Sponsors extends Component
             'logo_url' => '',
             'tint' => 'blue',
             'side' => 'left',
+            'position' => null,
             'sort_order' => 0,
             'is_active' => true,
             // A booking runs for one month from today unless the admin moves the dates.
@@ -59,6 +60,7 @@ class Sponsors extends Component
             'logo_url' => $slot->logo_url ?? '',
             'tint' => $slot->tint,
             'side' => $slot->side,
+            'position' => $slot->position,
             'sort_order' => $slot->sort_order,
             'is_active' => $slot->is_active,
             'starts_at' => $slot->starts_at?->format('Y-m-d') ?? '',
@@ -88,6 +90,7 @@ class Sponsors extends Component
             'form.logo_url' => ['nullable', 'url', 'max:2048'],
             'form.tint' => ['required', Rule::in(array_keys(SponsorSlot::TINTS))],
             'form.side' => ['required', Rule::in(['left', 'right'])],
+            'form.position' => ['nullable', 'integer', 'min:1', 'max:'.max(1, Sponsorship::perRail())],
             'form.sort_order' => ['required', 'integer', 'min:0', 'max:999'],
             'form.is_active' => ['boolean'],
             'form.starts_at' => ['nullable', 'date'],
@@ -97,6 +100,9 @@ class Sponsors extends Component
         $data['logo_url'] = $data['logo_url'] ?: null;
         $data['starts_at'] = $data['starts_at'] ?: null;
         $data['ends_at'] = $data['ends_at'] ?: null;
+        $data['position'] = $data['position'] ?: null;
+        // Anything typed in here is a card we put up ourselves, so it skips the checkout.
+        $data['status'] = SponsorSlot::LIVE;
 
         if ($this->editing) {
             SponsorSlot::findOrFail($this->editing)->update($data);
@@ -113,6 +119,15 @@ class Sponsors extends Component
     {
         $slot = SponsorSlot::findOrFail($id);
         $slot->update(['is_active' => ! $slot->is_active]);
+    }
+
+    /** Pulls a booking: the spot goes back on the market at once. Refunds happen in Stripe. */
+    public function cancelBooking(int $id): void
+    {
+        $slot = SponsorSlot::findOrFail($id);
+        $slot->forceFill(['status' => SponsorSlot::CANCELLED, 'position' => null, 'reserved_until' => null])->save();
+
+        $this->notify('success', 'Booking cancelled and the spot is free again. Refund it in Stripe if money changed hands.');
     }
 
     public function destroy(int $id): void
@@ -133,9 +148,11 @@ class Sponsors extends Component
     {
         $this->settings = [
             'slots_per_rail' => (int) config('social.sponsors.slots_per_rail'),
-            'price' => (string) config('social.sponsors.price'),
+            'price' => Sponsorship::amount(),
+            'advance_price' => Sponsorship::advanceAmount(),
+            'currency' => Sponsorship::currency(),
             'days' => Sponsorship::days(),
-            'advance_price' => (string) config('social.sponsors.advance_price'),
+            'hold_minutes' => Sponsorship::holdMinutes(),
             'contact' => (string) config('social.sponsors.contact'),
         ];
     }
@@ -144,16 +161,20 @@ class Sponsors extends Component
     {
         $data = $this->validate([
             'settings.slots_per_rail' => ['required', 'integer', 'min:0', 'max:12'],
-            'settings.price' => ['nullable', 'string', 'max:40'],
+            'settings.price' => ['required', 'integer', 'min:0', 'max:1000000'],
+            'settings.advance_price' => ['required', 'integer', 'min:0', 'max:1000000'],
+            'settings.currency' => ['required', Rule::in(['eur', 'usd', 'gbp'])],
             'settings.days' => ['required', 'integer', 'min:1', 'max:365'],
-            'settings.advance_price' => ['nullable', 'string', 'max:40'],
+            'settings.hold_minutes' => ['required', 'integer', 'min:5', 'max:180'],
             'settings.contact' => ['required', 'email', 'max:255'],
         ])['settings'];
 
         $settings->set('social.sponsors.slots_per_rail', $data['slots_per_rail']);
-        $settings->set('social.sponsors.price', $data['price'] ?: null);
+        $settings->set('social.sponsors.price', $data['price']);
+        $settings->set('social.sponsors.advance_price', $data['advance_price']);
+        $settings->set('social.sponsors.currency', $data['currency']);
         $settings->set('social.sponsors.days', $data['days']);
-        $settings->set('social.sponsors.advance_price', $data['advance_price'] ?: null);
+        $settings->set('social.sponsors.hold_minutes', $data['hold_minutes']);
         $settings->set('social.sponsors.contact', $data['contact']);
 
         $this->notify('success', 'Rail settings saved. The public pages use them right away.');
@@ -162,7 +183,10 @@ class Sponsors extends Component
     public function render(): View
     {
         return view('livewire.admin.sponsors', [
-            'slots' => SponsorSlot::orderBy('side')->orderBy('sort_order')->orderBy('id')->get(),
+            'slots' => SponsorSlot::whereNotIn('status', [SponsorSlot::CANCELLED])
+                ->orderByRaw("CASE status WHEN 'live' THEN 1 WHEN 'paid' THEN 2 WHEN 'pending' THEN 3 ELSE 4 END")
+                ->orderBy('side')->orderBy('position')->orderBy('id')->get(),
+            'queue' => SponsorSlot::queued()->get(),
             'tints' => array_keys(SponsorSlot::TINTS),
             'perRail' => (int) config('social.sponsors.slots_per_rail'),
             'open' => Sponsorship::open(),
