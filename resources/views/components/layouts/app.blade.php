@@ -12,7 +12,7 @@
     $siteName = config('app.name');
     // The home title is the bare app name: Google's OAuth branding check matches it against the consent screen.
     $fullTitle = $title ? $title.' · '.$siteName : $siteName;
-    $description ??= config('app.tagline').' Browse creators on YouTube, Instagram and X. Claimed profiles show numbers that come straight from the creator’s own account.';
+    $description ??= config('app.tagline').' Browse creators on '.\App\Enums\Platform::enabledLabels(' and ').'. Claimed profiles show numbers that come straight from the creator’s own account.';
     $image = $image ?? config('app.og_image');
     $imageUrl = $image ? (str_starts_with($image, 'http') ? $image : url($image)) : null;
     // Signed-in areas, auth screens and OAuth hops never belong in a search index.

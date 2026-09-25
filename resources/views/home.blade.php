@@ -6,7 +6,7 @@
                     <span class="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-700">{{ config('app.name') }}</span>
                     <span class="display mt-3 block text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ config('app.tagline') }}</span>
                 </h1>
-                <p class="max-w-xl text-base text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from YouTube, Instagram or X.</p>
+                <p class="max-w-xl text-base text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from {{ \App\Enums\Platform::enabledLabels(' or ') }}.</p>
                 <div class="flex items-center gap-8 tnum">
                     <span class="flex flex-col items-center"><span class="display text-2xl tracking-[-0.02em]">{{ number_format($counts['creators']) }}</span><span class="text-xs font-medium text-ink-500">creators</span></span>
                     <span class="h-8 w-px bg-band-edge"></span>
@@ -69,7 +69,7 @@
         <livewire:top-performers />
     </div>
 
-    <p class="mx-auto mt-6 max-w-2xl text-center text-[13px] text-ink-500 text-pretty">{{ config('app.name') }} never asks for passwords. A creator signs in with Google to connect their YouTube channel (or with Instagram or X), and we read only that channel’s analytics to show verified numbers. Creators can disconnect at any time.</p>
+    <p class="mx-auto mt-6 max-w-2xl text-center text-[13px] text-ink-500 text-pretty">{{ config('app.name') }} never asks for passwords. A creator signs in with {{ \App\Enums\Platform::enabledLabels(' or ') }} itself, and we read only that account’s own statistics to show verified numbers. Creators can disconnect at any time.</p>
     <p class="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
         <span class="text-xs">Every number above comes straight from</span>
         @foreach(\App\Enums\Platform::enabled() as $platform)
@@ -115,21 +115,11 @@
             <h2 class="text-[15px] font-semibold text-ink-950">What a verified profile shows</h2>
             <p class="mt-0.5 text-xs text-ink-500">Everything below comes straight from the platform. Not every platform shares every number.</p>
             <ul class="mt-3 space-y-2 text-[13.5px] text-ink-900">
-                @foreach([
-                    ['Median and average views', 'YT · IG · X'],
-                    ['How much of a video gets watched', 'YT'],
-                    ['Average watch time', 'YT · IG'],
-                    ['How fast views come in', 'YT'],
-                    ['Reach, and how many viewers are new', 'IG'],
-                    ['Audience age, gender and country', 'YT · IG'],
-                    ['Saves, shares and comments', 'YT · IG · X'],
-                    ['Profile visits and link clicks', 'IG · X'],
-                    ['How regularly they post', 'YT · IG · X'],
-                ] as [$what, $where])
-                    <li class="flex justify-between gap-3"><span>{{ $what }}</span><span class="text-xs text-ink-500 whitespace-nowrap">{{ $where }}</span></li>
+                @foreach(\App\Support\PlatformFacts::metrics() as $metric)
+                    <li class="flex justify-between gap-3"><span>{{ $metric['what'] }}</span><span class="text-xs text-ink-500 whitespace-nowrap">{{ $metric['where'] }}</span></li>
                 @endforeach
             </ul>
-            <p class="mt-3 border-t border-ink-100 pt-3 text-xs text-ink-500">Some things the platforms don’t share, so we never show them: impressions on YouTube, audience details on X, second-by-second watch data on Instagram.</p>
+            <p class="mt-3 border-t border-ink-100 pt-3 text-xs text-ink-500">Some things the platforms don’t share, so we never show them: {{ \App\Support\PlatformFacts::notShared() }}.</p>
         </div>
     </section>
 

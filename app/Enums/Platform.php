@@ -33,6 +33,22 @@ enum Platform: string
         };
     }
 
+    /** Two-letter tag used in compact tables and lists. */
+    public function short(): string
+    {
+        return match ($this) {
+            self::YouTube => 'YT',
+            self::Instagram => 'IG',
+            self::X => 'X',
+        };
+    }
+
+    /** "Instagram or X", for copy that lists what creators can connect today. */
+    public static function enabledLabels(string $lastGlue = ' and '): string
+    {
+        return collect(self::enabled())->map(fn (self $p) => $p->label())->join(', ', $lastGlue);
+    }
+
     /** The word the platform uses for its audience count. */
     public function audienceNoun(): string
     {

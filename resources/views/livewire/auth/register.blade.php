@@ -4,7 +4,7 @@
 
     <div class="card mt-6 p-5">
         <x-google-button label="Sign up with Google" />
-        <p class="mt-2 text-xs text-ink-400">Google only tells us your name and email. Connecting YouTube is a separate step on your profile.</p>
+        <p class="mt-2 text-xs text-ink-400">Google only tells us your name and email. Connecting {{ \App\Enums\Platform::enabledLabels(' or ') }} is a separate step on your profile.</p>
         <div class="my-4 flex items-center gap-3 text-xs text-ink-400"><span class="h-px flex-1 bg-ink-200"></span>or use email<span class="h-px flex-1 bg-ink-200"></span></div>
         <form wire:submit="register" class="space-y-4">
             <div>
