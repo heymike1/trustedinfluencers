@@ -9,11 +9,11 @@
     $contact = config('social.sponsors.contact');
 @endphp
 @if($slots->isNotEmpty())
-    <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[136px] min-[1440px]:block min-[1600px]:w-[184px]" aria-label="Sponsored">
-        <div class="pointer-events-auto sticky top-6 flex flex-col gap-2.5 p-3 min-[1600px]:gap-3 min-[1600px]:p-4">
+    <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[160px] min-[1440px]:block min-[1600px]:w-[200px] min-[1800px]:w-[224px]" aria-label="Sponsored">
+        <div class="pointer-events-auto sticky top-6 flex flex-col gap-2.5 p-3 min-[1600px]:gap-3 min-[1600px]:p-5">
             @foreach($slots as $slot)
                 <a href="{{ route('sponsors.click', $slot) }}" target="_blank" rel="nofollow sponsored noopener"
-                   class="block rounded-2xl border p-3.5 text-center transition-transform hover:-translate-y-0.5 {{ $slot->tintClasses() }}">
+                   class="block rounded-2xl border px-3 py-3.5 text-center transition-transform hover:-translate-y-0.5 min-[1600px]:px-4 {{ $slot->tintClasses() }}">
                     @if($slot->logo_url)
                         <img src="{{ $slot->logo_url }}" alt="" class="mx-auto size-8 rounded-lg object-cover" loading="lazy" onerror="this.remove()">
                     @else
@@ -26,7 +26,7 @@
 
             @if($openSlots > 0)
                 <a href="mailto:{{ $contact }}?subject={{ rawurlencode('Sponsoring '.config('app.name')) }}"
-                   class="block rounded-2xl border border-dashed border-band-edge p-3.5 text-center transition-colors hover:bg-white/60">
+                   class="block rounded-2xl border border-dashed border-band-edge px-3 py-3.5 text-center transition-colors hover:bg-white/60 min-[1600px]:px-4">
                     <span class="mx-auto flex size-8 items-center justify-center rounded-lg border border-dashed border-band-edge text-ink-400">
                         <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 5v10M5 10h10"/></svg>
                     </span>
