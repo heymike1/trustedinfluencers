@@ -7,6 +7,8 @@
     'jsonLd' => null,
     'wide' => false,
     'band' => false,
+    // The sponsor page draws the spots itself, so the real rails would say it twice.
+    'rails' => true,
 ])
 @php
     $siteName = config('app.name');
@@ -147,8 +149,10 @@
     {{-- Every spot in rail order, whether it holds a card or is still for sale. --}}
     @php($sponsorSpots = \App\Support\Sponsorship::spots()->groupBy('side'))
     <main class="relative flex-1">
-        <x-sponsor-rail :spots="$sponsorSpots->get('left', collect())" side="left" />
-        <x-sponsor-rail :spots="$sponsorSpots->get('right', collect())" side="right" />
+        @if($rails)
+            <x-sponsor-rail :spots="$sponsorSpots->get('left', collect())" side="left" />
+            <x-sponsor-rail :spots="$sponsorSpots->get('right', collect())" side="right" />
+        @endif
         {{ $hero ?? '' }}
         <div class="mx-auto {{ $wide ? 'max-w-7xl' : 'max-w-6xl' }} px-4 sm:px-6 py-8">
             <x-flash />

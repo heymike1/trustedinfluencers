@@ -57,7 +57,7 @@ class SponsorPageTest extends TestCase
         $this->slot();
 
         $this->get(route('sponsor'))->assertOk()
-            ->assertSee('7 of 8 spots open')
+            ->assertSee('7 of 8 open')
             ->assertSee('Continue to payment')
             ->assertSee('$250')
             ->assertSee('30 days');
@@ -75,7 +75,8 @@ class SponsorPageTest extends TestCase
 
         $this->get(route('sponsor'))->assertOk()
             ->assertSee('All 4 spots are taken')
-            ->assertSee('you take the first spot that comes free')
+            ->assertSee('Every spot is running.')
+            ->assertSee('Take the next spot')
             ->assertSee('$999')
             ->assertSee(now()->addDays(10)->format('j F Y'))
             ->assertDontSee('Continue to payment');
@@ -93,7 +94,7 @@ class SponsorPageTest extends TestCase
 
         $this->get(route('sponsor'))->assertOk()
             ->assertSee('Take the next spot')
-            ->assertSee('you take the first spot that comes free')
+            ->assertSee('The next spot that comes free')
             ->assertDontSee('$999');
     }
 
