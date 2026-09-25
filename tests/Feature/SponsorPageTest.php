@@ -68,7 +68,7 @@ class SponsorPageTest extends TestCase
         $this->fillEverySpot();
 
         $this->get(route('sponsor'))->assertOk()
-            ->assertSee('Every spot is taken this month.')
+            ->assertSee('All 4 cards are running right now.')
             ->assertSee('€999')
             ->assertSee(now()->addDays(10)->format('j F Y'))
             ->assertDontSee('Book a spot');
@@ -86,7 +86,8 @@ class SponsorPageTest extends TestCase
 
         $this->get(route('sponsor'))->assertOk()
             ->assertSee('Put me on the list')
-            ->assertDontSee('advance of');
+            ->assertSee('in the order the requests came in')
+            ->assertDontSee('Pay the');
     }
 
     public function test_a_full_rail_still_links_through_to_the_page(): void

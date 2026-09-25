@@ -24,7 +24,7 @@
                     @if(! $forSale)
                         <span class="btn-secondary !px-5 !py-2.5 !text-[15px] border-band-edge pointer-events-none">Spots are not for sale right now</span>
                     @elseif($full)
-                        <a href="{{ $advanceMail }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Reserve the next spot @if($advance)<span class="tnum">· {{ $advance }}</span>@endif</a>
+                        <a href="{{ $advanceMail }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Take the next spot @if($advance)<span class="tnum">· {{ $advance }}</span>@endif</a>
                         <a href="#availability" class="btn-secondary !px-5 !py-2.5 !text-[15px] border-band-edge">How the waiting list works</a>
                     @else
                         <a href="{{ $bookMail }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Book a spot <span class="tnum">· {{ $price }} / {{ $days }} days</span></a>
@@ -50,9 +50,9 @@
         <h2 class="display text-2xl sm:text-[28px]">How it works</h2>
         <div class="mt-5 grid gap-4 sm:grid-cols-3">
             @foreach([
-                ['Tell us which side', 'Email us and say left or right. We reply with what is free and hold it for you while we sort out the invoice.'],
-                ['Send your card', 'A logo, your name, one line about the product and the link. That is the whole card; there is no design work on your end.'],
-                ['Live for '.$days.' days', 'The clock starts the day it goes up, not the day you pay. When the '.$days.' days are over the card comes down by itself and the spot goes back on the page.'],
+                ['Add your product or website', 'Click any open slot on the site and you land here. You need a name, one line about what you make, and a link. A logo if you have one; if you don’t, we use your initials. That is the whole card, so there is nothing to design.'],
+                ['Pick your spot and pay for the month', 'Say which side you want, left or right. Whatever this page calls open is genuinely open, and if everything is taken you simply take the first spot that frees up. '.($price ? $price : 'The price').' covers '.$days.' days, one invoice, and the card goes up as soon as it is paid.'],
+                ['It runs '.$days.' days, then it is free again', 'The clock starts the day your card appears, not the day you paid. Nothing renews behind your back: when the '.$days.' days are up the card comes down and the spot goes back on the page for the next one.'],
             ] as $i => [$title, $body])
                 <div class="card p-5">
                     <span class="flex size-7 items-center justify-center rounded-full bg-brand-100 text-[13px] font-bold text-brand-700 tnum">{{ $i + 1 }}</span>
@@ -113,32 +113,31 @@
                 <div class="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-center">
                     <div>
                         <span class="inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-ink-50 px-2.5 py-1 text-xs font-semibold text-ink-700"><span class="size-1.5 rounded-full bg-ink-400"></span> Fully booked</span>
-                        <h2 class="display mt-3 text-2xl sm:text-[28px]">Every spot is taken this month.</h2>
+                        <h2 class="display mt-3 text-2xl sm:text-[28px]">All {{ $total }} cards are running right now.</h2>
                         <p class="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-600">
-                            All {{ $total }} cards are running, and we do not add extras.
+                            You can still buy one: you take the first spot that comes free.
                             @if($nextFree)
-                                The first one comes free on <span class="font-semibold text-ink-950">{{ $nextFree->format('j F Y') }}</span>.
-                            @else
-                                The moment one ends, it is offered again on this page.
+                                That is <span class="font-semibold text-ink-950">{{ $nextFree->format('j F Y') }}</span>.
                             @endif
+                            Your {{ $days }} days start the day your card goes up, not the day you pay.
                         </p>
                         <p class="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-600">
                             @if($advance)
-                                Put down an advance of <span class="font-semibold text-ink-950 tnum">{{ $advance }}</span> and the next spot that frees up is yours before it goes back on the page. The advance covers your first {{ $days }} days; if we cannot place you within three months, you get it back in full.
+                                Pay the <span class="font-semibold text-ink-950 tnum">{{ $advance }}</span> and the spot is held in your name until then. If someone pays before you do, you take the one after it: we go in the order people paid, and we tell you the date in writing first.
                             @else
-                                Leave your details and we will come to you the moment a spot frees up, in the order the requests came in.
+                                Tell us you want in and we hold the next opening in your name, in the order the requests came in.
                             @endif
                         </p>
                     </div>
                     <div class="flex flex-col gap-2.5 rounded-2xl border border-ink-200 bg-ink-50 p-5">
                         @if($advance)
                             <p class="display text-3xl tnum">{{ $advance }}</p>
-                            <p class="text-[13px] text-ink-600">Advance for the next opening. Covers {{ $days }} days once your card is live.</p>
+                            <p class="text-[13px] text-ink-600">Paid now, for the next spot that opens. It covers your {{ $days }} days from the day the card goes up.</p>
                         @else
                             <p class="font-semibold text-ink-950">Join the list</p>
                             <p class="text-[13px] text-ink-600">First in, first served.</p>
                         @endif
-                        <a href="{{ $advanceMail }}" class="btn-primary mt-1 w-full">{{ $advance ? 'Reserve the next spot' : 'Put me on the list' }}</a>
+                        <a href="{{ $advanceMail }}" class="btn-primary mt-1 w-full">{{ $advance ? 'Take the next spot' : 'Put me on the list' }}</a>
                         <p class="text-[11.5px] leading-snug text-ink-500">We invoice by email and confirm the date in writing before you pay a cent.</p>
                     </div>
                 </div>
