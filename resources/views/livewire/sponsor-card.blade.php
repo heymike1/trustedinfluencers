@@ -32,18 +32,9 @@
     </x-page-band>
 
     @if($booking->isQueued())
-        <div class="card mb-6 flex flex-wrap items-center justify-between gap-3 px-5 py-4">
-            <div>
-                <p class="text-xs font-medium uppercase tracking-wide text-ink-500">Your spot is visible from</p>
-                <p class="display mt-1 text-2xl">{{ $freedBy?->ends_at?->format('j F Y') ?? 'the first card that comes down' }}</p>
-            </div>
-            <p class="max-w-sm text-[13px] leading-relaxed text-ink-600">
-                @if($freedBy)
-                    {{ $freedBy->name }} runs out that day in the {{ $freedBy->side }} rail, {{ $ordinal($freedBy->position) }} card. Yours takes that place and we email you when it is up.
-                @else
-                    We email you the moment yours is up.
-                @endif
-            </p>
+        <div class="card mb-6 px-5 py-4">
+            <p class="text-xs font-medium uppercase tracking-wide text-ink-500">Your spot is visible from</p>
+            <p class="display mt-1 text-2xl">{{ $freedBy?->ends_at?->format('j F Y') ?? 'the first card that comes down' }}</p>
         </div>
     @endif
 
