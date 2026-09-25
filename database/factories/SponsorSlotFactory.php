@@ -75,12 +75,11 @@ class SponsorSlotFactory extends Factory
         ]);
     }
 
-    /** A checkout that is still open and holding its spot. */
+    /** A checkout that was started and never finished. It holds nothing. */
     public function pending(): static
     {
         return $this->state(fn () => [
             'status' => SponsorSlot::PENDING,
-            'reserved_until' => now()->addMinutes(Sponsorship::holdMinutes()),
             'paid_at' => null,
             'starts_at' => null,
             'ends_at' => null,

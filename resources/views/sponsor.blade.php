@@ -94,7 +94,7 @@
                                 </div>
                                 <button type="submit" class="btn-primary w-full">{{ $full ? 'Take the next spot' : 'Continue to payment' }}</button>
                             </form>
-                            <p class="mt-3 text-[11.5px] leading-snug text-ink-500">We hold the spot for {{ Sponsorship::holdMinutes() }} minutes while you pay. You fill in the card itself afterwards, and it only goes up once you do.</p>
+                            <p class="mt-3 text-[11.5px] leading-snug text-ink-500">Paying is what gets you the spot. If this one goes while you are at the checkout, you take the next one that comes free. You fill in the card afterwards and it goes up once you do.</p>
                         @endif
                     </div>
                 </div>
@@ -108,7 +108,7 @@
         <div class="mt-5 grid gap-4 sm:grid-cols-3">
             @foreach([
                 ['Pick an open spot', 'Click any open slot on the site and you land here with that one selected. If everything is taken you are not stuck: you buy anyway and you take the first spot that comes free, in the order people paid.'],
-                ['Pay for the month', ($price ?: 'The price').' covers '.$days.' days. One payment, no percentages, and nothing renews behind your back. We hold your spot while you are in the checkout so nobody can pay for it twice.'],
+                ['Pay for the month', ($price ?: 'The price').' covers '.$days.' days. One payment, no percentages, and nothing renews behind your back. Paying is what claims the spot, so nothing is reserved and nothing expires on you.'],
                 ['Add your product or website', 'Straight after paying you get your own page. Fill in a name, your website and one line about what you make; we read the logo off your site for you. The card goes up as soon as it is complete, and that is when the '.$days.' days start.'],
             ] as $i => [$title, $body])
                 <div class="card p-5">

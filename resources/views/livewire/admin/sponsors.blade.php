@@ -93,12 +93,6 @@
                     <x-field-error for="settings.days" />
                 </div>
                 <div>
-                    <label class="label" for="s-hold">Hold during checkout</label>
-                    <input id="s-hold" type="number" min="5" max="180" wire:model="settings.hold_minutes" class="input" placeholder="20">
-                    <p class="mt-1 text-xs text-ink-400">Minutes a spot stays off the market while someone pays.</p>
-                    <x-field-error for="settings.hold_minutes" />
-                </div>
-                <div>
                     <label class="label" for="s-contact">Enquiries to</label>
                     <input id="s-contact" type="email" wire:model="settings.contact" class="input">
                     <x-field-error for="settings.contact" />

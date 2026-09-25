@@ -18,6 +18,8 @@ class SiteLogo
 {
     private const MAX_BYTES = 2 * 1024 * 1024;
 
+    private const MAX_REDIRECTS = 3;
+
     private const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/gif'];
 
     /** @return string|null A URL on our own disk, or null when the site gives us nothing usable. */
@@ -102,7 +104,7 @@ class SiteLogo
         return Storage::disk('public')->url($path);
     }
 
-    private function get(string $url): ?Response
+    private function get(string $url, int $redirects = 0): ?Response
     {
         try {
             $response = Http::withHeaders(['User-Agent' => config('app.name').' logo fetcher'])
@@ -113,12 +115,16 @@ class SiteLogo
             return null;
         }
 
-        // One redirect is normal (http → https, bare → www); we follow it by hand so we can
-        // check where it is actually going before asking for it.
+        // A redirect or two is normal (http → https, bare → www); we follow them by hand so we
+        // can check where each one is going, and we stop after three so a loop cannot run away.
         if ($response->redirect() && ($location = $response->header('Location'))) {
+            if ($redirects >= self::MAX_REDIRECTS) {
+                return null;
+            }
+
             $next = $this->safeUrl($this->absolute($location, $url) ?? '');
 
-            return $next ? $this->get($next) : null;
+            return $next ? $this->get($next, $redirects + 1) : null;
         }
 
         return $response->successful() ? $response : null;

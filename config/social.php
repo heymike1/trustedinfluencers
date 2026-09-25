@@ -97,8 +97,6 @@ return [
         'currency' => strtolower(env('SPONSOR_CURRENCY', 'eur')),
         // A booking runs this many days from the day the card goes up. One month, counted in days.
         'days' => (int) env('SPONSOR_DAYS', 30),
-        // How long a checkout keeps a spot off the market before someone else may take it.
-        'hold_minutes' => (int) env('SPONSOR_HOLD_MINUTES', 20),
         'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
         // 'stripe' hands off to Checkout; 'fake' keeps the whole flow local for tests and dev.
         'checkout' => env('SPONSOR_CHECKOUT_DRIVER', 'stripe'),

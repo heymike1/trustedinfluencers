@@ -25,8 +25,6 @@ class StripeCheckout implements CheckoutGateway
             'customer_email' => $booking->buyer_email,
             'client_reference_id' => (string) $booking->id,
             'metadata' => ['booking' => (string) $booking->id, 'spot' => $booking->spotKey() ?? 'queue'],
-            // The spot is only held for so long; there is no point in a checkout outliving it.
-            'expires_at' => now()->addMinutes(max(30, Sponsorship::holdMinutes()))->timestamp,
             'line_items' => [[
                 'quantity' => 1,
                 'price_data' => [
@@ -34,9 +32,7 @@ class StripeCheckout implements CheckoutGateway
                     'unit_amount' => (int) $booking->amount * 100,
                     'product_data' => [
                         'name' => config('app.name').' · sponsor spot',
-                        'description' => $booking->position
-                            ? 'One card in the '.$booking->side.' rail for '.Sponsorship::days().' days'
-                            : 'The first spot that comes free, for '.Sponsorship::days().' days',
+                        'description' => 'One card in the rails for '.Sponsorship::days().' days',
                     ],
                 ],
             ]],

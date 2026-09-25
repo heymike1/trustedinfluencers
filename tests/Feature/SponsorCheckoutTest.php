@@ -34,26 +34,28 @@ class SponsorCheckoutTest extends TestCase
         return SponsorSlot::where('buyer_email', $email)->latest('id')->firstOrFail();
     }
 
-    public function test_starting_a_checkout_holds_the_spot_that_was_clicked(): void
+    public function test_an_open_checkout_keeps_nobody_out(): void
     {
         $booking = $this->buy('right2');
 
-        $this->assertSame('right', $booking->side);
-        $this->assertSame(2, $booking->position);
         $this->assertSame(SponsorSlot::PENDING, $booking->status);
-        $this->assertTrue($booking->reserved_until->isFuture());
 
-        // Nobody else is offered that spot while the checkout is open.
-        $this->get(route('sponsor', ['spot' => 'right2']))->assertOk()->assertSee('That one just went');
+        // Until it is paid for, the spot is still on offer to everyone else.
+        $this->assertTrue(Sponsorship::isSpotOpen('right2'));
+        $this->get(route('sponsor', ['spot' => 'right2']))->assertOk()->assertDontSee('That one just went');
     }
 
-    public function test_two_buyers_cannot_end_up_in_the_same_spot(): void
+    public function test_the_spot_goes_to_whoever_pays_first(): void
     {
         $first = $this->buy('left1', 'one@example.com');
         $second = $this->buy('left1', 'two@example.com');
 
-        $this->assertSame('left1', $first->spotKey());
-        $this->assertNotSame('left1', $second->spotKey());
+        // Both wanted left1; the one who pays first gets it and the other moves along.
+        $this->post(route('sponsor.checkout.fake.pay', $second));
+        $this->post(route('sponsor.checkout.fake.pay', $first));
+
+        $this->assertSame('left1', $second->fresh()->spotKey());
+        $this->assertNotSame('left1', $first->fresh()->spotKey());
     }
 
     public function test_paying_confirms_the_booking_and_hands_over_the_card_page(): void
@@ -126,14 +128,33 @@ class SponsorCheckoutTest extends TestCase
         Mail::assertQueued(SponsorSpotReady::class, 1);
     }
 
-    public function test_a_checkout_nobody_finished_lets_go_of_its_spot(): void
+    public function test_a_checkout_nobody_finished_is_cleared_away_after_a_day(): void
     {
-        $abandoned = SponsorSlot::factory()->pending()->create(['reserved_until' => now()->subMinute()]);
+        $fresh = SponsorSlot::factory()->pending()->create();
+        $stale = SponsorSlot::factory()->pending()->create(['created_at' => now()->subDays(2)]);
 
         app(RollBookings::class)->handle();
 
-        $this->assertSame(SponsorSlot::CANCELLED, $abandoned->fresh()->status);
-        $this->assertTrue(Sponsorship::isSpotOpen('left1'));
+        $this->assertSame(SponsorSlot::PENDING, $fresh->fresh()->status);
+        $this->assertSame(SponsorSlot::CANCELLED, $stale->fresh()->status);
+    }
+
+    public function test_a_card_filled_in_from_the_queue_goes_up_the_moment_a_spot_frees(): void
+    {
+        SponsorSlot::factory()->create(['ends_at' => now()->subMinute()]);
+        SponsorSlot::factory()->count(3)->create();
+
+        $waiting = SponsorSlot::factory()->queued()->create([
+            'name' => 'Blotato',
+            'tagline' => 'Social media API',
+            'url' => 'https://blotato.example',
+        ]);
+
+        app(RollBookings::class)->handle();
+
+        $this->assertSame(SponsorSlot::LIVE, $waiting->fresh()->status);
+        $this->assertTrue($waiting->fresh()->starts_at->isToday());
+        $this->get('/')->assertOk()->assertSee('Blotato');
     }
 
     public function test_the_webhook_only_listens_to_stripe(): void

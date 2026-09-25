@@ -23,7 +23,6 @@ class Settings
         'social.sponsors.advance_price' => 'int',
         'social.sponsors.currency' => 'string',
         'social.sponsors.days' => 'int',
-        'social.sponsors.hold_minutes' => 'int',
         'social.sponsors.contact' => 'string',
         'social.enabled_platforms' => 'array',
         'social.sync.refresh_every_hours' => 'int',

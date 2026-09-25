@@ -10,12 +10,12 @@ use Illuminate\Support\Str;
 /**
  * One booking of one numbered spot in one of the two rails beside the page.
  *
- * pending  a checkout is open; the spot is held until reserved_until
- * paid     the money is in. With a position it is waiting for the buyer's card details, without
- *          one it is in the queue for the first spot that comes free
+ * pending  a checkout is open; nothing is reserved and no spot is taken yet
+ * paid     the money is in and the spot is theirs. With a position it is waiting for the buyer's
+ *          card details, without one it is in the queue for the first spot that comes free
  * live     the card is up and the clock is running
  * ended    the run is over and the spot is back on the market
- * cancelled a hold that expired, or a booking we refunded
+ * cancelled a checkout nobody finished, or a booking we refunded
  */
 class SponsorSlot extends Model
 {
@@ -43,7 +43,7 @@ class SponsorSlot extends Model
 
     protected $fillable = [
         'name', 'tagline', 'url', 'logo_url', 'tint', 'side', 'position', 'sort_order',
-        'is_active', 'starts_at', 'ends_at', 'status', 'reserved_until', 'paid_at', 'queued_at',
+        'is_active', 'starts_at', 'ends_at', 'status', 'paid_at', 'queued_at',
         'buyer_email', 'checkout_session_id', 'payment_reference', 'amount', 'currency',
     ];
 
@@ -53,7 +53,6 @@ class SponsorSlot extends Model
             'is_active' => 'boolean',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
-            'reserved_until' => 'datetime',
             'paid_at' => 'datetime',
             'queued_at' => 'datetime',
             'reminded_at' => 'datetime',
@@ -71,16 +70,10 @@ class SponsorSlot extends Model
             ->where(fn (Builder $q) => $q->whereNull('ends_at')->orWhere('ends_at', '>', now()));
     }
 
-    /**
-     * Bookings that keep a spot off the market: a card that is up, money that is in, and a
-     * checkout that has not run out of time yet.
-     */
+    /** Bookings that keep a spot off the market: the money is in. A checkout holds nothing. */
     public function scopeHoldingASpot(Builder $query): Builder
     {
-        return $query->whereNotNull('position')
-            ->where(fn (Builder $q) => $q
-                ->whereIn('status', [self::LIVE, self::PAID])
-                ->orWhere(fn (Builder $q) => $q->where('status', self::PENDING)->where('reserved_until', '>', now())));
+        return $query->whereNotNull('position')->whereIn('status', [self::LIVE, self::PAID]);
     }
 
     /** Paid, but with no spot to go to yet. First paid, first served. */

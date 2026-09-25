@@ -125,7 +125,7 @@ class Sponsors extends Component
     public function cancelBooking(int $id): void
     {
         $slot = SponsorSlot::findOrFail($id);
-        $slot->forceFill(['status' => SponsorSlot::CANCELLED, 'position' => null, 'reserved_until' => null])->save();
+        $slot->forceFill(['status' => SponsorSlot::CANCELLED, 'position' => null])->save();
 
         $this->notify('success', 'Booking cancelled and the spot is free again. Refund it in Stripe if money changed hands.');
     }
@@ -152,7 +152,6 @@ class Sponsors extends Component
             'advance_price' => Sponsorship::advanceAmount(),
             'currency' => Sponsorship::currency(),
             'days' => Sponsorship::days(),
-            'hold_minutes' => Sponsorship::holdMinutes(),
             'contact' => (string) config('social.sponsors.contact'),
         ];
     }
@@ -165,7 +164,6 @@ class Sponsors extends Component
             'settings.advance_price' => ['required', 'integer', 'min:0', 'max:1000000'],
             'settings.currency' => ['required', Rule::in(['eur', 'usd', 'gbp'])],
             'settings.days' => ['required', 'integer', 'min:1', 'max:365'],
-            'settings.hold_minutes' => ['required', 'integer', 'min:5', 'max:180'],
             'settings.contact' => ['required', 'email', 'max:255'],
         ])['settings'];
 
@@ -174,7 +172,6 @@ class Sponsors extends Component
         $settings->set('social.sponsors.advance_price', $data['advance_price']);
         $settings->set('social.sponsors.currency', $data['currency']);
         $settings->set('social.sponsors.days', $data['days']);
-        $settings->set('social.sponsors.hold_minutes', $data['hold_minutes']);
         $settings->set('social.sponsors.contact', $data['contact']);
 
         $this->notify('success', 'Rail settings saved. The public pages use them right away.');

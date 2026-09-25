@@ -51,6 +51,15 @@ class SiteLogoTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_a_site_that_redirects_in_circles_gives_up(): void
+    {
+        Http::fake([
+            'https://blotato.example*' => Http::response('', 302, ['Location' => 'https://blotato.example/again']),
+        ]);
+
+        $this->assertNull(app(SiteLogo::class)->fetch('https://blotato.example'));
+    }
+
     public function test_a_page_that_serves_something_other_than_an_image_gives_nothing(): void
     {
         Storage::fake('public');

@@ -146,11 +146,6 @@ class Sponsorship
         return self::days().' days';
     }
 
-    public static function holdMinutes(): int
-    {
-        return max(1, (int) config('social.sponsors.hold_minutes'));
-    }
-
     public static function contact(): string
     {
         return (string) config('social.sponsors.contact');

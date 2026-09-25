@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * The money is in. The booking keeps the spot it was holding, or takes another one if that spot
- * went while the buyer was paying, or joins the queue when the rails are full. Safe to call twice:
- * the webhook and the buyer coming back both land here.
+ * The money is in, so the spot is handed out now: the one they picked if it is still free, the
+ * first free one otherwise, and the queue when the rails are full. Safe to call twice: the
+ * webhook and the buyer coming back both land here.
  */
 class ConfirmPayment
 {
@@ -22,22 +22,16 @@ class ConfirmPayment
         }
 
         DB::transaction(function () use ($booking, $reference) {
-            $position = $booking->position;
-
-            // The hold may have run out while they were paying. Then it is the next free spot,
-            // and failing that the queue, exactly as the page promises.
-            if ($position === null || ! $this->stillOurs($booking)) {
-                $spot = Sponsorship::parseSpot(Sponsorship::openSpots()->first());
-                $booking->side = $spot[0] ?? $booking->side;
-                $position = $spot[1] ?? null;
-            }
+            $wanted = $booking->position !== null && Sponsorship::isSpotOpen($booking->spotKey())
+                ? [$booking->side, $booking->position]
+                : Sponsorship::parseSpot(Sponsorship::openSpots()->first());
 
             $booking->forceFill([
                 'status' => SponsorSlot::PAID,
-                'position' => $position,
+                'side' => $wanted[0] ?? $booking->side,
+                'position' => $wanted[1] ?? null,
                 'paid_at' => now(),
-                'queued_at' => $position === null ? now() : null,
-                'reserved_until' => null,
+                'queued_at' => $wanted === null ? now() : null,
                 'payment_reference' => $reference ?? $booking->payment_reference,
                 'token' => $booking->freshToken(),
             ])->save();
@@ -46,15 +40,5 @@ class ConfirmPayment
         Mail::to($booking->buyer_email)->send(new SponsorBookingPaid($booking->fresh()));
 
         return $booking->fresh();
-    }
-
-    /** Nobody else has taken the spot this booking was holding. */
-    private function stillOurs(SponsorSlot $booking): bool
-    {
-        return ! SponsorSlot::holdingASpot()
-            ->where('id', '!=', $booking->id)
-            ->where('side', $booking->side)
-            ->where('position', $booking->position)
-            ->exists();
     }
 }

@@ -9,8 +9,8 @@ use App\Support\Sponsorship;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * Keeps the rails moving: holds that ran out are released, finished runs are closed, and the spot
- * that comes free goes to whoever has been waiting longest. Runs on a schedule.
+ * Keeps the rails moving: finished runs are closed and the spot that comes free goes to whoever
+ * has been waiting longest. Runs on a schedule.
  *
  * @return array{released: int, ended: int, promoted: int, warned: int}
  */
@@ -26,13 +26,12 @@ class RollBookings
         ];
     }
 
-    /** A checkout nobody finished stops holding its spot. */
+    /** A checkout nobody finished holds nothing up; it is only cleared away to keep the list short. */
     private function releaseExpiredHolds(): int
     {
         return SponsorSlot::where('status', SponsorSlot::PENDING)
-            ->whereNotNull('reserved_until')
-            ->where('reserved_until', '<=', now())
-            ->update(['status' => SponsorSlot::CANCELLED, 'position' => null, 'reserved_until' => null]);
+            ->where('created_at', '<=', now()->subDay())
+            ->update(['status' => SponsorSlot::CANCELLED, 'position' => null]);
     }
 
     private function endFinishedRuns(): int
@@ -70,8 +69,11 @@ class RollBookings
                 'token' => $booking->freshToken(),
             ])->save();
 
+            // Filled the card in while waiting? Then it goes up now, not on their next visit.
+            app(PublishCard::class)->handle($booking);
+
             // They paid before there was anywhere to go; now there is.
-            Mail::to($booking->buyer_email)->send(new SponsorSpotReady($booking));
+            Mail::to($booking->buyer_email)->send(new SponsorSpotReady($booking->fresh()));
             $promoted++;
         }
 

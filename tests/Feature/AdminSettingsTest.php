@@ -32,7 +32,6 @@ class AdminSettingsTest extends TestCase
             ->set('settings.days', 14)
             ->set('settings.advance_price', 1200)
             ->set('settings.currency', 'eur')
-            ->set('settings.hold_minutes', 20)
             ->set('settings.contact', 'ads@example.com')
             ->call('saveSettings')
             ->assertHasNoErrors();
