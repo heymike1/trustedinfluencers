@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Creator;
 use App\Models\CreatorCategory;
 use App\Models\CreatorClaim;
+use App\Support\Format;
 
 class HomeController extends Controller
 {
@@ -52,11 +53,44 @@ class HomeController extends Controller
                 ->with('socialAccounts')
                 ->orderByDesc('median_views')
                 ->first(),
-            'mostWatched' => Creator::active()
-                ->whereNotNull('average_view_percentage')
-                ->with('socialAccounts')
-                ->orderByDesc('average_view_percentage')
-                ->first(),
+            'record' => $this->record(),
         ];
+    }
+
+    /**
+     * The all-time tile. Watch time is the strongest signal, but only YouTube shares it, so
+     * fall back to engagement when no connected platform reports it.
+     *
+     * @return array{creator: Creator, title: string, value: string, line: string}|null
+     */
+    private function record(): array
+    {
+        $watched = Creator::active()
+            ->whereNotNull('average_view_percentage')
+            ->with('socialAccounts')
+            ->orderByDesc('average_view_percentage')
+            ->first();
+
+        if ($watched) {
+            return [
+                'creator' => $watched,
+                'title' => 'most watched',
+                'value' => Format::percent($watched->average_view_percentage, 0),
+                'line' => 'of each video watched, on average',
+            ];
+        }
+
+        $engaged = Creator::active()
+            ->whereNotNull('engagement_rate')
+            ->with('socialAccounts')
+            ->orderByDesc('engagement_rate')
+            ->first();
+
+        return $engaged ? [
+            'creator' => $engaged,
+            'title' => 'most engaged',
+            'value' => Format::percent($engaged->engagement_rate),
+            'line' => 'engagement: likes, comments and saves per view',
+        ] : null;
     }
 }

@@ -49,18 +49,18 @@
             @endif
         </div>
         <div class="px-6 py-5 flex flex-col gap-3">
-            <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> All-time <span class="normal-case tracking-normal font-medium text-ink-400">· most watched</span></p>
-            @if($best = $pulse['mostWatched'])
-                <a href="{{ route('creators.show', $best) }}" class="flex items-center gap-3 group">
-                    <x-avatar :creator="$best" size="md" />
+            <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> All-time <span class="normal-case tracking-normal font-medium text-ink-400">· {{ $pulse['record']['title'] ?? 'most engaged' }}</span></p>
+            @if($best = $pulse['record'])
+                <a href="{{ route('creators.show', $best['creator']) }}" class="flex items-center gap-3 group">
+                    <x-avatar :creator="$best['creator']" size="md" />
                     <span class="min-w-0">
-                        <span class="block display text-lg leading-tight tracking-[-0.02em] truncate group-hover:text-brand-700">{{ $best->name }}</span>
-                        <span class="block text-[13px] text-ink-500 tnum"><span class="font-semibold text-brand-700">{{ \App\Support\Format::percent($best->average_view_percentage, 0) }}</span> of each video watched, on average</span>
+                        <span class="block display text-lg leading-tight tracking-[-0.02em] truncate group-hover:text-brand-700">{{ $best['creator']->name }}</span>
+                        <span class="block text-[13px] text-ink-500 tnum"><span class="font-semibold text-brand-700">{{ $best['value'] }}</span> {{ $best['line'] }}</span>
                     </span>
                 </a>
             @else
                 <p class="display text-[28px] leading-none tracking-[-0.02em]">No record yet</p>
-                <p class="text-[13px] text-ink-500">The creator whose videos get watched the longest takes this spot.</p>
+                <p class="text-[13px] text-ink-500">The creator whose posts get the most out of every view takes this spot.</p>
             @endif
         </div>
     </div>
