@@ -17,7 +17,6 @@
                     <span class="mt-1 block text-[11.5px] leading-snug text-ink-600">{{ $slot->tagline }}</span>
                 </a>
             @endforeach
-            <span class="text-center text-[10.5px] uppercase tracking-wide text-ink-400">Sponsored</span>
         </div>
     </aside>
 @endif

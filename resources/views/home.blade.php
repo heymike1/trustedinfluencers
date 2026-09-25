@@ -1,27 +1,23 @@
 <x-layouts.app :canonical="route('home')" :json-ld="\App\Support\Seo::website()">
     <x-slot:hero>
         <div class="band">
-            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-36 sm:pt-14 sm:pb-40 flex flex-col items-center text-center gap-5">
-                <h1 class="max-w-2xl">
-                    <span class="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-700">{{ config('app.name') }}</span>
-                    <span class="display mt-3 block text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">{{ config('app.tagline') }}</span>
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-28 sm:pt-10 sm:pb-32 flex flex-col items-center text-center gap-4">
+                <h1 class="max-w-[38rem]">
+                    <span class="block text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-700">{{ config('app.name') }}</span>
+                    <span class="display mt-2 block text-[26px] leading-[1.12] sm:text-[32px] lg:text-[34px]">{{ config('app.tagline') }}</span>
                 </h1>
-                <p class="max-w-xl text-base text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from {{ \App\Enums\Platform::enabledLabels(' or ') }}.</p>
-                <div class="flex items-center gap-8 tnum">
-                    <span class="flex flex-col items-center"><span class="display text-2xl tracking-[-0.02em]">{{ number_format($counts['creators']) }}</span><span class="text-xs font-medium text-ink-500">creators</span></span>
-                    <span class="h-8 w-px bg-band-edge"></span>
-                    <span class="flex flex-col items-center"><span class="display text-2xl tracking-[-0.02em] !text-brand-700">{{ number_format($counts['verified']) }}</span><span class="text-xs font-medium text-ink-500">verified</span></span>
-                </div>
+                <p class="max-w-lg text-[15px] text-ink-700 text-pretty">Brands find creators by real numbers, not follower counts. Creators claim their profile and the stats come straight from {{ \App\Enums\Platform::enabledLabels(' or ') }}.</p>
                 <div class="flex flex-wrap items-center justify-center gap-3">
                     <a href="{{ route('creators.index') }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Browse creators <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
                     <a href="{{ route('creators.create') }}" class="btn-secondary !px-5 !py-2.5 !text-[15px] border-band-edge">Add a creator</a>
                 </div>
+                <p class="text-[13px] text-ink-600 tnum"><span class="font-semibold text-ink-950">{{ number_format($counts['creators']) }}</span> creators listed · <span class="font-semibold text-brand-700">{{ number_format($counts['verified']) }}</span> with verified numbers</p>
             </div>
         </div>
     </x-slot:hero>
 
     {{-- Three moments in time, overlapping the band. Not filters: a glance at what moved today, this week and ever. --}}
-    <div class="-mt-36 sm:-mt-40 card overflow-hidden grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-100">
+    <div class="-mt-24 sm:-mt-28 card overflow-hidden grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink-100">
         <div class="px-6 py-5 flex flex-col gap-3">
             <p class="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500"><span class="size-1.5 rounded-full bg-brand-600"></span> Today</p>
             @if($pulse['refreshedToday'] || $pulse['claimedToday'])
