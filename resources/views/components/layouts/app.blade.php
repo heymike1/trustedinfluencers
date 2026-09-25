@@ -198,6 +198,7 @@
                         <li><a href="{{ route('creators.index', ['verified' => 1, 'sort' => 'median_views']) }}" class="hover:text-ink-950">Highest median views</a></li>
                         <li><a href="{{ route('creators.index', ['verified' => 1, 'sort' => 'engagement']) }}" class="hover:text-ink-950">Highest engagement</a></li>
                         <li><a href="{{ route('creators.create') }}" class="hover:text-ink-950">Add a creator you work with</a></li>
+                        <li><a href="{{ route('sponsor') }}" class="hover:text-ink-950">Sponsor this site</a></li>
                     </ul>
                 </div>
             </div>

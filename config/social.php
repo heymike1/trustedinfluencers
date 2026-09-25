@@ -91,7 +91,10 @@ return [
     'sponsors' => [
         'slots_per_rail' => (int) env('SPONSOR_SLOTS_PER_RAIL', 4),
         'price' => env('SPONSOR_PRICE', '€250'),
-        'period' => env('SPONSOR_PERIOD', '30 days'),
+        // A booking runs this many days from the day it goes live. One month, counted in days.
+        'days' => (int) env('SPONSOR_DAYS', 30),
+        // Held when every spot is taken: it books the first one that frees up.
+        'advance_price' => env('SPONSOR_ADVANCE_PRICE', '€999'),
         'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
     ],
 

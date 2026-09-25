@@ -43,8 +43,12 @@
         <form wire:submit="saveSettings" class="card p-5 space-y-4">
             <div>
                 <h2 class="text-[15px] font-semibold text-ink-950">Rail settings</h2>
-                <p class="text-[13px] text-ink-500">What the rails offer when a side is not sold out.</p>
+                <p class="text-[13px] text-ink-500">What the rails offer, and what <a href="{{ route('sponsor') }}" target="_blank" class="font-semibold text-brand-700">/sponsor</a> tells a buyer.</p>
             </div>
+            <p class="flex items-center gap-2 rounded-xl border border-ink-200 bg-ink-50 px-3 py-2 text-[13px] text-ink-600">
+                <span class="size-1.5 rounded-full {{ $open === 0 ? 'bg-ink-400' : 'bg-brand-600' }}"></span>
+                {{ $open === 0 ? 'Sold out: the page offers the advance instead.' : $open.' of '.$total.' spots open right now.' }}
+            </p>
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
                     <label class="label" for="s-slots">Slots per side</label>
@@ -59,9 +63,16 @@
                     <x-field-error for="settings.price" />
                 </div>
                 <div>
-                    <label class="label" for="s-period">Period</label>
-                    <input id="s-period" type="text" wire:model="settings.period" class="input" placeholder="30 days">
-                    <x-field-error for="settings.period" />
+                    <label class="label" for="s-days">Days per booking</label>
+                    <input id="s-days" type="number" min="1" max="365" wire:model="settings.days" class="input" placeholder="30">
+                    <p class="mt-1 text-xs text-ink-400">A booking runs this long from the day it goes live.</p>
+                    <x-field-error for="settings.days" />
+                </div>
+                <div>
+                    <label class="label" for="s-advance">Advance</label>
+                    <input id="s-advance" type="text" wire:model="settings.advance_price" class="input" placeholder="€999">
+                    <p class="mt-1 text-xs text-ink-400">Asked on <a href="{{ route('sponsor') }}" target="_blank" class="font-semibold text-brand-700">/sponsor</a> when everything is booked. Empty turns it into a plain waiting list.</p>
+                    <x-field-error for="settings.advance_price" />
                 </div>
                 <div>
                     <label class="label" for="s-contact">Enquiries to</label>
@@ -75,7 +86,7 @@
         <form wire:submit="save" class="card p-5 space-y-4">
             <div>
                 <h2 class="text-[15px] font-semibold text-ink-950">{{ $editing ? 'Edit sponsor' : 'New sponsor' }}</h2>
-                <p class="text-[13px] text-ink-500">Cards show beside the page on screens wider than 1536px, newest booking last.</p>
+                <p class="text-[13px] text-ink-500">Cards show beside the page on screens wider than 1440px. A new booking runs {{ $days }} days from today unless you move the dates.</p>
             </div>
 
             <div>
@@ -135,7 +146,10 @@
                     <x-field-error for="form.ends_at" />
                 </div>
             </div>
-            <p class="text-xs text-ink-400">Leave the dates empty to run until you pause it.</p>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="text-xs text-ink-400">Leave the dates empty to run until you pause it.</p>
+                <button type="button" wire:click="bookFromToday" class="btn-secondary btn-sm">Book {{ $days }} days from today</button>
+            </div>
             <x-switch-row model="form.is_active" title="Active" description="A paused sponsor keeps its booking but disappears from the rails." />
 
             <div class="flex items-center gap-2">

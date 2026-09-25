@@ -4,9 +4,8 @@
 @props(['slots', 'side'])
 @php
     // An open slot is offered until the rail holds the number of cards we sell per side.
-    $price = config('social.sponsors.price');
+    $price = \App\Support\Sponsorship::price();
     $openSlots = $price ? max(0, (int) config('social.sponsors.slots_per_rail') - $slots->count()) : 0;
-    $contact = config('social.sponsors.contact');
 @endphp
 @if($slots->isNotEmpty() || $openSlots > 0)
     <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[168px] min-[1440px]:block min-[1600px]:w-[216px] min-[1800px]:w-[240px]" aria-label="Sponsored">
@@ -26,16 +25,21 @@
 
             {{-- One card per free slot, so the page always shows how much space is actually for sale. --}}
             @for($i = 0; $i < $openSlots; $i++)
-                <a href="mailto:{{ $contact }}?subject={{ rawurlencode('Sponsoring '.config('app.name')) }}"
+                <a href="{{ route('sponsor') }}"
                    class="block rounded-2xl border border-dashed border-ink-400 px-3 py-5 text-center transition-colors hover:bg-white/60 min-[1600px]:px-4 min-[1600px]:py-6">
                     <span class="mx-auto flex size-9 items-center justify-center rounded-lg border border-dashed border-ink-400 text-ink-400">
                         <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 5v10M5 10h10"/></svg>
                     </span>
                     <span class="mt-2 block text-[13px] font-semibold text-brand-700">Open slot</span>
-                    <span class="mt-1 block text-[11.5px] leading-snug text-ink-600 tnum">{{ $price }} / {{ config('social.sponsors.period') }}</span>
+                    <span class="mt-1 block text-[11.5px] leading-snug text-ink-600 tnum">{{ $price }} / {{ \App\Support\Sponsorship::periodLabel() }}</span>
                     <span class="mt-1.5 block text-[11px] leading-snug text-ink-500">Put your product here</span>
                 </a>
             @endfor
+
+            {{-- Nothing free: the way through to the waiting list, or the page is a dead end. --}}
+            @if($price && $openSlots === 0)
+                <a href="{{ route('sponsor') }}" class="block rounded-xl px-2 py-1.5 text-center text-[11px] font-semibold text-ink-500 transition-colors hover:text-brand-700">Sponsor this site &rarr;</a>
+            @endif
         </div>
     </aside>
 @endif

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Livewire\Concerns\HasNotice;
 use App\Models\SponsorSlot;
 use App\Support\Settings;
+use App\Support\Sponsorship;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -40,8 +41,9 @@ class Sponsors extends Component
             'side' => 'left',
             'sort_order' => 0,
             'is_active' => true,
-            'starts_at' => '',
-            'ends_at' => '',
+            // A booking runs for one month from today unless the admin moves the dates.
+            'starts_at' => now()->format('Y-m-d'),
+            'ends_at' => now()->addDays(Sponsorship::days())->format('Y-m-d'),
         ];
     }
 
@@ -62,6 +64,13 @@ class Sponsors extends Component
             'starts_at' => $slot->starts_at?->format('Y-m-d') ?? '',
             'ends_at' => $slot->ends_at?->format('Y-m-d') ?? '',
         ];
+    }
+
+    /** Sets the window to one full run starting today, the way a fresh booking is sold. */
+    public function bookFromToday(): void
+    {
+        $this->form['starts_at'] = now()->format('Y-m-d');
+        $this->form['ends_at'] = now()->addDays(Sponsorship::days())->format('Y-m-d');
     }
 
     public function cancel(): void
@@ -125,7 +134,8 @@ class Sponsors extends Component
         $this->settings = [
             'slots_per_rail' => (int) config('social.sponsors.slots_per_rail'),
             'price' => (string) config('social.sponsors.price'),
-            'period' => (string) config('social.sponsors.period'),
+            'days' => Sponsorship::days(),
+            'advance_price' => (string) config('social.sponsors.advance_price'),
             'contact' => (string) config('social.sponsors.contact'),
         ];
     }
@@ -135,13 +145,15 @@ class Sponsors extends Component
         $data = $this->validate([
             'settings.slots_per_rail' => ['required', 'integer', 'min:0', 'max:12'],
             'settings.price' => ['nullable', 'string', 'max:40'],
-            'settings.period' => ['required', 'string', 'max:40'],
+            'settings.days' => ['required', 'integer', 'min:1', 'max:365'],
+            'settings.advance_price' => ['nullable', 'string', 'max:40'],
             'settings.contact' => ['required', 'email', 'max:255'],
         ])['settings'];
 
         $settings->set('social.sponsors.slots_per_rail', $data['slots_per_rail']);
         $settings->set('social.sponsors.price', $data['price'] ?: null);
-        $settings->set('social.sponsors.period', $data['period']);
+        $settings->set('social.sponsors.days', $data['days']);
+        $settings->set('social.sponsors.advance_price', $data['advance_price'] ?: null);
         $settings->set('social.sponsors.contact', $data['contact']);
 
         $this->notify('success', 'Rail settings saved. The public pages use them right away.');
@@ -153,6 +165,9 @@ class Sponsors extends Component
             'slots' => SponsorSlot::orderBy('side')->orderBy('sort_order')->orderBy('id')->get(),
             'tints' => array_keys(SponsorSlot::TINTS),
             'perRail' => (int) config('social.sponsors.slots_per_rail'),
+            'open' => Sponsorship::open(),
+            'total' => Sponsorship::total(),
+            'days' => Sponsorship::days(),
         ])->title('Sponsors');
     }
 }

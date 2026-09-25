@@ -29,13 +29,15 @@ class AdminSettingsTest extends TestCase
         Livewire::actingAs($this->admin)->test(Sponsors::class)
             ->set('settings.slots_per_rail', 2)
             ->set('settings.price', '€400')
-            ->set('settings.period', '14 days')
+            ->set('settings.days', 14)
+            ->set('settings.advance_price', '€1200')
             ->set('settings.contact', 'ads@example.com')
             ->call('saveSettings')
             ->assertHasNoErrors();
 
         $this->assertSame(2, config('social.sponsors.slots_per_rail'));
         $this->assertSame('€400', config('social.sponsors.price'));
+        $this->assertSame(14, config('social.sponsors.days'));
 
         // A fresh request reads them back from the database, not from the config file.
         $this->get('/')->assertOk()->assertSee('€400 / 14 days');

@@ -20,7 +20,8 @@ class Settings
     public const EDITABLE = [
         'social.sponsors.slots_per_rail' => 'int',
         'social.sponsors.price' => 'string',
-        'social.sponsors.period' => 'string',
+        'social.sponsors.days' => 'int',
+        'social.sponsors.advance_price' => 'string',
         'social.sponsors.contact' => 'string',
         'social.enabled_platforms' => 'array',
         'social.sync.refresh_every_hours' => 'int',
