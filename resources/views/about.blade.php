@@ -5,7 +5,7 @@
     <x-slot:hero>
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-12 sm:pt-16 sm:pb-16 flex flex-col gap-6">
-                <h1 class="display max-w-3xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">Follower counts are easy to fake. Watch time isn’t.</h1>
+                <h1 class="display max-w-3xl text-3xl leading-[1.1] sm:text-4xl lg:text-[40px]">See the engagement behind the follower count.</h1>
                 <p class="max-w-2xl text-base text-ink-700 sm:text-lg text-pretty">{{ config('app.name') }} is a public directory where the creator, and only the creator, unlocks the numbers a sponsor actually needs: median views, how much of a video gets watched, and who the audience is. Straight from {{ \App\Enums\Platform::enabledLabels(' and ') }}, refreshed every {{ config('social.sync.refresh_every_hours') }} hours.</p>
                 <div class="flex flex-wrap items-center gap-3">
                     <a href="{{ route('creators.index') }}" class="btn-primary !px-5 !py-2.5 !text-[15px]">Find your profile <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
