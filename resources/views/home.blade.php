@@ -27,20 +27,6 @@
         </div>
     </x-slot:hero>
 
-    {{-- What moved lately, as one line. The full picture lives in the leaderboard below. --}}
-    <p class="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-ink-500 tnum">
-        <span class="size-1.5 shrink-0 rounded-full bg-brand-600"></span>
-        @if($pulse['refreshedToday'])<span><span class="font-semibold text-ink-950">{{ number_format($pulse['refreshedToday']) }}</span> {{ \Illuminate\Support\Str::plural('profile', $pulse['refreshedToday']) }} refreshed today</span>@else<span>Numbers refresh every {{ config('social.sync.refresh_every_hours') }} hours</span>@endif
-        @if($new = $pulse['newThisWeek'])
-            <span class="text-ink-300">·</span>
-            <span>new this week: <a href="{{ route('creators.show', $new) }}" class="font-semibold text-ink-950 hover:text-brand-700">{{ $new->name }}</a></span>
-        @endif
-        @if($best = $pulse['record'])
-            <span class="text-ink-300">·</span>
-            <span>{{ $best['title'] }}: <a href="{{ route('creators.show', $best['creator']) }}" class="font-semibold text-ink-950 hover:text-brand-700">{{ $best['creator']->name }}</a> <span class="text-ink-500">({{ $best['value'] }})</span></span>
-        @endif
-    </p>
-
     <livewire:top-performers />
 
     <p class="mx-auto mt-6 max-w-2xl text-center text-[13px] text-ink-500 text-pretty">{{ config('app.name') }} never asks for passwords. A creator signs in with {{ \App\Enums\Platform::enabledLabels(' or ') }} itself, and we read only that account’s own statistics to show verified numbers. Creators can disconnect at any time.</p>

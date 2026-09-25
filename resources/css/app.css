@@ -89,7 +89,7 @@
         @apply border-brand-700 bg-brand-700 text-white hover:bg-brand-700;
     }
     .band {
-        @apply bg-band border-b border-band-edge;
+        @apply bg-band;
     }
     .label {
         @apply block text-xs font-medium uppercase tracking-wide text-ink-500 mb-1.5;
