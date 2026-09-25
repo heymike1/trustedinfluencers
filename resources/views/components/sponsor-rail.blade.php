@@ -1,6 +1,6 @@
 {{-- One of the two sponsor rails beside the page. Drawn only once the gutter beside the
-     1152px container is wide enough to hold a card, so the container never moves; hidden
-     entirely when nothing is booked for that side. --}}
+     1152px container is wide enough to hold a card, so the container never moves. A side with
+     nothing booked still shows the open slot card, unless the price is switched off. --}}
 @props(['slots', 'side'])
 @php
     // An open slot is offered until the rail holds the number of cards we sell per side.
@@ -8,7 +8,7 @@
     $openSlots = $price ? max(0, (int) config('social.sponsors.slots_per_rail') - $slots->count()) : 0;
     $contact = config('social.sponsors.contact');
 @endphp
-@if($slots->isNotEmpty())
+@if($slots->isNotEmpty() || $openSlots > 0)
     <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[160px] min-[1440px]:block min-[1600px]:w-[200px] min-[1800px]:w-[224px]" aria-label="Sponsored">
         <div class="pointer-events-auto sticky top-6 flex flex-col gap-2.5 p-3 min-[1600px]:gap-3 min-[1600px]:p-5">
             @foreach($slots as $slot)

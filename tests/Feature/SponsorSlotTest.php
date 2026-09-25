@@ -37,8 +37,15 @@ class SponsorSlotTest extends TestCase
             ->assertDontSee('Ended');
     }
 
-    public function test_the_rails_are_absent_without_bookings(): void
+    public function test_an_empty_rail_still_offers_the_open_slot(): void
     {
+        $this->get('/')->assertOk()->assertSee('aria-label="Sponsored"', false)->assertSee('Open slot');
+    }
+
+    public function test_the_rails_are_absent_when_the_price_is_switched_off(): void
+    {
+        config(['social.sponsors.price' => null]);
+
         $this->get('/')->assertOk()->assertDontSee('aria-label="Sponsored"', false);
     }
 
@@ -100,9 +107,12 @@ class SponsorSlotTest extends TestCase
         config(['social.sponsors.slots_per_rail' => 2, 'social.sponsors.price' => '€250']);
 
         $this->slot(['name' => 'Blotato', 'side' => 'left']);
+        $this->slot(['name' => 'Chargeback', 'side' => 'right']);
         $this->get('/')->assertOk()->assertSee('Open slot')->assertSee('€250 / 30 days');
 
+        // Both rails full: nothing left to sell, so the card is gone.
         $this->slot(['name' => 'Libertus', 'side' => 'left']);
+        $this->slot(['name' => 'Postiz', 'side' => 'right']);
         $this->get('/')->assertOk()->assertDontSee('Open slot');
     }
 
