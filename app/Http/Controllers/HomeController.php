@@ -63,7 +63,7 @@ class HomeController extends Controller
      *
      * @return array{creator: Creator, title: string, value: string, line: string}|null
      */
-    private function record(): array
+    private function record(): ?array
     {
         $watched = Creator::active()
             ->whereNotNull('average_view_percentage')
