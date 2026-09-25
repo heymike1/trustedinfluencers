@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('account.login') }}" class="btn-secondary border-band-edge {{ request()->routeIs('account.login') ? '!border-brand-700 !bg-brand-700 !text-white' : '' }}">
+            <a href="{{ route('account.settings') }}" class="btn-secondary border-band-edge {{ request()->routeIs('account.settings') ? '!border-brand-700 !bg-brand-700 !text-white' : '' }}">
                 <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
                 Manage my account
             </a>

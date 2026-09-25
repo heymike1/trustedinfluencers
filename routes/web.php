@@ -54,7 +54,7 @@ Route::middleware('auth')->prefix('account')->name('account')->group(function ()
     Route::get('/profile', Livewire\Account\EditProfile::class)->name('.profile');
     Route::get('/connections', Livewire\Account\Connections::class)->name('.connections');
     Route::get('/requests', Livewire\Account\ContactRequests::class)->name('.requests');
-    Route::get('/login', Livewire\Account\LoginSettings::class)->name('.login');
+    Route::get('/settings', Livewire\Account\LoginSettings::class)->name('.settings');
 });
 
 // Admin

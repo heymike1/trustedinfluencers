@@ -79,7 +79,7 @@ class AccountLoginTest extends TestCase
     {
         $user = User::factory()->create(['email' => 'mike@example.com', 'google_id' => 'g-2']);
 
-        $this->actingAs($user)->get(route('account.login'))
+        $this->actingAs($user)->get(route('account.settings'))
             ->assertOk()
             ->assertSee('mike@example.com')
             ->assertSee('Connected');
