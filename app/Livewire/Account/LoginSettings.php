@@ -15,7 +15,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 /**
- * The login itself, separate from the public profile: name, email address and password.
+ * The account behind the profile: name, email address, password and deletion.
  */
 #[Layout('components.layouts.app', ['band' => true])]
 class LoginSettings extends Component
@@ -104,6 +104,6 @@ class LoginSettings extends Component
         return view('livewire.account.login-settings', [
             'user' => $this->user(),
             'creator' => $this->user()->creator,
-        ])->title('Login and password');
+        ])->title('Manage my account');
     }
 }

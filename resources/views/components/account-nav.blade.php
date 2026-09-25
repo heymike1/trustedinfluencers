@@ -2,7 +2,7 @@
 @php
     $connected = $creator->socialAccounts->filter->hasVerifiedMetrics();
     $unread = $creator->contactRequests()->whereNull('read_at')->count();
-    $tabs = [['account', 'Profile', null], ['account.connections', 'Connected accounts', null], ['account.requests', 'Contact requests', $unread], ['account.login', 'Login and password', null]];
+    $tabs = [['account', 'Profile', null], ['account.connections', 'Connected accounts', null], ['account.requests', 'Contact requests', $unread]];
 @endphp
 <x-page-band class="!mb-8">
     <div class="flex flex-wrap items-center justify-between gap-4">
@@ -24,7 +24,13 @@
                 </p>
             </div>
         </div>
-        <a href="{{ route('creators.show', $creator) }}" class="btn-secondary border-band-edge">View public profile <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('account.login') }}" class="btn-secondary border-band-edge {{ request()->routeIs('account.login') ? '!border-brand-700 !bg-brand-700 !text-white' : '' }}">
+                <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
+                Manage my account
+            </a>
+            <a href="{{ route('creators.show', $creator) }}" class="btn-secondary border-band-edge">View public profile <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
+        </div>
     </div>
     <nav class="mt-5 flex flex-wrap gap-1 text-sm">
         @foreach($tabs as [$route, $label, $count])

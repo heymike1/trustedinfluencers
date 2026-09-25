@@ -3,7 +3,7 @@
         <x-account-nav :creator="$creator" />
     @else
         <x-page-band>
-            <h1 class="display text-2xl sm:text-[26px] tracking-[-0.025em]">Your login</h1>
+            <h1 class="display text-2xl sm:text-[26px] tracking-[-0.025em]">Manage my account</h1>
             <p class="mt-1 text-[13.5px] text-ink-500">{{ $user->email }}</p>
         </x-page-band>
     @endif
