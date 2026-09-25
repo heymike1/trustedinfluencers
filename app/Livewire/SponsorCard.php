@@ -30,8 +30,6 @@ class SponsorCard extends Component
 
     public string $tint = 'blue';
 
-    public ?string $logoNotice = null;
-
     public function mount(string $token): void
     {
         $this->booking = SponsorSlot::where('token', $token)->firstOrFail();
@@ -45,19 +43,10 @@ class SponsorCard extends Component
         ]);
     }
 
-    /** Reads the logo straight off the website they gave us, so nobody has to upload anything. */
-    public function findLogo(SiteLogo $logos): void
+    /** The logo follows the website: type one and the card has the other. */
+    public function updatedUrl(): void
     {
-        $this->validate(['url' => ['required', 'url', 'max:2048']]);
-
-        $found = $logos->fetch($this->url);
-
-        if ($found) {
-            $this->logo_url = $found;
-            $this->logoNotice = 'Found it. Not the right one? Paste a link to your own image.';
-        } else {
-            $this->logoNotice = 'Nothing usable on that site. Paste a link to an image, or leave it empty and we show your initials.';
-        }
+        $this->logo_url = SiteLogo::forWebsite($this->url) ?? '';
     }
 
     public function save(PublishCard $publish): void
@@ -68,11 +57,10 @@ class SponsorCard extends Component
             'name' => ['required', 'string', 'min:2', 'max:60'],
             'url' => ['required', 'url', 'max:2048'],
             'tagline' => ['required', 'string', 'min:4', 'max:120'],
-            'logo_url' => ['nullable', 'url', 'max:2048'],
             'tint' => ['required', Rule::in(array_keys(SponsorSlot::TINTS))],
         ]);
 
-        $this->booking->fill($data + ['logo_url' => $data['logo_url'] ?: null])->save();
+        $this->booking->fill($data)->forceFill(['logo_url' => SiteLogo::forWebsite($data['url'])])->save();
 
         $publish->handle($this->booking);
         $this->booking->refresh();

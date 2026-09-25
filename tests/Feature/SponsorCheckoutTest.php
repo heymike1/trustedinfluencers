@@ -86,6 +86,8 @@ class SponsorCheckoutTest extends TestCase
 
         $booking->refresh();
         $this->assertSame(SponsorSlot::LIVE, $booking->status);
+        // The logo comes along with the domain they gave us.
+        $this->assertSame('https://www.google.com/s2/favicons?domain=blotato.example&sz=64', $booking->logo_url);
         $this->assertTrue($booking->starts_at->isToday());
         $this->assertSame(30, (int) $booking->starts_at->diffInDays($booking->ends_at));
         Mail::assertQueued(SponsorCardLive::class);

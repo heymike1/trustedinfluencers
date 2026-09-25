@@ -109,7 +109,7 @@
             @foreach([
                 ['Pick an open spot', 'Click any open slot on the site and you land here with that one selected. If everything is taken you are not stuck: you buy anyway and you take the first spot that comes free, in the order people paid.'],
                 ['Pay for the month', ($price ?: 'The price').' covers '.$days.' days. One payment, no percentages, and nothing renews behind your back. Paying is what claims the spot, so nothing is reserved and nothing expires on you.'],
-                ['Add your product or website', 'Straight after paying you get your own page. Fill in a name, your website and one line about what you make; we read the logo off your site for you. The card goes up as soon as it is complete, and that is when the '.$days.' days start.'],
+                ['Add your product or website', 'Straight after paying you get your own page. Fill in a name, your website and one line about what you make; your logo comes along with your domain. The card goes up as soon as it is complete, and that is when the '.$days.' days start.'],
             ] as $i => [$title, $body])
                 <div class="card p-5">
                     <span class="flex size-7 items-center justify-center rounded-full bg-brand-100 text-[13px] font-bold text-brand-700 tnum">{{ $i + 1 }}</span>

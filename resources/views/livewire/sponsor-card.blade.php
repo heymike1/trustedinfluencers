@@ -43,33 +43,20 @@
         <form wire:submit="save" class="card p-6 space-y-5">
             <div>
                 <h2 class="text-[15px] font-semibold text-ink-950">The card</h2>
-                <p class="text-[13px] text-ink-500">Four fields. Change them whenever you like; the card updates straight away.</p>
+                <p class="text-[13px] text-ink-500">Three fields and a colour. Change them whenever you like; the card updates straight away.</p>
             </div>
 
             <div>
                 <label class="label" for="url">Your website</label>
-                <div class="flex gap-2">
-                    <input id="url" type="url" wire:model="url" class="input" placeholder="https://yourproduct.com">
-                    <button type="button" wire:click="findLogo" class="btn-secondary shrink-0" wire:loading.attr="disabled" wire:target="findLogo">
-                        <span wire:loading.remove wire:target="findLogo">Get logo</span>
-                        <span wire:loading wire:target="findLogo">Looking…</span>
-                    </button>
-                </div>
-                <p class="mt-1.5 text-xs text-ink-400">{{ $logoNotice ?? 'We read the logo straight off your site, so there is nothing to upload.' }}</p>
+                <input id="url" type="url" wire:model.live.debounce.500ms="url" class="input" placeholder="https://yourproduct.com">
+                <p class="mt-1.5 text-xs text-ink-400">Your logo comes from this domain, so there is nothing to upload.</p>
                 <x-field-error for="url" />
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2">
-                <div>
-                    <label class="label" for="name">Name</label>
-                    <input id="name" type="text" wire:model.live.debounce.400ms="name" class="input" maxlength="60" placeholder="Your product">
-                    <x-field-error for="name" />
-                </div>
-                <div>
-                    <label class="label" for="logo_url">Logo</label>
-                    <input id="logo_url" type="url" wire:model.live.debounce.400ms="logo_url" class="input" placeholder="Leave empty for your initials">
-                    <x-field-error for="logo_url" />
-                </div>
+            <div>
+                <label class="label" for="name">Name</label>
+                <input id="name" type="text" wire:model.live.debounce.400ms="name" class="input" maxlength="60" placeholder="Your product">
+                <x-field-error for="name" />
             </div>
 
             <div>
