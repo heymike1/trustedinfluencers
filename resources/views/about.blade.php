@@ -87,7 +87,7 @@
     <div class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-3 border-y border-ink-200 py-5 text-sm">
         <span class="max-w-[220px] text-[13px] leading-snug text-ink-500">Numbers pulled straight from the platforms, never typed in by hand</span>
         <div class="flex flex-wrap items-center gap-x-10 gap-y-3 sm:ml-auto">
-            @foreach(\App\Enums\Platform::cases() as $platform)
+            @foreach(\App\Enums\Platform::enabled() as $platform)
                 <span class="inline-flex items-center gap-2 font-semibold text-ink-700"><x-platform-icon :platform="$platform" class="size-[22px]" /> {{ $platform->label() }} {{ $platform === \App\Enums\Platform::Instagram ? 'Insights' : 'Analytics' }}</span>
             @endforeach
         </div>

@@ -127,7 +127,7 @@ class EditProfile extends Component
         }
 
         $accounts = $this->creator->socialAccounts;
-        $missing = collect(Platform::cases())->first(fn (Platform $p) => ! $accounts->contains('platform', $p));
+        $missing = collect(Platform::enabled())->first(fn (Platform $p) => ! $accounts->contains('platform', $p));
 
         return [
             ['label' => 'Connect a platform', 'done' => $accounts->contains->isConnected(), 'href' => route('account.connections')],

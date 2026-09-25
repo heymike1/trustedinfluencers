@@ -136,7 +136,7 @@ class Marketplace extends Component
         return view('livewire.marketplace', [
             'creators' => $this->query()->paginate(24),
             'categories' => CreatorCategory::orderBy('sort_order')->orderBy('name')->get(),
-            'platforms' => Platform::cases(),
+            'platforms' => Platform::enabled(),
             'platformCounts' => $this->platformCounts(),
             'activePlatform' => Platform::tryFrom($this->platform),
             'total' => Creator::active()->count(),

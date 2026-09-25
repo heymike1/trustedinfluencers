@@ -64,7 +64,7 @@
                                 <a href="{{ route('account') }}" class="btn-primary btn-sm">Edit profile</a>
                                 <a href="{{ route('account.connections') }}" class="btn-secondary btn-sm">Connections</a>
                             </div>
-                        @elseif(! $state->isClaimed())
+                        @elseif(! $state->isClaimed() && $creator->socialAccounts->contains(fn ($a) => $a->platform->isEnabled()))
                             <p class="font-medium text-ink-950">Is this you?</p>
                             <p class="mt-1 text-ink-500">Sign in with the social account this profile belongs to and it’s yours. We’ll pull your numbers straight from the platform.</p>
                             <a href="{{ route('creators.claim', $creator) }}" class="btn-primary btn-sm mt-3 w-full">Claim this profile</a>

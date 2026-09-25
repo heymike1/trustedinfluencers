@@ -169,7 +169,7 @@
                         <li><a href="{{ route('creators.index', ['verified' => 1]) }}" class="hover:text-ink-950">Verified only</a></li>
                         <li><a href="{{ route('home') }}#leaderboard" class="hover:text-ink-950">Leaderboard</a></li>
                         <li><a href="{{ route('about') }}" class="hover:text-ink-950">About</a></li>
-                        @foreach(\App\Enums\Platform::cases() as $platform)
+                        @foreach(\App\Enums\Platform::enabled() as $platform)
                             <li><a href="{{ route('creators.index', ['platform' => $platform->value]) }}" class="inline-flex items-center gap-1.5 hover:text-ink-950"><x-platform-icon :platform="$platform" class="size-3.5" :colored="true" /> {{ $platform->label() }} creators</a></li>
                         @endforeach
                     </ul>

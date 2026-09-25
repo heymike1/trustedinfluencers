@@ -31,6 +31,22 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET') ?: env('YOUTUBE_CLIENT_SECRET'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Platforms creators can connect
+    |--------------------------------------------------------------------------
+    |
+    | Platforms left out here stay in the code and keep showing the data they
+    | already have, but they are not offered anywhere and cannot be claimed or
+    | connected. YouTube is parked until Google has verified the OAuth scopes.
+    |
+    */
+
+    'enabled_platforms' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', (string) env('SOCIAL_ENABLED_PLATFORMS', 'instagram,x'))
+    ))),
+
     'platforms' => [
         'youtube' => [
             'client_id' => env('YOUTUBE_CLIENT_ID'),

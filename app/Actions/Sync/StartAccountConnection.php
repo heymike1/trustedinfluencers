@@ -24,6 +24,10 @@ class StartAccountConnection
             throw ValidationException::withMessages(['connect' => 'You do not own this creator profile.']);
         }
 
+        if (! $account->platform->isEnabled()) {
+            throw ValidationException::withMessages(['connect' => "Connecting {$account->platform->label()} is switched off at the moment."]);
+        }
+
         $request = $this->oauth->begin($account->platform, ['intent' => 'connect', 'account_id' => $account->id], $account->handle);
 
         return $this->connectors->for($account->platform)->authorizationUrl($request);

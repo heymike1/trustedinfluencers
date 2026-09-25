@@ -20,7 +20,7 @@ class SitemapController extends Controller
                 ['loc' => route('terms'), 'changefreq' => 'yearly', 'priority' => '0.2'],
             ];
 
-            foreach (Platform::cases() as $platform) {
+            foreach (Platform::enabled() as $platform) {
                 $urls[] = ['loc' => route('creators.index', ['platform' => $platform->value]), 'changefreq' => 'daily', 'priority' => '0.7'];
             }
 

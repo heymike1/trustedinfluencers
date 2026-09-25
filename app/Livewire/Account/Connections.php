@@ -109,7 +109,7 @@ class Connections extends Component
         return view('livewire.account.connections', [
             'accounts' => $accounts,
             'importing' => $importing,
-            'platforms' => collect(Platform::cases())->reject(fn (Platform $p) => $accounts->contains('platform', $p)),
+            'platforms' => collect(Platform::enabled())->reject(fn (Platform $p) => $accounts->contains('platform', $p)),
             'cooldown' => config('social.sync.manual_cooldown_minutes'),
             'nextRefresh' => $lastSync?->addHours(config('social.sync.refresh_every_hours')),
         ])->title('Connected accounts');

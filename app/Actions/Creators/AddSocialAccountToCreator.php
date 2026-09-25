@@ -22,6 +22,10 @@ class AddSocialAccountToCreator
 
     public function handle(Creator $creator, Platform $platform, string $handleOrUrl): CreatorSocialAccount
     {
+        if (! $platform->isEnabled()) {
+            throw ValidationException::withMessages(['platform' => "{$platform->label()} can't be added at the moment."]);
+        }
+
         $normalized = $this->normalizer->normalize($platform, $handleOrUrl);
 
         if ($normalized === null) {

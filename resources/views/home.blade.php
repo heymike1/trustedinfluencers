@@ -72,7 +72,7 @@
     <p class="mx-auto mt-6 max-w-2xl text-center text-[13px] text-ink-500 text-pretty">{{ config('app.name') }} never asks for passwords. A creator signs in with Google to connect their YouTube channel (or with Instagram or X), and we read only that channel’s analytics to show verified numbers. Creators can disconnect at any time.</p>
     <p class="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-ink-500">
         <span class="text-xs">Every number above comes straight from</span>
-        @foreach(\App\Enums\Platform::cases() as $platform)
+        @foreach(\App\Enums\Platform::enabled() as $platform)
             <span class="inline-flex items-center gap-2 font-semibold text-ink-700"><x-platform-icon :platform="$platform" class="size-[18px]" /> {{ $platform->label() }} {{ $platform === \App\Enums\Platform::Instagram ? 'Insights' : 'Analytics' }}</span>
         @endforeach
     </p>

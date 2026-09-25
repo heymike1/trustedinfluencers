@@ -84,7 +84,7 @@ class AddCreator extends Component
     {
         return view('livewire.add-creator', [
             'categories' => CreatorCategory::orderBy('sort_order')->orderBy('name')->get(),
-            'platforms' => Platform::cases(),
+            'platforms' => Platform::enabled(),
             'preview' => $this->normalizedHandle(),
             'existing' => $this->existingCreatorId ? Creator::find($this->existingCreatorId) : null,
         ])->layout('components.layouts.app', [

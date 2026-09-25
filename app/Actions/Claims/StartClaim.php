@@ -31,6 +31,10 @@ class StartClaim
             throw ValidationException::withMessages(['claim' => 'That account does not belong to this profile.']);
         }
 
+        if (! $account->platform->isEnabled()) {
+            throw ValidationException::withMessages(['claim' => "Claiming through {$account->platform->label()} is switched off at the moment."]);
+        }
+
         if ($user->creator()->exists()) {
             throw ValidationException::withMessages(['claim' => 'Your login already has a creator profile.']);
         }

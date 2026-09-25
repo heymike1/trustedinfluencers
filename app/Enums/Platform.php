@@ -8,6 +8,22 @@ enum Platform: string
     case Instagram = 'instagram';
     case X = 'x';
 
+    /**
+     * Platforms creators can connect right now (config/social.php). A disabled platform keeps
+     * working for accounts that are already connected; it is simply not offered any more.
+     *
+     * @return list<self>
+     */
+    public static function enabled(): array
+    {
+        return array_values(array_filter(self::cases(), fn (self $p) => $p->isEnabled()));
+    }
+
+    public function isEnabled(): bool
+    {
+        return in_array($this->value, config('social.enabled_platforms', []), true);
+    }
+
     public function label(): string
     {
         return match ($this) {

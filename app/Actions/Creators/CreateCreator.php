@@ -27,6 +27,10 @@ class CreateCreator
      */
     public function handle(string $name, Platform $platform, string $handleOrUrl, ?int $categoryId = null): Creator
     {
+        if (! $platform->isEnabled()) {
+            throw ValidationException::withMessages(['platform' => "{$platform->label()} profiles can't be added at the moment."]);
+        }
+
         $normalized = $this->normalizer->normalize($platform, $handleOrUrl);
 
         if ($normalized === null) {

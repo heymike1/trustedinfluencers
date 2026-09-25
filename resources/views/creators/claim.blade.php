@@ -28,13 +28,23 @@
                             <span class="text-ink-900"><x-platform-icon :platform="$account->platform" class="size-5" /></span>
                             <div>
                                 <p class="text-sm font-medium text-ink-950">{{ $account->platform->label() }} {{ $account->handleWithAt() }}</p>
-                                <p class="text-xs text-ink-500">Sign in with this exact account. If {{ $account->platform->label() }} tells us it’s a different one, the claim won’t go through.</p>
+                                <p class="text-xs text-ink-500">
+                                    @if($account->platform->isEnabled())
+                                        Sign in with this exact account. If {{ $account->platform->label() }} tells us it’s a different one, the claim won’t go through.
+                                    @else
+                                        {{ $account->platform->label() }} claims are switched off for now. Claim another platform on this profile, or check back later.
+                                    @endif
+                                </p>
                             </div>
                         </div>
-                        <form method="POST" action="{{ route('creators.claim.start', [$creator, $account]) }}">
-                            @csrf
-                            <button type="submit" class="btn-primary btn-sm">Verify with {{ $account->platform->label() }}</button>
-                        </form>
+                        @if($account->platform->isEnabled())
+                            <form method="POST" action="{{ route('creators.claim.start', [$creator, $account]) }}">
+                                @csrf
+                                <button type="submit" class="btn-primary btn-sm">Verify with {{ $account->platform->label() }}</button>
+                            </form>
+                        @else
+                            <x-badge>Not available yet</x-badge>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -42,7 +52,7 @@
             <div class="mt-6 text-sm text-ink-500 space-y-2">
                 <p class="font-medium text-ink-900">What happens next</p>
                 <ol class="list-decimal pl-5 space-y-1">
-                    <li>We send you to {{ $creator->socialAccounts->map(fn ($a) => $a->platform->label())->unique()->join(', ', ' or ') }} to sign in. We only ask for read access.</li>
+                    <li>We send you to {{ $creator->socialAccounts->filter(fn ($a) => $a->platform->isEnabled())->map(fn ($a) => $a->platform->label())->unique()->join(', ', ' or ') }} to sign in. We only ask for read access.</li>
                     <li>If it’s the account on this profile, the profile is yours and linked to your login.</li>
                     <li>We pull in your content and stats in the background and show them as verified.</li>
                 </ol>

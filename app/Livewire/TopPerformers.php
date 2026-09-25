@@ -58,7 +58,7 @@ class TopPerformers extends Component
         return view('livewire.top-performers', [
             'active' => $metric,
             'metrics' => collect(RankMetric::cases())->filter(fn (RankMetric $m) => $m->availableFor($platform)),
-            'platforms' => Platform::cases(),
+            'platforms' => Platform::enabled(),
             'categories' => CreatorCategory::orderBy('sort_order')->get(),
             'creators' => $creators,
             'total' => $rankings->ranked($metric, $platform, $category?->id)->count(),

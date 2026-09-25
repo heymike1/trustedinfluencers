@@ -50,17 +50,21 @@
                         <div class="flex flex-wrap items-center gap-2">
                             @if($account->isConnected())
                                 <button type="button" wire:click="syncNow({{ $account->id }})" class="btn-secondary btn-sm" @if($account->isImporting()) disabled @endif>Sync now</button>
-                                <form method="POST" action="{{ route('account.connections.connect', $account) }}">
-                                    @csrf
-                                    <button type="submit" class="btn-secondary btn-sm">Reconnect</button>
-                                </form>
+                                @if($account->platform->isEnabled())
+                                    <form method="POST" action="{{ route('account.connections.connect', $account) }}">
+                                        @csrf
+                                        <button type="submit" class="btn-secondary btn-sm">Reconnect</button>
+                                    </form>
+                                @endif
                                 <button type="button" wire:click="disconnect({{ $account->id }})" wire:confirm="Disconnect {{ $account->platform->label() }}? We’ll delete the verified numbers and stats we pulled in for this account. Your public profile stays." class="btn-danger btn-sm sm:ml-auto">Disconnect</button>
-                            @else
+                            @elseif($account->platform->isEnabled())
                                 <form method="POST" action="{{ route('account.connections.connect', $account) }}">
                                     @csrf
                                     <button type="submit" class="btn-primary btn-sm">{{ $status === \App\Enums\ConnectionStatus::NeedsReconnection ? 'Reconnect' : 'Connect' }} {{ $account->platform->label() }}</button>
                                 </form>
                                 <p class="text-[13px] text-ink-500">Sign in as {{ $account->handleWithAt() }} to confirm it’s yours and pull in your numbers.</p>
+                            @else
+                                <p class="text-[13px] text-ink-500">Connecting {{ $account->platform->label() }} is switched off for now, so this one shows public info only. Your handle stays on your profile.</p>
                             @endif
                             <button type="button" wire:click="remove({{ $account->id }})" wire:confirm="Remove {{ $account->platform->label() }} from your profile? {{ $account->isConnected() ? 'We’ll delete the verified numbers and stats we pulled in, and ' : 'We’ll take ' }}{{ $account->handleWithAt() }} off your public profile." class="btn-secondary btn-sm text-danger-700 {{ $account->isConnected() ? '' : 'sm:ml-auto' }}">Remove</button>
                         </div>
