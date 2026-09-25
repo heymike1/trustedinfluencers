@@ -11,7 +11,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('components.layouts.app')]
+#[Layout('components.layouts.admin')]
 class Creators extends Component
 {
     use HasNotice;
@@ -69,6 +69,6 @@ class Creators extends Component
             ->latest('id')
             ->paginate(30);
 
-        return view('livewire.admin.creators', ['creators' => $creators])->title('Admin · Creators');
+        return view('livewire.admin.creators', ['creators' => $creators])->title('Creators');
     }
 }

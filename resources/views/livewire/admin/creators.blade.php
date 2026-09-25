@@ -1,5 +1,6 @@
+<x-slot:heading>Creators</x-slot:heading>
+<x-slot:subheading>{{ number_format($creators->total()) }} profiles</x-slot:subheading>
 <div>
-    <x-admin-nav />
     <x-notice :notice="$notice" />
 
     <div class="flex flex-wrap items-center gap-2 mb-4">

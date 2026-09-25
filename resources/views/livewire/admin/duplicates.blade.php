@@ -1,5 +1,6 @@
+<x-slot:heading>Duplicates</x-slot:heading>
+<x-slot:subheading>Same name, or the same handle on more than one profile</x-slot:subheading>
 <div>
-    <x-admin-nav />
     <x-notice :notice="$notice" />
     <p class="text-sm text-ink-500 mb-4">Provider account IDs and normalised handles already prevent the same social account from being listed twice. These are the softer signals worth a look.</p>
 

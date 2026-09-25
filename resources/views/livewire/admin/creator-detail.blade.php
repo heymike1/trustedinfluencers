@@ -1,121 +1,220 @@
+<x-slot:heading>{{ $creator->name }}</x-slot:heading>
+<x-slot:subheading>/{{ $creator->slug }} · {{ $state->value }} · created {{ $creator->created_at->format('j M Y') }}</x-slot:subheading>
+<x-slot:actions>
+    <a href="{{ route('creators.show', $creator) }}" class="btn-secondary btn-sm">View public profile</a>
+    <a href="{{ route('admin.creators') }}" class="btn-secondary btn-sm">All creators</a>
+</x-slot:actions>
 <div>
-    <x-admin-nav />
     <x-notice :notice="$notice" />
 
-    <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
-        <div class="flex items-center gap-3">
-            <x-avatar :creator="$creator" size="lg" />
-            <div>
-                <h2 class="text-xl font-semibold text-ink-950 flex items-center gap-2">{{ $creator->name }} <x-state-badge :state="$state" /></h2>
-                <p class="text-sm text-ink-500">
-                    <a href="{{ route('creators.show', $creator) }}" class="hover:underline">/creators/{{ $creator->slug }}</a>
-                    · {{ ucfirst($creator->status->value) }}
-                    @if($creator->category) · {{ $creator->category->name }} @endif
-                    · added {{ $creator->created_at->diffForHumans() }}
-                </p>
-            </div>
-        </div>
-        <div class="flex gap-2">
-            <button type="button" wire:click="toggleHidden" class="btn-secondary btn-sm">{{ $creator->status === \App\Enums\CreatorStatus::Hidden ? 'Restore' : 'Hide from marketplace' }}</button>
-        </div>
-    </div>
+    @if($creator->mergedInto)
+        <p class="mb-4 rounded-xl border border-warn-100 bg-amber-50 px-4 py-3 text-sm text-warn-700">Merged into <a href="{{ route('admin.creators.show', $creator->mergedInto) }}" class="font-semibold underline">{{ $creator->mergedInto->name }}</a>. This profile redirects there.</p>
+    @endif
 
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div class="space-y-6">
-            <section class="card overflow-x-auto">
-                <h3 class="px-4 py-3 border-b border-ink-100 text-sm font-semibold">Social accounts</h3>
+    <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+        <div class="space-y-5">
+            {{-- Editable fields --}}
+            <form wire:submit="save" class="card p-5 space-y-4">
+                <h2 class="text-[15px] font-semibold text-ink-950">Profile</h2>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="label" for="f-name">Name</label>
+                        <input id="f-name" type="text" wire:model="form.name" class="input">
+                        <x-field-error for="form.name" />
+                    </div>
+                    <div>
+                        <label class="label" for="f-slug">Slug</label>
+                        <input id="f-slug" type="text" wire:model="form.slug" class="input">
+                        <x-field-error for="form.slug" />
+                    </div>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="label" for="f-cat">Category</label>
+                        <select id="f-cat" wire:model="form.creator_category_id" class="input">
+                            <option value="">None</option>
+                            @foreach($categories as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach
+                        </select>
+                        <x-field-error for="form.creator_category_id" />
+                    </div>
+                    <div>
+                        <label class="label" for="f-status">Status</label>
+                        <select id="f-status" wire:model="form.status" class="input">
+                            @foreach($statuses as $s)<option value="{{ $s->value }}">{{ ucfirst($s->value) }}</option>@endforeach
+                        </select>
+                        <p class="mt-1 text-xs text-ink-400">Hidden takes it out of the directory for everyone; the creator's own switch is separate.</p>
+                        <x-field-error for="form.status" />
+                    </div>
+                </div>
+                <div>
+                    <label class="label" for="f-bio">Bio</label>
+                    <textarea id="f-bio" rows="3" wire:model="form.bio" class="input" maxlength="500"></textarea>
+                    <x-field-error for="form.bio" />
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="label" for="f-loc">Location</label>
+                        <input id="f-loc" type="text" wire:model="form.location" class="input">
+                        <x-field-error for="form.location" />
+                    </div>
+                    <div>
+                        <label class="label" for="f-web">Website</label>
+                        <input id="f-web" type="url" wire:model="form.website" class="input">
+                        <x-field-error for="form.website" />
+                    </div>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="label" for="f-avatar">Avatar URL</label>
+                        <input id="f-avatar" type="url" wire:model="form.avatar_url" class="input">
+                        <x-field-error for="form.avatar_url" />
+                    </div>
+                    <div>
+                        <label class="label" for="f-mail">Contact email</label>
+                        <input id="f-mail" type="email" wire:model="form.contact_email" class="input">
+                        <x-field-error for="form.contact_email" />
+                    </div>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    <x-switch-row model="form.contact_enabled" title="Contact requests" description="Visitors can message this creator." />
+                    <x-switch-row model="form.is_listed" title="Listed in the directory" description="The creator's own visibility switch." />
+                </div>
+                <div class="flex justify-end"><button type="submit" class="btn-primary" wire:loading.attr="disabled">Save changes</button></div>
+            </form>
+
+            {{-- Accounts --}}
+            <div class="card overflow-hidden">
+                <div class="flex items-center justify-between px-5 py-4">
+                    <h2 class="text-[15px] font-semibold text-ink-950">Social accounts</h2>
+                    <button type="button" wire:click="recalculate" class="btn-secondary btn-sm">Rebuild summary</button>
+                </div>
                 <table class="data-table">
-                    <thead><tr><th>Platform</th><th>Handle</th><th>Provider ID</th><th>Status</th><th>Last synced</th><th></th></tr></thead>
+                    <thead><tr><th class="pl-5">Account</th><th>Status</th><th class="text-right">Audience</th><th class="text-right">Content</th><th>Last sync</th><th class="pr-5"></th></tr></thead>
                     <tbody>
-                        @foreach($creator->socialAccounts as $account)
+                        @forelse($creator->socialAccounts as $account)
                             <tr wire:key="acc-{{ $account->id }}">
-                                <td class="whitespace-nowrap"><span class="inline-flex items-center gap-1.5"><x-platform-icon :platform="$account->platform" class="size-3.5" /> {{ $account->platform->label() }}</span></td>
-                                <td>{{ $account->handleWithAt() }} <span class="text-xs text-ink-400 tnum">{{ \App\Support\Format::compact($account->follower_count) }}</span></td>
-                                <td class="font-mono text-xs text-ink-500">{{ $account->provider_account_id ?? '—' }}</td>
-                                <td>
-                                    <x-badge :variant="match($account->connection_status) { \App\Enums\ConnectionStatus::Connected => 'verified', \App\Enums\ConnectionStatus::SyncFailed, \App\Enums\ConnectionStatus::NeedsReconnection => 'warn', default => 'neutral' }">{{ $account->connection_status->label() }}</x-badge>
-                                    @if($account->last_sync_error)<p class="mt-1 text-xs text-warn-700 max-w-xs">{{ $account->last_sync_error }}</p>@endif
+                                <td class="pl-5">
+                                    <p class="flex items-center gap-1.5 font-medium text-ink-950"><x-platform-icon :platform="$account->platform" class="size-3.5" :colored="true" /> {{ $account->handleWithAt() }}</p>
+                                    <p class="text-xs text-ink-500">{{ $account->platform->label() }} · ID {{ $account->provider_account_id ?? '—' }}</p>
                                 </td>
+                                <td><x-badge :variant="$account->isConnected() ? 'verified' : ($account->connection_status->value === 'unconnected' ? 'neutral' : 'warn')">{{ $account->connection_status->label() }}</x-badge></td>
+                                <td class="text-right tnum">{{ \App\Support\Format::compact($account->follower_count) }}</td>
+                                <td class="text-right tnum"><a href="{{ route('admin.content', ['account' => $account->id]) }}" class="text-brand-700 hover:underline">{{ $account->contents()->count() }}</a></td>
                                 <td class="text-xs text-ink-500 whitespace-nowrap">{{ $account->last_synced_at?->diffForHumans() ?? '—' }}</td>
-                                <td class="text-right">
+                                <td class="pr-5 text-right whitespace-nowrap">
                                     @if($account->isConnected())
-                                        <button type="button" wire:click="sync({{ $account->id }})" class="btn-secondary btn-sm" @if($account->isImporting()) disabled @endif>Sync</button>
+                                        <button type="button" wire:click="sync({{ $account->id }})" class="btn-secondary btn-sm">Sync</button>
+                                        <button type="button" wire:click="disconnect({{ $account->id }})" wire:confirm="Disconnect {{ $account->platform->label() }}? Imported data is deleted." class="btn-secondary btn-sm">Disconnect</button>
                                     @endif
+                                    <button type="button" wire:click="removeAccount({{ $account->id }})" wire:confirm="Remove {{ $account->handleWithAt() }} from this profile?" class="btn-danger btn-sm">Remove</button>
                                 </td>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </section>
-
-            <section class="card overflow-x-auto">
-                <h3 class="px-4 py-3 border-b border-ink-100 text-sm font-semibold">Claims</h3>
-                <table class="data-table">
-                    <thead><tr><th>User</th><th>Platform</th><th>Status</th><th>Expected ID</th><th>Returned</th><th>When</th></tr></thead>
-                    <tbody>
-                        @forelse($creator->claims->sortByDesc('id') as $claim)
-                            <tr>
-                                <td class="text-xs">{{ $claim->user->email }}</td>
-                                <td>{{ $claim->platform->label() }}</td>
-                                <td>
-                                    <x-badge :variant="match($claim->status) { \App\Enums\ClaimStatus::Verified => 'verified', \App\Enums\ClaimStatus::Failed => 'danger', default => 'neutral' }">{{ ucfirst($claim->status->value) }}</x-badge>
-                                    @if($claim->failure_reason)<p class="text-xs text-ink-500 mt-1">{{ $claim->failure_reason }}</p>@endif
-                                </td>
-                                <td class="font-mono text-xs text-ink-500">{{ $claim->expected_provider_account_id ?? '(handle)' }}</td>
-                                <td class="font-mono text-xs text-ink-500">{{ $claim->returned_provider_account_id ?? '—' }} @if($claim->returned_handle)<span class="font-sans">({{ "@".$claim->returned_handle }})</span>@endif</td>
-                                <td class="text-xs text-ink-400 whitespace-nowrap">{{ $claim->created_at->diffForHumans() }}</td>
-                            </tr>
+                            @if($account->last_sync_error)
+                                <tr wire:key="err-{{ $account->id }}"><td colspan="6" class="pl-5 pr-5 pt-0 text-xs text-warn-700">{{ $account->last_sync_error }}</td></tr>
+                            @endif
                         @empty
-                            <tr><td colspan="6" class="text-ink-500">No claims.</td></tr>
+                            <tr><td colspan="6" class="py-8 text-center text-sm text-ink-500">No accounts on this profile.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
-            </section>
+            </div>
 
-            <section class="card overflow-x-auto">
-                <h3 class="px-4 py-3 border-b border-ink-100 text-sm font-semibold">Contact requests <span class="text-ink-400 font-normal">({{ $creator->contactRequests->count() }})</span></h3>
-                @if($creator->contactRequests->isEmpty())
-                    <p class="px-4 py-3 text-sm text-ink-500">None.</p>
-                @else
-                    <table class="data-table">
-                        <thead><tr><th>From</th><th>Subject</th><th>Delivered</th><th>When</th></tr></thead>
-                        <tbody>
-                            @foreach($creator->contactRequests->take(10) as $r)
-                                <tr><td class="text-xs">{{ $r->name }} · {{ $r->email }}</td><td>{{ $r->subject }}</td><td class="text-xs">{{ $r->delivered_at ? 'Emailed' : 'Stored' }}</td><td class="text-xs text-ink-400 whitespace-nowrap">{{ $r->created_at->diffForHumans() }}</td></tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </section>
+            {{-- Claims --}}
+            <div class="card overflow-hidden">
+                <h2 class="px-5 py-4 text-[15px] font-semibold text-ink-950">Claims</h2>
+                <table class="data-table">
+                    <thead><tr><th class="pl-5">User</th><th>Platform</th><th>Status</th><th>Detail</th><th class="pr-5">When</th></tr></thead>
+                    <tbody>
+                        @forelse($creator->claims as $claim)
+                            <tr wire:key="claim-{{ $claim->id }}">
+                                <td class="pl-5 text-xs">{{ $claim->user?->email ?? '—' }}</td>
+                                <td class="text-xs">{{ $claim->platform->label() }}</td>
+                                <td><x-badge :variant="$claim->status->value === 'verified' ? 'verified' : ($claim->status->value === 'failed' ? 'danger' : 'neutral')">{{ ucfirst($claim->status->value) }}</x-badge></td>
+                                <td class="text-xs text-ink-500">{{ $claim->failure_reason ?? ($claim->returned_handle ? '@'.$claim->returned_handle : '—') }}</td>
+                                <td class="pr-5 text-xs text-ink-500 whitespace-nowrap">{{ $claim->created_at->diffForHumans() }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="py-8 text-center text-sm text-ink-500">Nobody has tried to claim this profile.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Contact requests --}}
+            <div class="card overflow-hidden">
+                <h2 class="px-5 py-4 text-[15px] font-semibold text-ink-950">Contact requests</h2>
+                <table class="data-table">
+                    <thead><tr><th class="pl-5">From</th><th>Subject</th><th>Read</th><th class="pr-5">When</th></tr></thead>
+                    <tbody>
+                        @forelse($creator->contactRequests as $request)
+                            <tr wire:key="req-{{ $request->id }}">
+                                <td class="pl-5 text-xs">{{ $request->name }}<br><span class="text-ink-500">{{ $request->email }}</span></td>
+                                <td class="text-xs">{{ $request->subject }}</td>
+                                <td class="text-xs text-ink-500">{{ $request->read_at ? 'Yes' : 'No' }}</td>
+                                <td class="pr-5 text-xs text-ink-500 whitespace-nowrap">{{ $request->created_at->diffForHumans() }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="py-8 text-center text-sm text-ink-500">No messages yet.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <aside class="space-y-4">
-            <section class="card p-4 text-sm">
-                <h3 class="font-semibold">Owner</h3>
+        {{-- Sidebar --}}
+        <div class="space-y-4">
+            <div class="card p-5">
+                <h2 class="text-[15px] font-semibold text-ink-950">Summary columns</h2>
+                <p class="text-xs text-ink-500">Denormalised for the directory. Rebuilt on every sync.</p>
+                <dl class="mt-3 space-y-2 text-[13px] tnum">
+                    @foreach([
+                        'Followers' => \App\Support\Format::compact($creator->follower_count),
+                        'Median views' => \App\Support\Format::compact($creator->median_views),
+                        'Average views' => \App\Support\Format::compact($creator->average_views),
+                        'Engagement' => \App\Support\Format::percent($creator->engagement_rate),
+                        'Watched' => \App\Support\Format::percent($creator->average_view_percentage, 0),
+                        'Posts / month' => $creator->posts_per_month ? round($creator->posts_per_month, 1) : '—',
+                        'Primary platform' => $creator->primary_platform?->label() ?? '—',
+                        'Metrics synced' => $creator->metrics_synced_at?->diffForHumans() ?? '—',
+                    ] as $label => $value)
+                        <div class="flex justify-between gap-3"><dt class="text-ink-500">{{ $label }}</dt><dd class="font-medium text-ink-950">{{ $value }}</dd></div>
+                    @endforeach
+                </dl>
+            </div>
+
+            <div class="card p-5 space-y-3">
+                <h2 class="text-[15px] font-semibold text-ink-950">Owner</h2>
                 @if($creator->user)
-                    <p class="mt-1 text-ink-700">{{ $creator->user->name }} <span class="text-ink-400">({{ $creator->user->email }})</span></p>
-                    <p class="text-xs text-ink-400">Claimed {{ $creator->claimed_at?->diffForHumans() }}</p>
-                    <button type="button" wire:click="releaseClaim" wire:confirm="Release this claim? The owner is unlinked, credentials are destroyed and verified data is deleted. Use this to resolve ownership disputes." class="btn-danger btn-sm mt-3">Release claim</button>
+                    <p class="text-[13px] text-ink-700">{{ $creator->user->name }}<br><span class="text-ink-500">{{ $creator->user->email }}</span></p>
+                    <button type="button" wire:click="releaseClaim" wire:confirm="Release this claim? Accounts are disconnected and imported data is deleted." class="btn-danger btn-sm">Release claim</button>
                 @else
-                    <p class="mt-1 text-ink-500">Unclaimed.</p>
+                    <p class="text-[13px] text-ink-500">Unclaimed.</p>
                 @endif
-            </section>
+                <div class="border-t border-ink-100 pt-3">
+                    <label class="label" for="transfer">Transfer to user</label>
+                    <div class="flex gap-2">
+                        <input id="transfer" type="text" wire:model="transferTo" class="input" placeholder="email or ID">
+                        <button type="button" wire:click="transfer" class="btn-secondary btn-sm shrink-0">Transfer</button>
+                    </div>
+                    <x-field-error for="transferTo" />
+                </div>
+            </div>
 
-            <section class="card p-4 text-sm">
-                <h3 class="font-semibold">Merge into another profile</h3>
-                <p class="mt-1 text-xs text-ink-500">This profile becomes a tombstone that redirects to the target. Accounts, claims and contact requests move across.</p>
-                <form wire:submit="merge" class="mt-3 flex gap-2">
-                    <input type="text" wire:model="mergeInto" placeholder="Target slug or ID" class="input">
-                    <button type="submit" class="btn-secondary" wire:confirm="Merge {{ $creator->name }} into the target profile?">Merge</button>
-                </form>
+            <div class="card p-5 space-y-3">
+                <h2 class="text-[15px] font-semibold text-ink-950">Merge</h2>
+                <p class="text-[13px] text-ink-500">Moves the accounts onto another profile and leaves a redirect behind.</p>
+                <div class="flex gap-2">
+                    <input type="text" wire:model="mergeInto" class="input" placeholder="target slug or ID">
+                    <button type="button" wire:click="merge" wire:confirm="Merge {{ $creator->name }} into that profile?" class="btn-secondary btn-sm shrink-0">Merge</button>
+                </div>
                 <x-field-error for="mergeInto" />
-            </section>
+            </div>
 
-            @if($creator->status === \App\Enums\CreatorStatus::Merged && $creator->mergedInto)
-                <section class="card p-4 text-sm">
-                    <p>Merged into <a href="{{ route('admin.creators.show', $creator->mergedInto) }}" class="underline">{{ $creator->mergedInto->name }}</a>.</p>
-                </section>
-            @endif
-        </aside>
+            <div class="card border-danger-100 p-5 space-y-2">
+                <h2 class="text-[15px] font-semibold text-ink-950">Delete</h2>
+                <p class="text-[13px] text-ink-500">Removes the profile, its accounts, imported content, metrics and messages. No undo.</p>
+                <button type="button" wire:click="destroy" wire:confirm.prompt="Delete {{ $creator->name }} and everything under it?\n\nType DELETE to confirm.|DELETE" class="btn-danger btn-sm">Delete profile</button>
+            </div>
+        </div>
     </div>
 </div>

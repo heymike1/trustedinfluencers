@@ -12,7 +12,7 @@ use Livewire\Component;
 /**
  * Books and edits the sponsor cards in the rails beside the page.
  */
-#[Layout('components.layouts.app')]
+#[Layout('components.layouts.admin')]
 class Sponsors extends Component
 {
     use HasNotice;

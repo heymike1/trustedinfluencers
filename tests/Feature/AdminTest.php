@@ -39,7 +39,7 @@ class AdminTest extends TestCase
         $creator = Creator::factory()->claimedBy()->create();
         CreatorSocialAccount::factory()->for($creator)->connected()->create();
 
-        foreach (['admin.dashboard', 'admin.creators', 'admin.users', 'admin.claims', 'admin.duplicates', 'admin.connections'] as $route) {
+        foreach (['admin.dashboard', 'admin.creators', 'admin.users', 'admin.claims', 'admin.duplicates', 'admin.accounts', 'admin.content', 'admin.requests', 'admin.categories', 'admin.sponsors'] as $route) {
             $this->actingAs($this->admin)->get(route($route))->assertOk();
         }
 

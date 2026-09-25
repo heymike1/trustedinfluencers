@@ -1,57 +1,93 @@
-<div>
-    <x-admin-nav />
-
-    <dl class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        @foreach($counts as $label => $value)
-            <div class="card p-4">
-                <dt class="text-xs text-ink-500">{{ $label }}</dt>
-                <dd class="mt-1 text-2xl font-semibold tracking-tight tnum">{{ number_format($value) }}</dd>
-            </div>
+<x-slot:heading>Overview</x-slot:heading>
+<x-slot:subheading>{{ now()->format('l j F, H:i') }}</x-slot:subheading>
+<div class="space-y-5">
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        @foreach($stats as [$label, $value, $hint, $href])
+            <a href="{{ $href }}" class="card p-4 hover:border-brand-200 transition-colors">
+                <p class="text-xs font-medium uppercase tracking-wide text-ink-500">{{ $label }}</p>
+                <p class="display mt-1 text-2xl tracking-[-0.02em] tnum">{{ number_format($value) }}</p>
+                <p class="text-xs text-ink-500 tnum">{{ $hint }}</p>
+            </a>
         @endforeach
-    </dl>
+    </div>
 
-    <div class="mt-8 grid gap-6 lg:grid-cols-2">
-        <section class="card overflow-x-auto">
-            <div class="flex items-center justify-between px-4 py-3 border-b border-ink-100">
-                <h2 class="text-sm font-semibold">Recent claims</h2>
-                <a href="{{ route('admin.claims') }}" class="text-xs text-ink-500 hover:text-ink-950">All claims →</a>
-            </div>
+    @if($attentionCount || $pendingClaims || $failedJobs || $staleCount)
+        <div class="card border-warn-100 p-5">
+            <h2 class="text-[15px] font-semibold text-ink-950">Needs a look</h2>
+            <ul class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-[13.5px] text-ink-700 tnum">
+                @if($attentionCount)<li><a href="{{ route('admin.accounts', ['status' => 'needs_reconnection']) }}" class="font-semibold text-brand-700">{{ $attentionCount }}</a> accounts failing or needing reconnection</li>@endif
+                @if($pendingClaims)<li><a href="{{ route('admin.claims', ['status' => 'pending']) }}" class="font-semibold text-brand-700">{{ $pendingClaims }}</a> claims still pending</li>@endif
+                @if($staleCount)<li><span class="font-semibold text-ink-950">{{ $staleCount }}</span> verified profiles with stale numbers</li>@endif
+                @if($failedJobs)<li><span class="font-semibold text-ink-950">{{ $failedJobs }}</span> failed jobs in the queue</li>@endif
+            </ul>
+        </div>
+    @endif
+
+    <div class="grid gap-5 lg:grid-cols-3">
+        <div class="card overflow-hidden">
+            <h2 class="px-5 py-4 text-[15px] font-semibold text-ink-950">Accounts needing attention</h2>
             <table class="data-table">
-                <thead><tr><th>Creator</th><th>User</th><th>Status</th><th>When</th></tr></thead>
+                <tbody>
+                    @forelse($needsAttention as $account)
+                        <tr wire:key="att-{{ $account->id }}">
+                            <td class="pl-5">
+                                <a href="{{ route('admin.creators.show', $account->creator) }}" class="font-medium text-ink-950 hover:underline">{{ $account->creator->name }}</a>
+                                <p class="text-xs text-ink-500">{{ $account->platform->label() }} {{ $account->handleWithAt() }}</p>
+                            </td>
+                            <td class="pr-5 text-right"><x-badge variant="warn">{{ $account->connection_status->label() }}</x-badge></td>
+                        </tr>
+                    @empty
+                        <tr><td class="px-5 py-8 text-center text-sm text-ink-500">Everything is syncing.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card overflow-hidden">
+            <h2 class="px-5 py-4 text-[15px] font-semibold text-ink-950">Latest claims</h2>
+            <table class="data-table">
                 <tbody>
                     @forelse($recentClaims as $claim)
-                        <tr>
-                            <td><a href="{{ route('admin.creators.show', $claim->creator) }}" class="font-medium hover:underline">{{ $claim->creator->name }}</a> <span class="text-ink-400 text-xs">{{ $claim->platform->label() }}</span></td>
-                            <td class="text-ink-500">{{ $claim->user->email }}</td>
-                            <td><x-badge :variant="match($claim->status) { \App\Enums\ClaimStatus::Verified => 'verified', \App\Enums\ClaimStatus::Failed => 'danger', default => 'neutral' }">{{ ucfirst($claim->status->value) }}</x-badge></td>
-                            <td class="text-ink-400 text-xs whitespace-nowrap">{{ $claim->created_at->diffForHumans() }}</td>
+                        <tr wire:key="cl-{{ $claim->id }}">
+                            <td class="pl-5">
+                                <p class="font-medium text-ink-950">{{ $claim->creator?->name ?? 'deleted' }}</p>
+                                <p class="text-xs text-ink-500">{{ $claim->user?->email ?? '—' }}</p>
+                            </td>
+                            <td class="pr-5 text-right"><x-badge :variant="$claim->status === \App\Enums\ClaimStatus::Verified ? 'verified' : ($claim->status === \App\Enums\ClaimStatus::Failed ? 'danger' : 'neutral')">{{ ucfirst($claim->status->value) }}</x-badge></td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="text-ink-500">No claims yet.</td></tr>
+                        <tr><td class="px-5 py-8 text-center text-sm text-ink-500">No claims yet.</td></tr>
                     @endforelse
                 </tbody>
             </table>
-        </section>
+        </div>
 
-        <section class="card overflow-x-auto">
-            <div class="flex items-center justify-between px-4 py-3 border-b border-ink-100">
-                <h2 class="text-sm font-semibold">Failed syncs &amp; reconnections</h2>
-                <a href="{{ route('admin.connections') }}" class="text-xs text-ink-500 hover:text-ink-950">All connections →</a>
-            </div>
+        <div class="card overflow-hidden">
+            <h2 class="px-5 py-4 text-[15px] font-semibold text-ink-950">Newest profiles</h2>
             <table class="data-table">
-                <thead><tr><th>Account</th><th>Status</th><th>Error</th></tr></thead>
                 <tbody>
-                    @forelse($failedAccounts as $account)
-                        <tr>
-                            <td><a href="{{ route('admin.creators.show', $account->creator) }}" class="font-medium hover:underline">{{ $account->creator->name }}</a> <span class="text-ink-400 text-xs">{{ $account->platform->label() }} {{ $account->handleWithAt() }}</span></td>
-                            <td><x-badge variant="warn">{{ $account->connection_status->label() }}</x-badge></td>
-                            <td class="text-xs text-ink-500 max-w-xs truncate" title="{{ $account->last_sync_error }}">{{ $account->last_sync_error }}</td>
+                    @forelse($recentCreators as $creator)
+                        <tr wire:key="nc-{{ $creator->id }}">
+                            <td class="pl-5">
+                                <a href="{{ route('admin.creators.show', $creator) }}" class="font-medium text-ink-950 hover:underline">{{ $creator->name }}</a>
+                                <p class="text-xs text-ink-500">{{ $creator->category?->name ?? 'No category' }} · {{ $creator->created_at->diffForHumans() }}</p>
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3" class="text-ink-500">Everything is syncing fine.</td></tr>
+                        <tr><td class="px-5 py-8 text-center text-sm text-ink-500">Nothing listed yet.</td></tr>
                     @endforelse
                 </tbody>
             </table>
-        </section>
+        </div>
+    </div>
+
+    <div class="card p-5 text-[13.5px] text-ink-500">
+        <h2 class="text-[15px] font-semibold text-ink-950">Settings in effect</h2>
+        <dl class="mt-2 grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-4 tnum">
+            <div class="flex justify-between gap-3"><dt>Connector driver</dt><dd class="font-medium text-ink-950">{{ config('social.driver') }}</dd></div>
+            <div class="flex justify-between gap-3"><dt>Platforms on</dt><dd class="font-medium text-ink-950">{{ \App\Enums\Platform::enabledLabels(' and ') }}</dd></div>
+            <div class="flex justify-between gap-3"><dt>Refresh every</dt><dd class="font-medium text-ink-950">{{ config('social.sync.refresh_every_hours') }}h</dd></div>
+            <div class="flex justify-between gap-3"><dt>Hidden / unlisted</dt><dd class="font-medium text-ink-950">{{ $hiddenCount }} / {{ $unlistedCount }}</dd></div>
+        </dl>
     </div>
 </div>

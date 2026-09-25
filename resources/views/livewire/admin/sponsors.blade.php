@@ -1,5 +1,6 @@
+<x-slot:heading>Sponsors</x-slot:heading>
+<x-slot:subheading>Cards in the rails beside the public pages</x-slot:subheading>
 <div>
-    <x-admin-nav />
     <x-notice :notice="$notice" />
 
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">

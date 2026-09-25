@@ -63,6 +63,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', Livewire\Admin\Users::class)->name('users');
     Route::get('/claims', Livewire\Admin\Claims::class)->name('claims');
     Route::get('/duplicates', Livewire\Admin\Duplicates::class)->name('duplicates');
-    Route::get('/connections', Livewire\Admin\Connections::class)->name('connections');
+    Route::get('/accounts', Livewire\Admin\Accounts::class)->name('accounts');
+    Route::get('/content', Livewire\Admin\Content::class)->name('content');
+    Route::get('/requests', Livewire\Admin\ContactRequests::class)->name('requests');
+    Route::get('/categories', Livewire\Admin\Categories::class)->name('categories');
     Route::get('/sponsors', Livewire\Admin\Sponsors::class)->name('sponsors');
 });

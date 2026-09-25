@@ -17,7 +17,7 @@ use Livewire\Component;
  * Surfaces likely duplicates: same name, or the same handle listed under different profiles
  * (usually the same person on two platforms who was added twice).
  */
-#[Layout('components.layouts.app')]
+#[Layout('components.layouts.admin')]
 class Duplicates extends Component
 {
     use HasNotice;
@@ -57,6 +57,6 @@ class Duplicates extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.duplicates', ['groups' => $this->groups()])->title('Admin · Duplicates');
+        return view('livewire.admin.duplicates', ['groups' => $this->groups()])->title('Duplicates');
     }
 }
