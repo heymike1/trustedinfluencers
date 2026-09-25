@@ -12,8 +12,10 @@
     ['admin.duplicates', 'Duplicates', '<rect x="4" y="4" width="11" height="11" rx="2"/><rect x="9" y="9" width="11" height="11" rx="2"/>'],
 ])
 <x-layouts.bare :title="$title">
-    <div class="flex min-h-full">
-        <aside class="hidden w-60 shrink-0 flex-col bg-brand-700 text-white lg:flex">
+    <div class="flex min-h-dvh">
+        {{-- The bar fills the window height and stays put while the table scrolls. --}}
+        <aside class="hidden w-60 shrink-0 bg-brand-700 text-white lg:block">
+            <div class="sticky top-0 flex h-dvh flex-col overflow-y-auto">
             <a href="{{ route('admin.dashboard') }}" class="flex h-16 items-center gap-2.5 px-5 text-white">
                 <span class="inline-flex size-6 items-center justify-center rounded-[7px] bg-white/15"><svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>
                 <span class="display text-[15px] tracking-[-0.02em] !text-white">{{ config('app.name') }}</span>
@@ -27,11 +29,12 @@
                     </a>
                 @endforeach
             </nav>
-            <div class="border-t border-white/10 px-3 py-3 text-[13px]">
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-white/70 hover:bg-white/10 hover:text-white">
-                    <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    Back to the site
-                </a>
+                <div class="border-t border-white/10 px-3 py-3 text-[13px]">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-white/70 hover:bg-white/10 hover:text-white">
+                        <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        Back to the site
+                    </a>
+                </div>
             </div>
         </aside>
 
