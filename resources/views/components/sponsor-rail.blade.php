@@ -1,9 +1,10 @@
-{{-- One of the two sponsor rails beside the page. Only drawn on very wide screens, so the
-     main container keeps its width; hidden entirely when nothing is booked for that side. --}}
+{{-- One of the two sponsor rails beside the page. Drawn only once the gutter beside the
+     1152px container is wide enough to hold a card, so the container never moves; hidden
+     entirely when nothing is booked for that side. --}}
 @props(['slots', 'side'])
 @if($slots->isNotEmpty())
-    <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[196px] 2xl:block" aria-label="Sponsored">
-        <div class="pointer-events-auto sticky top-6 flex flex-col gap-3 p-4">
+    <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[136px] min-[1440px]:block min-[1600px]:w-[184px]" aria-label="Sponsored">
+        <div class="pointer-events-auto sticky top-6 flex flex-col gap-2.5 p-3 min-[1600px]:gap-3 min-[1600px]:p-4">
             @foreach($slots as $slot)
                 <a href="{{ route('sponsors.click', $slot) }}" target="_blank" rel="nofollow sponsored noopener"
                    class="block rounded-2xl border p-3.5 text-center transition-transform hover:-translate-y-0.5 {{ $slot->tintClasses() }}">
