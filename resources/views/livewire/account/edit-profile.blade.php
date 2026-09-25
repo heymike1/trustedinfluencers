@@ -1,17 +1,5 @@
 <div>
     @if(! $creator)
-        <x-page-band>
-            <div class="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h1 class="display text-2xl sm:text-[26px] tracking-[-0.025em]">My profile</h1>
-                    <p class="mt-0.5 text-[13.5px] text-ink-500">{{ auth()->user()->email }}</p>
-                </div>
-                <a href="{{ route('account.login') }}" class="btn-secondary border-band-edge">
-                    <svg class="size-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.7-5 6-5s6 2 6 5"/></svg>
-                    Manage my account
-                </a>
-            </div>
-        </x-page-band>
         <x-no-creator />
     @else
         <x-account-nav :creator="$creator" />
@@ -99,27 +87,6 @@
             </form>
 
             <aside class="space-y-4">
-                @php($done = collect($checklist)->where('done', true)->count())
-                <div class="card p-5">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-[15px] font-semibold text-ink-950">Profile checklist</h2>
-                        <span class="text-[13px] text-ink-500 tnum">{{ $done }} of {{ count($checklist) }}</span>
-                    </div>
-                    <div class="mt-3 h-1.5 rounded-full bg-ink-100"><div class="h-1.5 rounded-full bg-brand-600" style="width: {{ count($checklist) ? round($done / count($checklist) * 100) : 0 }}%"></div></div>
-                    <ul class="mt-4 space-y-2.5 text-[13.5px]">
-                        @foreach($checklist as $item)
-                            <li class="flex items-center gap-2.5 {{ $item['done'] ? 'text-ink-500' : '' }}">
-                                @if($item['done'])
-                                    <span class="inline-flex size-[18px] shrink-0 items-center justify-center rounded-full bg-verified-50 text-brand-700"><svg class="size-2.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg></span>
-                                    <span class="line-through">{{ $item['label'] }}</span>
-                                @else
-                                    <span class="inline-block size-[18px] shrink-0 rounded-full border-[1.5px] border-ink-200"></span>
-                                    @if($item['href'])<a href="{{ $item['href'] }}" class="font-semibold text-brand-700">{{ $item['label'] }}</a>@else<span>{{ $item['label'] }}</span>@endif
-                                @endif
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
                 <div class="card p-5 text-[13.5px] text-ink-500 space-y-2">
                     <p class="font-semibold text-ink-950">What you can’t edit</p>
                     <p>Your verified numbers, follower count and content stats come straight from the platform, so there’s nothing to edit here. To refresh or reconnect, go to <a href="{{ route('account.connections') }}" class="font-semibold text-brand-700">Connected accounts</a>.</p>

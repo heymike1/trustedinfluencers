@@ -50,7 +50,8 @@ Route::post('/oauth/fake/{platform}/authorize', [FakeOAuthController::class, 'au
 
 // Creator account area
 Route::middleware('auth')->prefix('account')->name('account')->group(function () {
-    Route::get('/', Livewire\Account\EditProfile::class);
+    Route::get('/', Livewire\Account\Overview::class);
+    Route::get('/profile', Livewire\Account\EditProfile::class)->name('.profile');
     Route::get('/connections', Livewire\Account\Connections::class)->name('.connections');
     Route::get('/requests', Livewire\Account\ContactRequests::class)->name('.requests');
     Route::get('/login', Livewire\Account\LoginSettings::class)->name('.login');
