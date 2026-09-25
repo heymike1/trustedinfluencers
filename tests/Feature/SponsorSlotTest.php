@@ -95,6 +95,25 @@ class SponsorSlotTest extends TestCase
             ->assertHasErrors('form.ends_at');
     }
 
+    public function test_an_open_slot_is_offered_until_the_rail_is_full(): void
+    {
+        config(['social.sponsors.slots_per_rail' => 2, 'social.sponsors.price' => '€250']);
+
+        $this->slot(['name' => 'Blotato', 'side' => 'left']);
+        $this->get('/')->assertOk()->assertSee('Open slot')->assertSee('€250 / 30 days');
+
+        $this->slot(['name' => 'Libertus', 'side' => 'left']);
+        $this->get('/')->assertOk()->assertDontSee('Open slot');
+    }
+
+    public function test_the_open_slot_card_is_off_without_a_price(): void
+    {
+        config(['social.sponsors.price' => null]);
+        $this->slot();
+
+        $this->get('/')->assertOk()->assertSee('Blotato')->assertDontSee('Open slot');
+    }
+
     public function test_the_admin_screen_is_closed_to_everyone_else(): void
     {
         $this->actingAs(User::factory()->create())->get(route('admin.sponsors'))->assertForbidden();

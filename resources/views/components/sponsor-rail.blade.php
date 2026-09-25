@@ -2,6 +2,12 @@
      1152px container is wide enough to hold a card, so the container never moves; hidden
      entirely when nothing is booked for that side. --}}
 @props(['slots', 'side'])
+@php
+    // An open slot is offered until the rail holds the number of cards we sell per side.
+    $price = config('social.sponsors.price');
+    $openSlots = $price ? max(0, (int) config('social.sponsors.slots_per_rail') - $slots->count()) : 0;
+    $contact = config('social.sponsors.contact');
+@endphp
 @if($slots->isNotEmpty())
     <aside class="pointer-events-none absolute inset-y-0 {{ $side === 'left' ? 'left-0' : 'right-0' }} hidden w-[136px] min-[1440px]:block min-[1600px]:w-[184px]" aria-label="Sponsored">
         <div class="pointer-events-auto sticky top-6 flex flex-col gap-2.5 p-3 min-[1600px]:gap-3 min-[1600px]:p-4">
@@ -17,6 +23,18 @@
                     <span class="mt-1 block text-[11.5px] leading-snug text-ink-600">{{ $slot->tagline }}</span>
                 </a>
             @endforeach
+
+            @if($openSlots > 0)
+                <a href="mailto:{{ $contact }}?subject={{ rawurlencode('Sponsoring '.config('app.name')) }}"
+                   class="block rounded-2xl border border-dashed border-band-edge p-3.5 text-center transition-colors hover:bg-white/60">
+                    <span class="mx-auto flex size-8 items-center justify-center rounded-lg border border-dashed border-band-edge text-ink-400">
+                        <svg class="size-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 5v10M5 10h10"/></svg>
+                    </span>
+                    <span class="mt-2 block text-[13px] font-semibold text-brand-700">Open slot</span>
+                    <span class="mt-1 block text-[11.5px] leading-snug text-ink-600 tnum">{{ $price }} / {{ config('social.sponsors.period') }}</span>
+                    <span class="mt-1.5 block text-[11px] leading-snug text-ink-500">Put your product here</span>
+                </a>
+            @endif
         </div>
     </aside>
 @endif

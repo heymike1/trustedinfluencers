@@ -77,6 +77,24 @@ return [
         'refresh_every_hours' => (int) env('SOCIAL_SYNC_REFRESH_HOURS', 24),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Sponsor rails
+    |--------------------------------------------------------------------------
+    |
+    | The two columns beside the page. A rail that is not full shows an "open
+    | slot" card with your price, up to the target number of cards. Set the
+    | price to null to switch that card off.
+    |
+    */
+
+    'sponsors' => [
+        'slots_per_rail' => (int) env('SPONSOR_SLOTS_PER_RAIL', 3),
+        'price' => env('SPONSOR_PRICE', '€250'),
+        'period' => env('SPONSOR_PERIOD', '30 days'),
+        'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
+    ],
+
     'contact' => [
         // Forward contact requests for unclaimed profiles to their public email.
         // Off by default: the address was submitted by a third party and is unverified.
