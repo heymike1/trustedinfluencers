@@ -9,11 +9,13 @@ use App\Http\Controllers\FakeOAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SponsorClickController;
 use App\Livewire;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/go/{slot}', SponsorClickController::class)->name('sponsors.click');
 Route::view('/about', 'about')->name('about');
 Route::view('/privacy', 'legal.privacy')->name('privacy');
 Route::view('/terms', 'legal.terms')->name('terms');
@@ -62,4 +64,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/claims', Livewire\Admin\Claims::class)->name('claims');
     Route::get('/duplicates', Livewire\Admin\Duplicates::class)->name('duplicates');
     Route::get('/connections', Livewire\Admin\Connections::class)->name('connections');
+    Route::get('/sponsors', Livewire\Admin\Sponsors::class)->name('sponsors');
 });

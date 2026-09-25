@@ -143,7 +143,10 @@
         })();
     </script>
 
-    <main class="flex-1">
+    @php($sponsorSlots = \App\Models\SponsorSlot::live()->orderBy('sort_order')->orderBy('id')->get()->groupBy('side'))
+    <main class="relative flex-1">
+        <x-sponsor-rail :slots="$sponsorSlots->get('left', collect())" side="left" />
+        <x-sponsor-rail :slots="$sponsorSlots->get('right', collect())" side="right" />
         {{ $hero ?? '' }}
         <div class="mx-auto {{ $wide ? 'max-w-7xl' : 'max-w-6xl' }} px-4 sm:px-6 py-8">
             <x-flash />

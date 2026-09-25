@@ -9,5 +9,6 @@ Disallow: /reset-password
 Disallow: /oauth/
 Disallow: /creators/*/claim
 Disallow: /livewire/
+Disallow: /go/
 
 Sitemap: https://trustedinfluencers.co/sitemap.xml
