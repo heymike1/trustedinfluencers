@@ -57,7 +57,7 @@ class SponsorPageTest extends TestCase
             ->assertSee('30 days');
     }
 
-    public function test_a_sold_out_page_asks_for_an_advance_and_names_the_next_free_date(): void
+    public function test_a_sold_out_page_sells_the_next_spot_and_names_the_date(): void
     {
         config([
             'social.sponsors.slots_per_rail' => 2,
@@ -68,13 +68,14 @@ class SponsorPageTest extends TestCase
         $this->fillEverySpot();
 
         $this->get(route('sponsor'))->assertOk()
-            ->assertSee('All 4 cards are running right now.')
+            ->assertSee('All 4 spots are taken')
+            ->assertSee('you take the first spot that comes free')
             ->assertSee('€999')
             ->assertSee(now()->addDays(10)->format('j F Y'))
             ->assertDontSee('Book a spot');
     }
 
-    public function test_without_an_advance_price_the_sold_out_page_is_a_waiting_list(): void
+    public function test_the_next_spot_is_offered_even_without_an_advance_price(): void
     {
         config([
             'social.sponsors.slots_per_rail' => 1,
@@ -85,9 +86,9 @@ class SponsorPageTest extends TestCase
         $this->fillEverySpot();
 
         $this->get(route('sponsor'))->assertOk()
-            ->assertSee('Put me on the list')
-            ->assertSee('in the order the requests came in')
-            ->assertDontSee('Pay the');
+            ->assertSee('Take the next spot')
+            ->assertSee('you take the first spot that comes free')
+            ->assertDontSee('€999');
     }
 
     public function test_a_full_rail_still_links_through_to_the_page(): void
@@ -106,7 +107,7 @@ class SponsorPageTest extends TestCase
         config(['social.sponsors.price' => null]);
 
         $this->get(route('sponsor'))->assertOk()
-            ->assertSee('Not for sale at the moment')
+            ->assertSee('We have taken the spots off the market for now.')
             ->assertDontSee('Book a spot');
     }
 }
