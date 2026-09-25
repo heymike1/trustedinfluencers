@@ -75,7 +75,6 @@ class SponsorPageTest extends TestCase
 
         $this->get(route('sponsor'))->assertOk()
             ->assertSee('All 4 spots are taken')
-            ->assertSee('Every spot is running.')
             ->assertSee('Take the next spot')
             ->assertSee('$999')
             ->assertSee(now()->addDays(10)->format('j F Y'))

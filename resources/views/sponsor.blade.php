@@ -40,8 +40,7 @@
         <div class="band">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 pb-8 sm:pt-14 sm:pb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
                 <div class="max-w-2xl">
-                    <span class="eyebrow">Sponsor {{ config('app.name') }}</span>
-                    <h1 class="display mt-4 text-3xl leading-[1.05] sm:text-4xl lg:text-[44px]">{{ $full ? 'Every spot is running.' : 'Pick the spot you want.' }}</h1>
+                    <h1 class="display text-3xl leading-[1.05] sm:text-4xl lg:text-[44px]">Advertise on {{ config('app.name') }}</h1>
                     <p class="mt-3 max-w-xl text-base text-ink-700 sm:text-[17px] text-pretty">{{ $total }} cards sit beside every page on the site: the home page, the directory, the leaderboard and every creator profile. Take one for {{ $days }} days.</p>
                 </div>
                 @if($forSale)
