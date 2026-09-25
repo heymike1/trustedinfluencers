@@ -6,6 +6,7 @@ use App\Enums\ConnectionStatus;
 use App\Enums\Platform;
 use App\Livewire\Account\Connections;
 use App\Livewire\Account\EditProfile;
+use App\Livewire\Account\LoginSettings;
 use App\Models\Creator;
 use App\Models\CreatorCategory;
 use App\Models\CreatorPerformanceMetric;
@@ -188,7 +189,7 @@ class CreatorAccountTest extends TestCase
     {
         SocialContent::factory()->for($this->account, 'socialAccount')->withMetrics(['views' => 10])->count(2)->create();
 
-        Livewire::actingAs($this->owner)->test(EditProfile::class)
+        Livewire::actingAs($this->owner)->test(LoginSettings::class)
             ->call('deleteAccount')
             ->assertHasNoErrors()
             ->assertRedirect(route('home'));
@@ -204,7 +205,7 @@ class CreatorAccountTest extends TestCase
     {
         $admin = User::factory()->create(['is_admin' => true]);
 
-        Livewire::actingAs($admin)->test(EditProfile::class)->call('deleteAccount')->assertHasErrors('account');
+        Livewire::actingAs($admin)->test(LoginSettings::class)->call('deleteAccount')->assertHasErrors('account');
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }
 

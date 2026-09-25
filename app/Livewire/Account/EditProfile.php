@@ -2,14 +2,11 @@
 
 namespace App\Livewire\Account;
 
-use App\Actions\Auth\DeleteUserAccount;
 use App\Enums\Platform;
 use App\Models\Creator;
 use App\Models\CreatorCategory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -94,25 +91,6 @@ class EditProfile extends Component
 
         session()->flash('success', 'Profile updated.');
         $this->redirectRoute('account');
-    }
-
-    public function deleteAccount(DeleteUserAccount $delete): void
-    {
-        try {
-            $delete->handle(auth()->user());
-        } catch (ValidationException $e) {
-            $this->addError('account', collect($e->errors())->flatten()->first());
-
-            return;
-        }
-
-        // Not Auth::logout(): cycling the remember token would save() the deleted model back into the table.
-        Auth::forgetUser();
-        session()->invalidate();
-        session()->regenerateToken();
-        session()->flash('success', 'Your account and profile have been deleted.');
-
-        $this->redirectRoute('home');
     }
 
     /**

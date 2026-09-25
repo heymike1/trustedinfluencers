@@ -85,12 +85,6 @@
                     <button type="submit" class="btn-primary" wire:loading.attr="disabled">Save changes</button>
                 </div>
 
-                <details class="card !border-ink-100 mt-6">
-                    <summary class="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 px-6 py-4 text-sm font-semibold text-ink-500">
-                        Delete my account <span class="text-[13px] font-normal">Removes your login, profile and every connected platform. No undo.</span>
-                    </summary>
-                    <div class="border-t border-ink-100 px-6 py-5">@include('livewire.account.partials.delete-account', ['bare' => true])</div>
-                </details>
             </form>
 
             <aside class="space-y-4">

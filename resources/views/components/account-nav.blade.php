@@ -2,7 +2,7 @@
 @php
     $connected = $creator->socialAccounts->filter->hasVerifiedMetrics();
     $unread = $creator->contactRequests()->whereNull('read_at')->count();
-    $tabs = [['account', 'Profile', null], ['account.connections', 'Connected accounts', null], ['account.requests', 'Contact requests', $unread]];
+    $tabs = [['account', 'Profile', null], ['account.connections', 'Connected accounts', null], ['account.requests', 'Contact requests', $unread], ['account.login', 'Login and password', null]];
 @endphp
 <x-page-band class="!mb-8">
     <div class="flex flex-wrap items-center justify-between gap-4">
