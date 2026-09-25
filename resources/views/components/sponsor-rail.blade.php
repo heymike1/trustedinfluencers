@@ -24,7 +24,8 @@
                 </a>
             @endforeach
 
-            @if($openSlots > 0)
+            {{-- One card per free slot, so the page always shows how much space is actually for sale. --}}
+            @for($i = 0; $i < $openSlots; $i++)
                 <a href="mailto:{{ $contact }}?subject={{ rawurlencode('Sponsoring '.config('app.name')) }}"
                    class="block rounded-2xl border border-dashed border-ink-400 px-3 py-5 text-center transition-colors hover:bg-white/60 min-[1600px]:px-4 min-[1600px]:py-6">
                     <span class="mx-auto flex size-9 items-center justify-center rounded-lg border border-dashed border-ink-400 text-ink-400">
@@ -34,7 +35,7 @@
                     <span class="mt-1 block text-[11.5px] leading-snug text-ink-600 tnum">{{ $price }} / {{ config('social.sponsors.period') }}</span>
                     <span class="mt-1.5 block text-[11px] leading-snug text-ink-500">Put your product here</span>
                 </a>
-            @endif
+            @endfor
         </div>
     </aside>
 @endif

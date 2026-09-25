@@ -37,9 +37,15 @@ class SponsorSlotTest extends TestCase
             ->assertDontSee('Ended');
     }
 
-    public function test_an_empty_rail_still_offers_the_open_slot(): void
+    public function test_every_free_slot_gets_its_own_card(): void
     {
-        $this->get('/')->assertOk()->assertSee('aria-label="Sponsored"', false)->assertSee('Open slot');
+        config(['social.sponsors.slots_per_rail' => 4]);
+
+        // Nothing booked: four cards a side, eight in total.
+        $this->assertSame(8, substr_count($this->get('/')->assertOk()->getContent(), 'Open slot'));
+
+        $this->slot(['side' => 'left']);
+        $this->assertSame(7, substr_count($this->get('/')->getContent(), 'Open slot'));
     }
 
     public function test_the_rails_are_absent_when_the_price_is_switched_off(): void
