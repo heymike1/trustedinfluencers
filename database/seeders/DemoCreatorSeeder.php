@@ -79,7 +79,7 @@ class DemoCreatorSeeder extends Seeder
 
         $brandUser = User::factory()->create(['name' => 'Brand Manager', 'email' => 'brand@example.com']);
 
-        foreach (self::CREATORS as $i => $definition) {
+        foreach ($this->definitions() as $i => $definition) {
             $createdAt = now()->subDays(60 - $i * 2)->subHours($i * 3);
 
             $creator = Creator::create([
@@ -224,10 +224,37 @@ class DemoCreatorSeeder extends Seeder
         });
     }
 
+    /**
+     * The demo set without the platforms that are switched off, so seeded data matches
+     * what the site actually offers.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function definitions(): array
+    {
+        return collect(self::CREATORS)
+            ->map(function (array $definition) {
+                $definition['accounts'] = array_filter(
+                    $definition['accounts'],
+                    fn (string $platform) => Platform::from($platform)->isEnabled(),
+                    ARRAY_FILTER_USE_KEY
+                );
+                $definition['connected'] = array_values(array_filter(
+                    $definition['connected'] ?? [],
+                    fn (string $platform) => Platform::from($platform)->isEnabled()
+                ));
+
+                return $definition;
+            })
+            ->reject(fn (array $definition) => $definition['accounts'] === [])
+            ->values()
+            ->all();
+    }
+
     /** A realistic mismatch: someone signed in to the wrong account while claiming. */
     private function seedFailedClaim(): void
     {
-        $creator = Creator::unclaimed()->whereHas('socialAccounts', fn ($q) => $q->where('platform', Platform::YouTube))->first();
+        $creator = Creator::unclaimed()->first();
 
         if (! $creator) {
             return;
@@ -242,9 +269,9 @@ class DemoCreatorSeeder extends Seeder
             'platform' => $account->platform,
             'status' => ClaimStatus::Failed,
             'expected_provider_account_id' => $account->provider_account_id,
-            'returned_provider_account_id' => 'UCx1QF1zK0nfaCvHdb7Wn9hA',
+            'returned_provider_account_id' => 'demo-wrong-account',
             'returned_handle' => 'chrisdoyle',
-            'failure_reason' => "You signed in to YouTube as @chrisdoyle, but this profile is for @{$account->handle}.",
+            'failure_reason' => "You signed in to {$account->platform->label()} as @chrisdoyle, but this profile is for @{$account->handle}.",
             'created_at' => now()->subDays(3),
         ]);
     }
