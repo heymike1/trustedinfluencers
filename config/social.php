@@ -92,7 +92,7 @@ return [
         // Defaults only. Every value here is changed from the admin panel, not from .env, so
         // there is one place to look. Prices are whole dollars; 0 takes the spots off the market.
         'slots_per_rail' => 4,
-        'price' => 250,
+        'price' => 999,
         // Paid when every spot is taken: it buys the first one that comes free.
         'advance_price' => 999,
         // A booking runs this many days from the day the card goes up.

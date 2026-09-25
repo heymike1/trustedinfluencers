@@ -93,8 +93,6 @@
 
             <div class="card p-5 text-[13px] leading-relaxed text-ink-600 space-y-2">
                 <p class="font-semibold text-ink-950">Good to know</p>
-                <p>Your link carries <span class="tnum">rel="sponsored nofollow"</span> and arrives tagged as <span class="tnum">utm_source={{ config('social.sponsors.utm_source') }}</span>, so the visits show up in your own analytics.</p>
-                <p>The rails need a wide screen, so the card shows to people browsing from a desk, not on phones.</p>
                 <p>Keep this page bookmarked: it is the only way back in. Lost it? Mail <a href="mailto:{{ Sponsorship::contact() }}" class="font-semibold text-brand-700">{{ Sponsorship::contact() }}</a>.</p>
             </div>
         </aside>
