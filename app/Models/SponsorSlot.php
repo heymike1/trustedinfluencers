@@ -16,12 +16,12 @@ class SponsorSlot extends Model
 
     /** Card tints, keyed by the value stored on the slot. */
     public const TINTS = [
-        'blue' => 'border-[#c9d9f0] bg-[#e8f0fc]',
-        'mint' => 'border-[#c6e6db] bg-[#e6f5f0]',
-        'lilac' => 'border-[#d9d2f2] bg-[#eee9fb]',
-        'peach' => 'border-[#f3d9c6] bg-[#fdeee3]',
-        'rose' => 'border-[#f2d0da] bg-[#fceaf0]',
-        'sand' => 'border-[#e6dfc9] bg-[#f6f2e4]',
+        'blue' => 'border-[#a8c4ea] bg-[#e8f0fc]',
+        'mint' => 'border-[#9ed4c3] bg-[#e6f5f0]',
+        'lilac' => 'border-[#bdb1e8] bg-[#eee9fb]',
+        'peach' => 'border-[#e8bd9c] bg-[#fdeee3]',
+        'rose' => 'border-[#e8b1c1] bg-[#fceaf0]',
+        'sand' => 'border-[#d5c9a4] bg-[#f6f2e4]',
     ];
 
     protected $fillable = [

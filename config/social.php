@@ -89,7 +89,7 @@ return [
     */
 
     'sponsors' => [
-        'slots_per_rail' => (int) env('SPONSOR_SLOTS_PER_RAIL', 3),
+        'slots_per_rail' => (int) env('SPONSOR_SLOTS_PER_RAIL', 4),
         'price' => env('SPONSOR_PRICE', '€250'),
         'period' => env('SPONSOR_PERIOD', '30 days'),
         'contact' => env('SPONSOR_CONTACT', env('APP_CONTACT_EMAIL', 'info@runmorebrands.com')),
