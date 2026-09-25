@@ -75,10 +75,11 @@ class SponsorCard extends Component
         return view('livewire.sponsor-card', [
             'days' => Sponsorship::days(),
             'tints' => array_keys(SponsorSlot::TINTS),
-            'ahead' => $this->booking->isQueued()
+            'ahead' => $ahead = $this->booking->isQueued()
                 ? SponsorSlot::queued()->where('paid_at', '<', $this->booking->paid_at)->count()
                 : 0,
-            'nextFree' => Sponsorship::nextFreeAt(),
+            // The day this particular booking's card can appear, queue and all.
+            'visibleFrom' => $this->booking->isQueued() ? Sponsorship::spotFreesAt($ahead) : null,
         ])->title('Your sponsor card');
     }
 }

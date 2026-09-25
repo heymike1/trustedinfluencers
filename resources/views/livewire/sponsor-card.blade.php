@@ -20,7 +20,7 @@
                     @if($booking->isLive())
                         {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. Expires on {{ $booking->ends_at?->format('j F Y') }}. No auto-renew.
                     @elseif($booking->isQueued())
-                        Everything was taken when you paid, so you take the first spot that comes free{{ $nextFree ? ', around '.$nextFree->format('j F Y') : '' }}. Fill your card in now and it goes up the moment there is room.
+                        Everything was taken when you paid, so you take the first spot that comes free. Fill your card in now and it goes up the moment there is room.
                     @elseif($booking->needsDetails())
                         {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. It goes up as soon as this is complete, and your {{ $days }} days start then.
                     @else
@@ -30,6 +30,22 @@
             </div>
         </div>
     </x-page-band>
+
+    @if($booking->isQueued())
+        <div class="card mb-6 flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wide text-ink-500">Your spot is visible from</p>
+                <p class="display mt-1 text-2xl">{{ $visibleFrom ? $visibleFrom->format('j F Y') : 'the first card that comes down' }}</p>
+            </div>
+            <p class="max-w-sm text-[13px] leading-relaxed text-ink-600">
+                @if($visibleFrom)
+                    That is when the card ahead of you finishes its run. Sooner if one stops early; we email you the moment yours is up.
+                @else
+                    We email you the moment yours is up.
+                @endif
+            </p>
+        </div>
+    @endif
 
     <x-flash />
 

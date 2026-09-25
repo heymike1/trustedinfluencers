@@ -149,14 +149,24 @@ class Sponsorship
      */
     public static function nextFreeAt(): ?Carbon
     {
+        // Everyone already in the queue is ahead of the buyer reading the page.
+        return self::spotFreesAt(self::queueLength());
+    }
+
+    /**
+     * When the spot with this many bookings ahead of it comes free. Null when a live card has no
+     * end date, or when there are fewer running cards than people waiting: then there is no date
+     * to promise.
+     */
+    public static function spotFreesAt(int $behind = 0): ?Carbon
+    {
         $live = SponsorSlot::live()->get();
 
-        if ($live->isEmpty() || $live->contains(fn (SponsorSlot $slot) => $slot->ends_at === null)) {
+        if ($live->contains(fn (SponsorSlot $slot) => $slot->ends_at === null)) {
             return null;
         }
 
-        // Everyone already in the queue is ahead of this buyer.
-        return $live->sortBy('ends_at')->values()->get(self::queueLength())?->ends_at;
+        return $live->sortBy('ends_at')->values()->get($behind)?->ends_at;
     }
 
     /** A mailto for the enquiry, pre-filled so we know what it is about. */
