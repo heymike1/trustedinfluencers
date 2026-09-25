@@ -18,7 +18,7 @@
                 </h1>
                 <p class="mt-1.5 text-[14px] text-ink-600">
                     @if($booking->isLive())
-                        {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. It comes down on {{ $booking->ends_at?->format('j F Y') }}; nothing renews by itself.
+                        {{ ucfirst($booking->side) }} rail, {{ $ordinal($booking->position) }} card. Expires on {{ $booking->ends_at?->format('j F Y') }}. No auto-renew.
                     @elseif($booking->isQueued())
                         Everything was taken when you paid, so you take the first spot that comes free{{ $nextFree ? ', around '.$nextFree->format('j F Y') : '' }}. Fill your card in now and it goes up the moment there is room.
                     @elseif($booking->needsDetails())
